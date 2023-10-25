@@ -1,5 +1,7 @@
 import ctypes
+import os
 import pygame
+os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
 class Main:
     def __init__(self):
@@ -7,7 +9,7 @@ class Main:
         self.clock = pygame.time.Clock()
 
         self.user32 = ctypes.windll.user32
-        self.window_size = self.user32.GetSystemMetrics(0), self.user32.GetSystemMetrics(1)
+        self.window_size = self.user32.GetSystemMetrics(0), self.user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
         self.window_object = None
 
