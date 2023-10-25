@@ -1,3 +1,4 @@
+import ctypes
 import pygame
 
 class Main:
@@ -5,8 +6,9 @@ class Main:
         self.fps = 60
         self.clock = pygame.time.Clock()
 
-        self.window_size = (1920, 1080)
-        self.window = pygame.display.set_mode(self.window_size, pygame.FULLSCREEN)
+        self.user32 = ctypes.windll.user32
+        self.window_size = self.user32.GetSystemMetrics(0), self.user32.GetSystemMetrics(1)
+        self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
         self.window_object = None
 
     def main_loop(self):
@@ -21,7 +23,7 @@ class Main:
                 if event.type == pygame.QUIT:
                     run = False
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEWHEEL:
                     run = False
 
         pygame.quit()
