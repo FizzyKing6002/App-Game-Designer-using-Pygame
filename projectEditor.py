@@ -5,7 +5,7 @@ class Main:
         self.fps = 60
         self.clock = pygame.time.Clock()
 
-        self.window_size = (640, 480)
+        self.window_size = (1920, 1080)
         self.window = pygame.display.set_mode(self.window_size, pygame.FULLSCREEN)
         self.window_object = None
 
@@ -19,6 +19,9 @@ class Main:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    run = False
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     run = False
 
         pygame.quit()
