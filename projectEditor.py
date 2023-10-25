@@ -8,8 +8,8 @@ class Main:
         self.fps = 60
         self.clock = pygame.time.Clock()
 
-        self.user32 = ctypes.windll.user32
-        self.window_size = self.user32.GetSystemMetrics(0), self.user32.GetSystemMetrics(1) - 70
+        user32 = ctypes.windll.user32
+        self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
         self.window_object = None
 
