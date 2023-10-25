@@ -5,8 +5,8 @@ class Main:
         self.fps = 60
         self.clock = pygame.time.Clock()
 
-        self.window_size = (1920, 1080)
-        self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
+        self.window_size = (640, 480)
+        self.window = pygame.display.set_mode(self.window_size, pygame.FULLSCREEN)
         self.window_object = None
 
     def main_loop(self):
