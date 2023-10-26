@@ -21,7 +21,11 @@ class Main:
         while run:
             elapsed_time = self.clock.tick(self.fps)
 
-            #update window_object
+            self.window_object(self.window, elapsed_time,
+                               [self.window_size[0], self.window_size[1]],
+                               self.window_size, 0, 1,
+                               pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
+                               pygame.key.get_pressed())
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

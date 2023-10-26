@@ -16,7 +16,36 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
-            pass
+            if self.script_directory is None:
+                self.call_objects = getattr(self, "call_objects", None)
+                if callable(self.call_objects):
+                    self.call_objects(window, time,
+                                      mouse_pos, mouse_state, key_state)
+                return
+
+            self.call_clicked = getattr(self, "call_clicked", None)
+            if callable(self.call_clicked):
+                self.call_clicked(mouse_pos, mouse_state)
+
+            self.call_hovered = getattr(self, "call_hovered", None)
+            if callable(self.call_hovered):
+                self.call_hovered(mouse_pos)
+
+            self.call_activated = getattr(self, "call_activated", None)
+            if callable(self.call_activated):
+                self.call_activated(key_state)
+
+            self.animate(time)
+            self.calc_attr(con_pos, con_size, con_rot, con_opa)
+
+            self.draw_self = getattr(self, "draw_self", None)
+            if callable(self.draw_self):
+                self.draw_self()
+
+            self.call_objects = getattr(self, "call_objects", None)
+            if callable(self.call_objects):
+                self.call_objects(window, time,
+                                  mouse_pos, mouse_state, key_state)
 
         def animate(self, time):
             pass
