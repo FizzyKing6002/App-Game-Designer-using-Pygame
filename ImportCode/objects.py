@@ -1,4 +1,6 @@
 def Object(*args):
+    container, image, button, hover_activated, key_activated, *args = args
+
     class Object(Container if container else None1,
                  Image if image else None2,
                  Button if button else None3,
@@ -11,7 +13,6 @@ def Object(*args):
             self.opacity = 1
             self.script_directory = args[0]
 
-    container, image, button, hover_activated, key_activated, *args = args
     return Object(args)
 
 class Container:
