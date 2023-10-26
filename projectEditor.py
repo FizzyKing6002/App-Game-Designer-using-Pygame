@@ -1,6 +1,8 @@
 import ctypes
 import os
 import pygame
+from ImportCode import objects
+
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
 class Main:
@@ -11,7 +13,7 @@ class Main:
         user32 = ctypes.windll.user32
         self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
-        self.window_object = None
+        self.window_object = objects.Object(True, False, False, False, False, None)
 
     def main_loop(self):
         run = True
