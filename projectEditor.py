@@ -52,7 +52,7 @@ class Main:
     def recursive_create_objects(self, objects_list, val, path):
         for container_type in objects_list:
             if container_type[0] == val:
-                for object_name, i in enumerate(container_type):
+                for i, object_name in enumerate(container_type):
                     if i == 0:
                         continue
 
