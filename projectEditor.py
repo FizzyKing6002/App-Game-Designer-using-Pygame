@@ -24,6 +24,8 @@ class Main:
         objects_list = []
         object_files = os.listdir("EditorScripts/ObjectScripts")
         for file_name in object_files:
+            if file_name == "__init__.py" or file_name[-3:] != ".py":
+                continue
             exec(f"container_name = ObjectScripts.{file_name[:-3]}.container_name",
                  locals(), globals())
             for container_type in objects_list:
