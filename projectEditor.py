@@ -2,6 +2,7 @@ import ctypes
 import os
 import pygame
 from ImportCode import objects
+from EditorScripts.ObjectScripts import *
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
@@ -14,6 +15,23 @@ class Main:
         self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
         self.window_object = objects.Object(True, False, False, False, False, None)
+
+    def __call__(self):
+        self.load_objects()
+        self.main_loop()
+
+    def load_objects(self):
+        objects_list = []
+        object_files = os.listdir("EditorScripts/ObjectScripts")
+        for file_name in object_files:
+            exec("container_name = " + file_name[:-3] + ".container_name")
+            for List in objects_list:
+                if container_name == List[0]:
+                    List.append(file_name[:-3])
+                    break
+                if List == objects_list[-1]:
+                    objects_list.append([container_name, file_name[:-3]])
+        print(objects_list)
 
     def main_loop(self):
         run = True
@@ -39,4 +57,4 @@ class Main:
 if __name__ == "__main__":
     main = Main()
 
-    main.main_loop()
+    main()
