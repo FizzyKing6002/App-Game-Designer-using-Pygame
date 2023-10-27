@@ -58,10 +58,11 @@ def Object(*args):
 class Container:
     def __init__(self):
         self.objects = []
+        print("inherited")
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
-        pass
+        print("called")
 
 class Image:
     def draw_self(self):

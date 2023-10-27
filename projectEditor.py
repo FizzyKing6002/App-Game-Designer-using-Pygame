@@ -45,6 +45,32 @@ class Main:
 
         print(objects_list)
 
+        self.recursive_create_objects(objects_list, None, "self.window_object.objects")
+
+        print(self.window_object.objects)
+
+    def recursive_create_objects(self, objects_list, val, path):
+        for container_type in objects_list:
+            if container_type[0] == val:
+                for object_name, i in enumerate(container_type):
+                    if i == 0:
+                        continue
+
+                    exec(f"object_type = ObjectScripts.{object_name}.object_type",
+                         locals(), globals())
+                    exec(f"""{path}.append(objects.Object(
+object_type['container'],
+object_type['image'],
+object_type['button'],
+object_type['hover_activated'],
+object_type['key_activated'],
+None
+))""", globals(), locals())
+
+                    if object_type['container']:
+                        self.recursive_create_objects(
+                            objects_list, object_name, f"{path}[{i-1}].objects")
+
     def main_loop(self):
         run = True
 
