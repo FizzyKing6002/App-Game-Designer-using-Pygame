@@ -41,6 +41,7 @@ class Main:
 
                 if container_type == objects_list[-1]:
                     objects_list.append([container_name, file_name[:-3]])
+                    break
 
         print(objects_list)
 
