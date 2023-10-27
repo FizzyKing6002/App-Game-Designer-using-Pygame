@@ -71,6 +71,8 @@ None
                         self.recursive_create_objects(
                             objects_list, object_name, f"{path}[{i-1}].objects")
 
+                break
+
     def main_loop(self):
         run = True
 

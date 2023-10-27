@@ -13,6 +13,9 @@ def Object(*args):
             self.opacity = 1
             self.script_directory = args[0]
 
+            if container:
+                Container.__init__(self)
+
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
@@ -58,11 +61,10 @@ def Object(*args):
 class Container:
     def __init__(self):
         self.objects = []
-        print("inherited")
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
-        print("called")
+        pass
 
 class Image:
     def draw_self(self):
