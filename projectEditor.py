@@ -2,7 +2,7 @@ import ctypes
 import os
 import pygame
 from ImportCode import objects
-from EditorScripts.ObjectScripts import *
+from EditorScripts import ObjectScripts
 
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
@@ -24,13 +24,16 @@ class Main:
         objects_list = []
         object_files = os.listdir("EditorScripts/ObjectScripts")
         for file_name in object_files:
-            exec("container_name = " + file_name[:-3] + ".container_name")
-            for List in objects_list:
-                if container_name == List[0]:
-                    List.append(file_name[:-3])
+            exec(f"container_name = ObjectScripts.{file_name[:-3]}.container_name",
+                 locals(), globals())
+            for container_type in objects_list:
+                if container_name == container_type[0]:
+                    container_type.append(file_name[:-3])
                     break
-                if List == objects_list[-1]:
+
+                if container_type == objects_list[-1]:
                     objects_list.append([container_name, file_name[:-3]])
+
         print(objects_list)
 
     def main_loop(self):
