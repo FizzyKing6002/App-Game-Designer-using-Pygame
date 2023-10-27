@@ -26,8 +26,14 @@ class Main:
         for file_name in object_files:
             if file_name == "__init__.py" or file_name[-3:] != ".py":
                 continue
+
             exec(f"container_name = ObjectScripts.{file_name[:-3]}.container_name",
                  locals(), globals())
+
+            if len(objects_list) == 0:
+                objects_list.append([container_name, file_name[:-3]])
+                continue
+
             for container_type in objects_list:
                 if container_name == container_type[0]:
                     container_type.append(file_name[:-3])
