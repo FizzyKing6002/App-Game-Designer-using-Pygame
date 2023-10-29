@@ -8,10 +8,10 @@ def Object(*args):
                  Key_Activated if key_activated else None5,
                  object_class):
         def __init__(self, *args):
-            self.position = [0, 0]
+            self.pos = [0, 0]
             self.size = [0, 0]
-            self.rotation = 0
-            self.opacity = 1
+            self.rot = 0
+            self.opa = 1
 
             if container:
                 Container.__init__(self)
@@ -60,7 +60,11 @@ class Container:
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
-        pass
+        print("pong")
+        for obj in self.objects:
+            obj(window, time,
+                self.pos, self.size, self.rot, self.opa,
+                mouse_pos, mouse_state, key_state)
 
 class Image:
     def draw_self(self):

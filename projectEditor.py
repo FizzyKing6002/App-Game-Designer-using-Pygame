@@ -61,13 +61,13 @@ class Main:
                     exec(f"object_class = ObjectScripts.{object_name}.{object_name}",
                          locals(), globals())
                     exec(f"""{path}.append(objects.Object(
-object_type['container'],
-object_type['image'],
-object_type['button'],
-object_type['hover_activated'],
-object_type['key_activated'],
-object_class
-))""", globals(), locals())
+                         object_type['container'],
+                         object_type['image'],
+                         object_type['button'],
+                         object_type['hover_activated'],
+                         object_type['key_activated'],
+                         object_class
+                         ))""", globals(), locals())
 
                     if object_type['container']:
                         self.recursive_create_objects(
@@ -76,6 +76,7 @@ object_class
                 break
 
     def call_objects(self, elapsed_time):
+        print("ping")
         for obj in self.objects:
             obj(self.window, elapsed_time,
                 [self.window_size[0], self.window_size[1]],
@@ -85,11 +86,11 @@ object_class
 
     def main_loop(self):
         run = True
-
+        self.call_objects(0)
         while run:
             elapsed_time = self.clock.tick(self.fps)
 
-            self.call_objects(elapsed_time)
+            #self.call_objects(elapsed_time)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

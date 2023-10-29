@@ -5,7 +5,7 @@ object_type = {
     "hover_activated" : False,
     "key_activated" : False
 }
-container_name = "xd"
+container_name = "Example_Object2"
 
 class Example_Object3:
     def __init__(self):
