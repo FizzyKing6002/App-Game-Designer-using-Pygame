@@ -14,7 +14,7 @@ class Main:
         user32 = ctypes.windll.user32
         self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
-        self.window_object = objects.Object(True, False, False, False, False, object)
+        self.objects = []
 
     def __call__(self):
         self.load_objects()
@@ -45,9 +45,9 @@ class Main:
 
         print(objects_list)
 
-        self.recursive_create_objects(objects_list, None, "self.window_object.objects")
+        self.recursive_create_objects(objects_list, None, "self.objects")
 
-        print(self.window_object.objects)
+        print(self.objects)
 
     def recursive_create_objects(self, objects_list, val, path):
         for container_type in objects_list:
@@ -75,17 +75,21 @@ object_class
 
                 break
 
+    def call_objects(self, elapsed_time):
+        for obj in self.objects:
+            obj(self.window, elapsed_time,
+                [self.window_size[0], self.window_size[1]],
+                self.window_size, 0, 1,
+                pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
+                pygame.key.get_pressed())
+
     def main_loop(self):
         run = True
 
         while run:
             elapsed_time = self.clock.tick(self.fps)
 
-            self.window_object(self.window, elapsed_time,
-                               [self.window_size[0], self.window_size[1]],
-                               self.window_size, 0, 1,
-                               pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
-                               pygame.key.get_pressed())
+            self.call_objects(elapsed_time)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

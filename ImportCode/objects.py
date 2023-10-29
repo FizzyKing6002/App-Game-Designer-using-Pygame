@@ -21,12 +21,6 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
-            if self.script_directory is None:
-                self.call_objects = getattr(self, "call_objects", None)
-                if callable(self.call_objects):
-                    self.call_objects(window, time,
-                                      mouse_pos, mouse_state, key_state)
-                return
 
             self.call_clicked = getattr(self, "call_clicked", None)
             if callable(self.call_clicked):
