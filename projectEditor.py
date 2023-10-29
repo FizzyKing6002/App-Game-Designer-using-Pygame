@@ -58,13 +58,15 @@ class Main:
 
                     exec(f"object_type = ObjectScripts.{object_name}.object_type",
                          locals(), globals())
+                    exec(f"object_class = ObjectScripts.{object_name}.{object_name}",
+                         locals(), globals())
                     exec(f"""{path}.append(objects.Object(
 object_type['container'],
 object_type['image'],
 object_type['button'],
 object_type['hover_activated'],
 object_type['key_activated'],
-None
+object_class
 ))""", globals(), locals())
 
                     if object_type['container']:

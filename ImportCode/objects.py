@@ -1,20 +1,22 @@
 def Object(*args):
-    container, image, button, hover_activated, key_activated, *args = args
+    container, image, button, hover_activated, key_activated, object_class, *args = args
 
     class Object(Container if container else None1,
                  Image if image else None2,
                  Button if button else None3,
                  Hover_Activated if hover_activated else None4,
-                 Key_Activated if key_activated else None5):
+                 Key_Activated if key_activated else None5,
+                 object_class):
         def __init__(self, *args):
             self.position = [0, 0]
             self.size = [0, 0]
             self.rotation = 0
             self.opacity = 1
-            self.script_directory = args[0]
 
             if container:
                 Container.__init__(self)
+
+            object_class.__init__(self)
 
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
