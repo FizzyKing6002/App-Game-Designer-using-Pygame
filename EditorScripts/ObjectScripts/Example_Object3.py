@@ -7,7 +7,7 @@ object_type = {
 }
 container_name = "xd"
 
-class Example_Object:
+class Example_Object3:
     def __init__(self):
         self.update_priority = 0
         self.img_dir = ""
