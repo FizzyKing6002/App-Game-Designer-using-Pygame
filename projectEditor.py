@@ -14,7 +14,7 @@ class Main:
         user32 = ctypes.windll.user32
         self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
-        self.window_object = objects.Object(True, False, False, False, False, None)
+        self.window_object = objects.Object(True, False, False, False, False, object)
 
     def __call__(self):
         self.load_objects()
