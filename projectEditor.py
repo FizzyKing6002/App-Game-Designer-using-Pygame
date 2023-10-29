@@ -43,11 +43,7 @@ class Main:
                     objects_list.append([container_name, file_name[:-3]])
                     break
 
-        print(objects_list)
-
         self.recursive_create_objects(objects_list, None, "self.objects")
-
-        print(self.objects)
 
     def recursive_create_objects(self, objects_list, val, path):
         for container_type in objects_list:
@@ -60,14 +56,13 @@ class Main:
                          locals(), globals())
                     exec(f"object_class = ObjectScripts.{object_name}.{object_name}",
                          locals(), globals())
-                    exec(f"""{path}.append(objects.Object(
-                         object_type['container'],
-                         object_type['image'],
-                         object_type['button'],
-                         object_type['hover_activated'],
-                         object_type['key_activated'],
-                         object_class
-                         ))""", globals(), locals())
+                    exec(f"""{path}.append(objects.Object(object_type['container'],
+                                                          object_type['image'],
+                                                          object_type['button'],
+                                                          object_type['hover_activated'],
+                                                          object_type['key_activated'],
+                                                          object_class
+                                                          ))""", locals(), globals())
 
                     if object_type['container']:
                         self.recursive_create_objects(
@@ -76,7 +71,6 @@ class Main:
                 break
 
     def call_objects(self, elapsed_time):
-        print("ping")
         for obj in self.objects:
             obj(self.window, elapsed_time,
                 [self.window_size[0], self.window_size[1]],
@@ -86,11 +80,10 @@ class Main:
 
     def main_loop(self):
         run = True
-        self.call_objects(0)
         while run:
             elapsed_time = self.clock.tick(self.fps)
 
-            #self.call_objects(elapsed_time)
+            self.call_objects(elapsed_time)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
