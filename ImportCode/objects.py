@@ -49,7 +49,23 @@ def Object(*args):
             pass
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
-            pass
+            pos_mod = self.position_modifiers
+            size_mod = self.size_modifiers
+            rot_mod = self.rotation_modifiers
+            opa_mod = self.opacity_modifiers
+
+            self.pos = [
+                round(con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0]),
+                round(con_pos[1] + con_size[1] * (pos_mod[1][1] - 0.5) + pos_mod[1][0])
+            ]
+            self.size = [
+                max(round(con_size[0] * size_mod[0][1] + size_mod[0][0]), 0),
+                max(round(con_size[1] * size_mod[1][1] + size_mod[1][0]), 0)
+            ]
+            self.rot = round(con_rot * rot_mod[0] + rot_mod[1])
+            self.opa = min(max(round(con_opa * opa_mod[0] + opa_mod[1]), 0), 1)
+
+            #add animation values
 
     return Object(args)
 
