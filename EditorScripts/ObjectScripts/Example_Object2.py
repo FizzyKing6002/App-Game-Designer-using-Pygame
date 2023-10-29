@@ -1,5 +1,5 @@
 object_type = {
-    "container" : False,
+    "container" : True,
     "image" : False,
     "button" : False,
     "hover_activated" : False,

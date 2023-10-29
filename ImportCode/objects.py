@@ -21,7 +21,7 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
-
+            print("pong")
             self.call_clicked = getattr(self, "call_clicked", None)
             if callable(self.call_clicked):
                 self.call_clicked(mouse_pos, mouse_state)
@@ -60,7 +60,6 @@ class Container:
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
-        print("pong")
         for obj in self.objects:
             obj(window, time,
                 self.pos, self.size, self.rot, self.opa,
