@@ -18,6 +18,9 @@ def Object(*args):
 
             object_class.__init__(self)
 
+            if image:
+                Image.__init__(self)
+
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
@@ -38,7 +41,7 @@ def Object(*args):
 
             self.draw_self = getattr(self, "draw_self", None)
             if callable(self.draw_self):
-                self.draw_self()
+                self.draw_self(window)
 
             self.call_objects = getattr(self, "call_objects", None)
             if callable(self.call_objects):
@@ -81,8 +84,28 @@ class Container:
                 mouse_pos, mouse_state, key_state)
 
 class Image:
-    def draw_self(self):
-        pass
+    def __init__(self):
+        if self.img_dir is not None:
+            self.img = pygame.image.load(self.img_dir)
+
+    def draw_self(self, window):
+        temp_img = pygame.transform.rotate(pygame.transform.scale(
+            self.img, self.size), self.rot)
+
+        width = temp_img.get_width()
+        height = temp_img.get_height()
+        x_coord = round(self.pos[0] - width / 2)
+        y_coord = round(self.pos[1] - height / 2)
+
+        if self.opa == 1:
+            window.blit(temp_img, (x_coord, y_coord))
+            return
+
+        temp_surface = pygame.Surface((width, height)).convert()
+        temp_surface.blit(window, (-x_coord, -y_coord))
+        temp_surface.blit(temp_img, (0, 0))
+        temp_surface.set_alpha(255 * self.opa)
+        window.blit(temp_surface, (x_coord, y_coord))
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):

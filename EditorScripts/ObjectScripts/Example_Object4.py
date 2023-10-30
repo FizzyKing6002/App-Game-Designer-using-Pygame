@@ -10,7 +10,7 @@ container_name = None
 class Example_Object4:
     def __init__(self):
         self.update_priority = 0
-        self.img_dir = ""
+        self.img_dir = None
         self.activation_keys = {}
 
         self.position_modifiers = [[0, 1], [0, 1]]
