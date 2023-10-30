@@ -1,3 +1,5 @@
+import pygame
+
 def Object(*args):
     container, image, button, hover_activated, key_activated, object_class, *args = args
 
