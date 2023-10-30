@@ -1,6 +1,6 @@
 object_type = {
     "container" : True,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -10,13 +10,13 @@ container_name = "Example_Object"
 class Example_Object2:
     def __init__(self):
         self.update_priority = 0
-        self.img_dir = None
+        self.img_dir = "EditorTextures/pawn.png"
         self.activation_keys = {}
 
-        self.position_modifiers = [[0, 1], [0, 1]]
-        self.size_modifiers = [[0, 1], [0, 1]]
-        self.rotation_modifiers = [0, 1]
-        self.opacity_modifiers = [0, 1]
+        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.size_modifiers = [[0, 0.5], [0, 0.5]]
+        self.rotation_modifiers = [90, 1]
+        self.opacity_modifiers = [0, 0.5]
 
         self.animations = []
 
