@@ -1,4 +1,5 @@
 import pygame
+import math
 
 def Object(*args):
     container, image, button, hover_activated, key_activated, object_class, *args = args
@@ -112,6 +113,21 @@ class Image:
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):
+        if not self.rot == 0:
+            mouse_dist_from_obj_center = math.sqrt(
+                (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
+            mouse_angle_from_obj_center = math.degrees(math.atan(
+                (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
+
+            if mouse_pos[0] - self.pos[0] < 0:
+                mouse_angle_from_obj_center += 180
+            mouse_angle_from_obj_center += self.rot
+
+            mouse_pos = [
+                mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
+                mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
+            ]
+
         if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
                 and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
                 and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
@@ -129,6 +145,21 @@ class Button:
 
 class Hover_Activated:
     def call_hovered(self, mouse_pos):
+        if not self.rot == 0:
+            mouse_dist_from_obj_center = math.sqrt(
+                (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
+            mouse_angle_from_obj_center = math.degrees(math.atan(
+                (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
+
+            if mouse_pos[0] - self.pos[0] < 0:
+                mouse_angle_from_obj_center += 180
+            mouse_angle_from_obj_center += self.rot
+
+            mouse_pos = [
+                mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
+                mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
+            ]
+
         if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
                 and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
                 and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
