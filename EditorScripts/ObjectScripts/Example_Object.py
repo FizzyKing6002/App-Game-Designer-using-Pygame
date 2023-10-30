@@ -1,7 +1,7 @@
 object_type = {
     "container" : True,
     "image" : True,
-    "button" : False,
+    "button" : True,
     "hover_activated" : False,
     "key_activated" : False
 }
@@ -21,4 +21,16 @@ class Example_Object:
         self.animations = []
 
         def frame_update(self, time):
+            pass
+
+        def left_clicked(self):
+            print("pong")
+
+        def middle_clicked(self):
+            pass
+
+        def right_clicked(self):
+            pass
+
+        def hovered_over(self):
             pass

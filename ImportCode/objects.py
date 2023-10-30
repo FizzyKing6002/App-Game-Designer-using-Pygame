@@ -26,20 +26,21 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
+            self.animate(time)
+            self.calc_attr(con_pos, con_size, con_rot, con_opa)
+
             self.call_clicked = getattr(self, "call_clicked", None)
             if callable(self.call_clicked):
                 self.call_clicked(mouse_pos, mouse_state)
 
-            self.call_hovered = getattr(self, "call_hovered", None)
-            if callable(self.call_hovered):
-                self.call_hovered(mouse_pos)
+            else:
+                self.call_hovered = getattr(self, "call_hovered", None)
+                if callable(self.call_hovered):
+                    self.call_hovered(mouse_pos)
 
             self.call_activated = getattr(self, "call_activated", None)
             if callable(self.call_activated):
                 self.call_activated(key_state)
-
-            self.animate(time)
-            self.calc_attr(con_pos, con_size, con_rot, con_opa)
 
             self.draw_self = getattr(self, "draw_self", None)
             if callable(self.draw_self):
@@ -111,11 +112,28 @@ class Image:
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):
-        pass
+        if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
+                and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
+                and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
+                and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
+            self.call_hovered = getattr(self, "call_hovered", None)
+            if callable(self.call_hovered):
+                self.hovered_over()
+
+            if mouse_state[0]:
+                self.left_clicked()
+            if mouse_state[1]:
+                self.middle_clicked()
+            if mouse_state[2]:
+                self.right_clicked()
 
 class Hover_Activated:
     def call_hovered(self, mouse_pos):
-        pass
+        if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
+                and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
+                and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
+                and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
+            self.hovered_over()
 
 class Key_Activated:
     def call_activated(self, key_state):

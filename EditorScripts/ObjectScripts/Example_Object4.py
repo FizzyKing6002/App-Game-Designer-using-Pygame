@@ -22,3 +22,15 @@ class Example_Object4:
 
         def frame_update(self, time):
             pass
+
+        def left_clicked(self):
+            pass
+
+        def middle_clicked(self):
+            pass
+
+        def right_clicked(self):
+            pass
+
+        def hovered_over(self):
+            pass
