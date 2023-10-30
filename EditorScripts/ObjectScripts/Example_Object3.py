@@ -20,17 +20,17 @@ class Example_Object3:
 
         self.animations = []
 
-        def frame_update(self, time):
-            pass
+    def frame_update(self, time):
+        pass
 
-        def left_clicked(self):
-            pass
+    def left_clicked(self):
+        pass
 
-        def middle_clicked(self):
-            pass
+    def middle_clicked(self):
+        pass
 
-        def right_clicked(self):
-            pass
+    def right_clicked(self):
+        pass
 
-        def hovered_over(self):
-            pass
+    def hovered_over(self):
+        pass
