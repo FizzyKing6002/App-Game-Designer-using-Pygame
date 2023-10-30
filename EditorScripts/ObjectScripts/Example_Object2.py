@@ -1,7 +1,7 @@
 object_type = {
     "container" : True,
     "image" : True,
-    "button" : False,
+    "button" : True,
     "hover_activated" : False,
     "key_activated" : False
 }
@@ -24,7 +24,7 @@ class Example_Object2:
         pass
 
     def left_clicked(self):
-        pass
+        print("ping")
 
     def middle_clicked(self):
         pass
