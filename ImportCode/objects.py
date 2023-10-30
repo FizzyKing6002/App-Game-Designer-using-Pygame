@@ -121,11 +121,11 @@ class Button:
 
             if mouse_pos[0] - self.pos[0] < 0:
                 mouse_angle_from_obj_center += 180
-            mouse_angle_from_obj_center += self.rot
+            mouse_angle_from_obj_center = math.radians(mouse_angle_from_obj_center + self.rot)
 
             mouse_pos = [
-                mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
-                mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
+                self.pos[0] + mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
+                self.pos[1] + mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
             ]
 
         if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
