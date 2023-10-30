@@ -15,7 +15,7 @@ class Example_Object2:
 
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
-        self.rotation_modifiers = [90, 1]
+        self.rotation_modifiers = [30, 1]
         self.opacity_modifiers = [0, 1]
 
         self.animations = []
