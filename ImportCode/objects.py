@@ -60,15 +60,15 @@ def Object(*args):
             opa_mod = self.opacity_modifiers
 
             self.pos = [
-                round(con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0]),
-                round(con_pos[1] + con_size[1] * (pos_mod[1][1] - 0.5) + pos_mod[1][0])
+                con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0],
+                con_pos[1] + con_size[1] * (pos_mod[1][1] - 0.5) + pos_mod[1][0]
             ]
             self.size = [
-                max(round(con_size[0] * size_mod[0][1] + size_mod[0][0]), 0),
-                max(round(con_size[1] * size_mod[1][1] + size_mod[1][0]), 0)
+                max(con_size[0] * size_mod[0][1] + size_mod[0][0], 0),
+                max(con_size[1] * size_mod[1][1] + size_mod[1][0], 0)
             ]
-            self.rot = round(con_rot * rot_mod[1] + rot_mod[0])
-            self.opa = min(max(round(con_opa * opa_mod[1] + opa_mod[0]), 0), 1)
+            self.rot = con_rot * rot_mod[1] + rot_mod[0]
+            self.opa = min(max(con_opa * opa_mod[1] + opa_mod[0], 0), 1)
 
             #add animation values
 
@@ -92,7 +92,7 @@ class Image:
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(
-            self.img, self.size), self.rot)
+            self.img, [round(self.size[0]), round(self.size[1])]), self.rot)
 
         width = temp_img.get_width()
         height = temp_img.get_height()
