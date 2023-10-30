@@ -67,8 +67,8 @@ def Object(*args):
                 max(round(con_size[0] * size_mod[0][1] + size_mod[0][0]), 0),
                 max(round(con_size[1] * size_mod[1][1] + size_mod[1][0]), 0)
             ]
-            self.rot = round(con_rot * rot_mod[0] + rot_mod[1])
-            self.opa = min(max(round(con_opa * opa_mod[0] + opa_mod[1]), 0), 1)
+            self.rot = round(con_rot * rot_mod[1] + rot_mod[0])
+            self.opa = min(max(round(con_opa * opa_mod[1] + opa_mod[0]), 0), 1)
 
             #add animation values
 
