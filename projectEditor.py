@@ -73,8 +73,9 @@ class Main:
     def call_objects(self, elapsed_time):
         for obj in self.objects:
             obj(self.window, elapsed_time,
-                [self.window_size[0], self.window_size[1]],
-                self.window_size, 0, 1,
+                [self.window.get_width() / 2, self.window.get_height() / 2],
+                [self.window.get_width(), self.window.get_height()],
+                0, 1,
                 pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
                 pygame.key.get_pressed())
 
@@ -91,6 +92,8 @@ class Main:
 
                 if event.type == pygame.MOUSEWHEEL:
                     run = False
+
+            pygame.display.update()
 
         pygame.quit()
 
