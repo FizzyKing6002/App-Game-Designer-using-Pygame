@@ -72,6 +72,15 @@ def Object(*args):
             self.rot = con_rot * rot_mod[1] + rot_mod[0]
             self.opa = min(max(con_opa * opa_mod[1] + opa_mod[0], 0), 1)
 
+            if "top" in self.position_origin.lower():
+                self.pos[1] += self.size[1] / 2
+            elif "bottom" in self.position_origin.lower():
+                self.pos[1] -= self.size[1] / 2
+            if "left" in self.position_origin.lower():
+                self.pos[0] += self.size[0] / 2
+            elif "right" in self.position_origin.lower():
+                self.pos[0] -= self.size[0] / 2
+
             #add animation values
 
     return Object(args)

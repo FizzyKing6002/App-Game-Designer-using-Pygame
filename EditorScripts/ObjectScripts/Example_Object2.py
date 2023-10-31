@@ -13,11 +13,12 @@ class Example_Object2:
         self.img_dir = "EditorTextures/pawn.png"
         self.activation_keys = {}
 
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[10, 0], [10, 0]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
-        self.rotation_modifiers = [30, 1]
+        self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
+        self.position_origin = "center"
         self.animations = []
 
     def frame_update(self, time):
