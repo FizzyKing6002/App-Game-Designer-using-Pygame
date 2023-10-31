@@ -38,6 +38,8 @@ def Object(*args):
             if hasattr(self, "call_activated") and callable(self.call_activated):
                 self.call_activated(key_state)
 
+            self.frame_update(time)
+
             if hasattr(self, "draw_self") and callable(self.draw_self):
                 self.draw_self(window)
 
