@@ -116,8 +116,12 @@ class Button:
         if not self.rot == 0:
             mouse_dist_from_obj_center = math.sqrt(
                 (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-            mouse_angle_from_obj_center = math.degrees(math.atan(
-                (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
+            
+            if mouse_pos[1] - self.pos[1] == 0:
+                mouse_angle_from_obj_center = 90
+            else:
+                mouse_angle_from_obj_center = math.degrees(math.atan(
+                    (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
 
             if mouse_pos[0] - self.pos[0] < 0:
                 mouse_angle_from_obj_center += 180
@@ -148,8 +152,12 @@ class Hover_Activated:
         if not self.rot == 0:
             mouse_dist_from_obj_center = math.sqrt(
                 (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-            mouse_angle_from_obj_center = math.degrees(math.atan(
-                (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
+            
+            if mouse_pos[1] - self.pos[1] == 0:
+                mouse_angle_from_obj_center = 90
+            else:
+                mouse_angle_from_obj_center = math.degrees(math.atan(
+                    (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
 
             if mouse_pos[0] - self.pos[0] < 0:
                 mouse_angle_from_obj_center += 180
