@@ -90,7 +90,7 @@ class Container:
 class Image:
     def __init__(self):
         if self.img_dir is not None:
-            self.img = pygame.image.load(self.img_dir)
+            self.img = pygame.image.load(self.img_dir).convert_alpha()
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(
