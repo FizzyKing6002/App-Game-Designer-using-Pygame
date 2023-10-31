@@ -18,7 +18,7 @@ class Example_Object2:
         self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
-        self.position_origin = "center"
+        self.position_origin = [0, 0]
         self.animations = []
 
     def frame_update(self, time):

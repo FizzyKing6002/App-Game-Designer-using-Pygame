@@ -72,14 +72,8 @@ def Object(*args):
             self.rot = con_rot * rot_mod[1] + rot_mod[0]
             self.opa = min(max(con_opa * opa_mod[1] + opa_mod[0], 0), 1)
 
-            if "top" in self.position_origin.lower():
-                self.pos[1] += self.size[1] / 2
-            elif "bottom" in self.position_origin.lower():
-                self.pos[1] -= self.size[1] / 2
-            if "left" in self.position_origin.lower():
-                self.pos[0] += self.size[0] / 2
-            elif "right" in self.position_origin.lower():
-                self.pos[0] -= self.size[0] / 2
+            self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
+            self.pos[1] -= (self.position_origin[1] - 0.5) * self.size[1]
 
             #add animation values
 
@@ -125,7 +119,7 @@ class Button:
         if not self.rot == 0:
             mouse_dist_from_obj_center = math.sqrt(
                 (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-            
+
             if mouse_pos[1] - self.pos[1] == 0:
                 mouse_angle_from_obj_center = 90
             else:
@@ -161,7 +155,7 @@ class Hover_Activated:
         if not self.rot == 0:
             mouse_dist_from_obj_center = math.sqrt(
                 (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-            
+
             if mouse_pos[1] - self.pos[1] == 0:
                 mouse_angle_from_obj_center = 90
             else:
