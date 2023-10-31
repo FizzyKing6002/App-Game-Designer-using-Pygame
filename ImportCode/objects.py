@@ -30,25 +30,18 @@ def Object(*args):
             self.animate(time)
             self.calc_attr(con_pos, con_size, con_rot, con_opa)
 
-            self.call_clicked = getattr(self, "call_clicked", None)
-            if callable(self.call_clicked):
+            if hasattr(self, "call_clicked") and callable(self.call_clicked):
                 self.call_clicked(mouse_pos, mouse_state)
+            elif hasattr(self, "call_hovered") and callable(self.call_hovered):
+                self.call_hovered(mouse_pos)
 
-            else:
-                self.call_hovered = getattr(self, "call_hovered", None)
-                if callable(self.call_hovered):
-                    self.call_hovered(mouse_pos)
-
-            self.call_activated = getattr(self, "call_activated", None)
-            if callable(self.call_activated):
+            if hasattr(self, "call_activated") and callable(self.call_activated):
                 self.call_activated(key_state)
 
-            self.draw_self = getattr(self, "draw_self", None)
-            if callable(self.draw_self):
+            if hasattr(self, "draw_self") and callable(self.draw_self):
                 self.draw_self(window)
 
-            self.call_objects = getattr(self, "call_objects", None)
-            if callable(self.call_objects):
+            if hasattr(self, "call_objects") and callable(self.call_objects):
                 self.call_objects(window, time,
                                   mouse_pos, mouse_state, key_state)
 
@@ -139,8 +132,7 @@ class Button:
                 and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
                 and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
                 and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
-            self.call_hovered = getattr(self, "call_hovered", None)
-            if callable(self.call_hovered):
+            if hasattr(self, "call_hovered") and callable(self.call_hovered):
                 self.hovered_over()
 
             if mouse_state[0]:
