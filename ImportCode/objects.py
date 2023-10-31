@@ -156,7 +156,9 @@ def hitbox_collision(self, mouse_pos):
 
 class Key_Activated:
     def call_activated(self, key_state):
-        pass
+        for key in self.activation_keys:
+            if self.activation_keys[key] and key_state[key]:
+                print(key)
 
 class None1:
     pass

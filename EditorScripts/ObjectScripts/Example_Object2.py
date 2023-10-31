@@ -3,7 +3,7 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : False,
-    "key_activated" : False
+    "key_activated" : True
 }
 container_name = "Example_Object"
 
@@ -11,7 +11,9 @@ class Example_Object2:
     def __init__(self):
         self.update_priority = 0
         self.img_dir = "EditorTextures/pawn.png"
-        self.activation_keys = {}
+        self.activation_keys = {
+            "pygame.K_SPACE" : True
+        }
 
         self.position_modifiers = [[10, 0], [10, 0]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
