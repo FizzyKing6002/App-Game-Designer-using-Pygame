@@ -3,15 +3,21 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : False,
-    "key_activated" : False
+    "key_activated" : True
 }
 container_name = "Example_Object"
 
 class Example_Object2:
     def __init__(self):
+        self.active = True
+
         self.update_priority = 0
         self.img_dir = "EditorTextures/pawn.png"
-        self.activation_keys = {}
+        self.activation_keys = {
+            "SPACE" : True,
+            "a" : True,
+            "b" : False
+        }
 
         self.position_modifiers = [[10, 0], [10, 0]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
@@ -34,4 +40,7 @@ class Example_Object2:
         pass
 
     def hovered_over(self):
+        pass
+
+    def key_input(self, key):
         pass

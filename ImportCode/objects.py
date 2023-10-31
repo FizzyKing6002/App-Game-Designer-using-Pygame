@@ -27,6 +27,10 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state):
+            if not self.active:
+                self.frame_update(time)
+                return
+
             self.animate(time)
             self.calc_attr(con_pos, con_size, con_rot, con_opa)
 
@@ -156,7 +160,17 @@ def hitbox_collision(self, mouse_pos):
 
 class Key_Activated:
     def call_activated(self, key_state):
-        pass
+        for key in self.activation_keys:
+            if self.activation_keys[key]:
+                if len(key) >= 2 and key[:2] == "K_":
+                    exec(f"pygame_key = pygame.{key}",
+                         locals(), globals())
+                else:
+                    exec(f"pygame_key = pygame.K_{key}",
+                         locals(), globals())
+
+                if key_state[pygame_key]:
+                    self.key_input(key)
 
 class None1:
     pass
