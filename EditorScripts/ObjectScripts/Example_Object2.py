@@ -25,7 +25,7 @@ class Example_Object2:
         pass
 
     def left_clicked(self):
-        print("ping")
+        pass
 
     def middle_clicked(self):
         pass

@@ -111,29 +111,7 @@ class Image:
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):
-        if not self.rot == 0:
-            mouse_dist_from_obj_center = math.sqrt(
-                (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-
-            if mouse_pos[1] - self.pos[1] == 0:
-                mouse_angle_from_obj_center = 90
-            else:
-                mouse_angle_from_obj_center = math.degrees(math.atan(
-                    (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
-
-            if mouse_pos[0] - self.pos[0] < 0:
-                mouse_angle_from_obj_center += 180
-            mouse_angle_from_obj_center = math.radians(mouse_angle_from_obj_center - self.rot)
-
-            mouse_pos = [
-                self.pos[0] + mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
-                self.pos[1] + mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
-            ]
-
-        if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
-                and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
-                and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
-                and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
+        if hitbox_collision(self, mouse_pos):
             if hasattr(self, "call_hovered") and callable(self.call_hovered):
                 self.hovered_over()
 
@@ -146,30 +124,35 @@ class Button:
 
 class Hover_Activated:
     def call_hovered(self, mouse_pos):
-        if not self.rot == 0:
-            mouse_dist_from_obj_center = math.sqrt(
-                (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
-
-            if mouse_pos[1] - self.pos[1] == 0:
-                mouse_angle_from_obj_center = 90
-            else:
-                mouse_angle_from_obj_center = math.degrees(math.atan(
-                    (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
-
-            if mouse_pos[0] - self.pos[0] < 0:
-                mouse_angle_from_obj_center += 180
-            mouse_angle_from_obj_center = math.radians(mouse_angle_from_obj_center - self.rot)
-
-            mouse_pos = [
-                self.pos[0] + mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
-                self.pos[1] + mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
-            ]
-
-        if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
-                and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
-                and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
-                and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
+        if hitbox_collision(self, mouse_pos):
             self.hovered_over()
+
+def hitbox_collision(self, mouse_pos):
+    if not self.rot == 0:
+        mouse_dist_from_obj_center = math.sqrt(
+            (mouse_pos[0] - self.pos[0]) ** 2 + (mouse_pos[1] - self.pos[1]) ** 2)
+
+        if mouse_pos[1] - self.pos[1] == 0:
+            mouse_angle_from_obj_center = 90
+        else:
+            mouse_angle_from_obj_center = math.degrees(math.atan(
+                (mouse_pos[0] - self.pos[0]) / (mouse_pos[1] - self.pos[1])))
+
+        if mouse_pos[0] - self.pos[0] < 0:
+            mouse_angle_from_obj_center += 180
+        mouse_angle_from_obj_center = math.radians(mouse_angle_from_obj_center - self.rot)
+
+        mouse_pos = [
+            self.pos[0] + mouse_dist_from_obj_center * math.sin(mouse_angle_from_obj_center),
+            self.pos[1] + mouse_dist_from_obj_center * math.cos(mouse_angle_from_obj_center)
+        ]
+
+    if mouse_pos[0] > self.pos[0] - self.size[0] / 2 \
+            and mouse_pos[0] < self.pos[0] + self.size[0] / 2 \
+            and mouse_pos[1] > self.pos[1] - self.size[1] / 2 \
+            and mouse_pos[1] < self.pos[1] + self.size[1] / 2:
+        return True
+    return False
 
 class Key_Activated:
     def call_activated(self, key_state):
