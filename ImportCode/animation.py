@@ -20,12 +20,12 @@ def animate(anim, time):
         anim[-1] = anim[-1].replace("=", "")
 
     if isinstance(anim[1], list):
-        for i, val in enumerate(anim[1]):
+        for i in range(len(anim[1])):
             if isinstance(anim[-1], list):
-                exec(f"val = ({anim[-1][i]}) * anim[2][i]",
+                exec(f"anim[1][i] = ({anim[-1][i]}) * anim[2][i]",
                      locals(), globals())
             else:
-                exec(f"val = ({anim[-1]}) * anim[2][i]",
+                exec(f"anim[1][i] = ({anim[-1]}) * anim[2][i]",
                      locals(), globals())
     else:
         exec(f"anim[1] = ({anim[-1]}) * anim[2]",
