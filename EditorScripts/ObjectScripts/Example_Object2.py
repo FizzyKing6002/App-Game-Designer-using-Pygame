@@ -27,8 +27,12 @@ class Example_Object2:
         self.position_origin = [0, 0]
         self.animations = []
 
+        self.one_time = True
+
     def frame_update(self, time):
-        pass
+        if self.one_time:
+            self.one_time = False
+            self.create_animation(200, 5000, "posx")
 
     def left_clicked(self):
         pass

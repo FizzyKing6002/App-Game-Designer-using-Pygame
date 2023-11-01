@@ -65,9 +65,9 @@ def Object(*args):
                 args = "x"
 
             if isinstance(val, list):
-                return [False, [0, 0], val, 0, time, anim_type, *args]
+                self.animations.append([False, [0, 0], val, 0, time, anim_type, *args])
             else:
-                return [False, 0, val, 0, time, anim_type, *args]
+                self.animations.append([False, 0, val, 0, time, anim_type, *args])
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = copy.deepcopy(self.position_modifiers)
