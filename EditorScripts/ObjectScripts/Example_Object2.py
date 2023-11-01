@@ -25,7 +25,7 @@ class Example_Object2:
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0, 0]
-        self.animations = [[False, [0, 0], [200, 200], 0, 5000, "move", "x"]]
+        self.animations = [[False, 0, -1, 0, 5000, "opacity", "x"]]
 
     def frame_update(self, time):
         pass

@@ -76,9 +76,32 @@ def Object(*args):
             opa_mod = copy.deepcopy(self.opacity_modifiers)
 
             for anim in self.animations:
-                if "move" in anim[-2]:
-                    pos_mod[0][0] += anim[1][0]
-                    pos_mod[1][0] += anim[1][1]
+                if "%" in anim[-2]:
+                    j = 1
+                else:
+                    j = 0
+
+                if "x" in anim[-2]:
+                    i = 0
+                elif "y" in anim[-2]:
+                    i = 1
+                else:
+                    if "pos" in anim[-2]:
+                        pos_mod[0][j] += anim[1][0]
+                        pos_mod[1][j] += anim[1][1]
+                    elif "size" in anim[-2]:
+                        size_mod[0][j] += anim[1][0]
+                        size_mod[1][j] += anim[1][1]
+                    elif "rot" in anim[-2]:
+                        rot_mod[j] += anim[1]
+                    elif "opa" in anim[-2]:
+                        opa_mod[j] += anim[1]
+                    continue
+
+                if "pos" in anim[-2]:
+                    pos_mod[i][j] += anim[1]
+                elif "size" in anim[-2]:
+                    size_mod[i][j] += anim[1]
 
             self.pos = [
                 con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0],
