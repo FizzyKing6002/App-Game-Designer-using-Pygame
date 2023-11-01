@@ -59,7 +59,7 @@ def Object(*args):
 
                 anim = animation.animate(anim, time)
 
-        def create_animation(val, time, anim_type, *args):
+        def create_animation(self, val, time, anim_type, *args):
             if len(args) == 0:
                 args = "x"
 
@@ -77,7 +77,7 @@ def Object(*args):
             for anim in self.animations:
                 if "move" in anim[-2]:
                     pos_mod[0][0] += anim[1][0]
-                    pos_mod[0][1] += anim[1][1]
+                    pos_mod[1][0] += anim[1][1]
 
             self.pos = [
                 con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0],
