@@ -83,7 +83,7 @@ def Object(*args):
 
                 if "x" in anim[-2]:
                     i = 0
-                elif "y" in anim[-2]:
+                elif "y" in anim[-2] and not "opa" in anim[-2]:
                     i = 1
                 else:
                     if "pos" in anim[-2]:
