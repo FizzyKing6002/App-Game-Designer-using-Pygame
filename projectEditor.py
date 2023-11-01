@@ -67,7 +67,6 @@ class Main:
                     if object_type['container']:
                         self.recursive_create_objects(
                             objects_list, object_name, f"{path}[{i-1}].objects")
-
                 break
 
     def call_objects(self, elapsed_time):

@@ -1,5 +1,6 @@
 import pygame
 import math
+import copy
 from ImportCode import animation
 
 def Object(*args):
@@ -69,10 +70,10 @@ def Object(*args):
                 return [False, 0, val, 0, time, anim_type, *args]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
-            pos_mod = self.position_modifiers
-            size_mod = self.size_modifiers
-            rot_mod = self.rotation_modifiers
-            opa_mod = self.opacity_modifiers
+            pos_mod = copy.deepcopy(self.position_modifiers)
+            size_mod = copy.deepcopy(self.size_modifiers)
+            rot_mod = copy.deepcopy(self.rotation_modifiers)
+            opa_mod = copy.deepcopy(self.opacity_modifiers)
 
             for anim in self.animations:
                 if "move" in anim[-2]:
