@@ -9,6 +9,8 @@ container_name = None
 
 class Example_Object:
     def __init__(self):
+        self.active = True
+
         self.update_priority = 0
         self.img_dir = "EditorTextures/example_image.png"
         self.activation_keys = {}
@@ -34,4 +36,7 @@ class Example_Object:
         pass
 
     def hovered_over(self):
+        pass
+
+    def key_input(self, key):
         pass
