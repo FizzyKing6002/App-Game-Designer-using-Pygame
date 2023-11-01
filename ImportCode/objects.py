@@ -1,5 +1,6 @@
 import pygame
 import math
+from ImportCode import animation
 
 def Object(*args):
     container, image, button, hover_activated, key_activated, object_class, *args = args
@@ -52,13 +53,31 @@ def Object(*args):
                                   mouse_pos, mouse_state, key_state)
 
         def animate(self, time):
-            pass
+            for anim in self.animations:
+                if anim[0]:
+                    continue
+
+                anim = animation.animate(anim, time)
+
+        def create_animation(val, time, anim_type, *args):
+            if len(args) == 0:
+                args = "x"
+
+            if isinstance(val, list):
+                return [False, [0, 0], val, 0, time, anim_type, *args]
+            else:
+                return [False, 0, val, 0, time, anim_type, *args]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = self.position_modifiers
             size_mod = self.size_modifiers
             rot_mod = self.rotation_modifiers
             opa_mod = self.opacity_modifiers
+
+            for anim in self.animations:
+                if "move" in anim[-2]:
+                    pos_mod[0][0] += anim[1][0]
+                    pos_mod[0][1] += anim[1][1]
 
             self.pos = [
                 con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0],
@@ -73,8 +92,6 @@ def Object(*args):
 
             self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
             self.pos[1] -= (self.position_origin[1] - 0.5) * self.size[1]
-
-            #add animation values
 
     return Object(args)
 
