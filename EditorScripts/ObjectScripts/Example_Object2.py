@@ -1,5 +1,6 @@
 object_type = {
     "container" : True,
+    "text" : False,
     "image" : True,
     "button" : True,
     "hover_activated" : False,
@@ -27,12 +28,18 @@ class Example_Object2:
         self.position_origin = [0, 0]
         self.animations = []
 
+        self.text = ""
+        self.text_font = "Calibri"
+        self.text_colour = (0, 0, 0)
+        self.text_bold = False
+        self.text_italic = False
+
         self.one_time = True
 
     def frame_update(self, time):
         if self.one_time:
             self.one_time = False
-            self.create_animation(200, 5000, "posx")
+            self.create_animation(200, 1000, "posx", "x")
 
     def left_clicked(self):
         pass

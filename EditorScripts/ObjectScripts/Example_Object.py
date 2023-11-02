@@ -1,5 +1,6 @@
 object_type = {
     "container" : True,
+    "text" : False,
     "image" : True,
     "button" : True,
     "hover_activated" : False,
@@ -22,6 +23,12 @@ class Example_Object:
 
         self.position_origin = [0.5, 0.5]
         self.animations = []
+
+        self.text = ""
+        self.text_font = "Calibri"
+        self.text_colour = (0, 0, 0)
+        self.text_bold = False
+        self.text_italic = False
 
     def frame_update(self, time):
         pass
