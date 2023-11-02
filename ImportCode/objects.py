@@ -126,16 +126,27 @@ class Container:
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
+        self.reorder_objects()
+
         for obj in self.objects:
             obj(window, time,
                 self.pos, self.size, self.rot, self.opa,
                 mouse_pos, mouse_state, key_state)
 
+    def reorder_objects(self):
+        self.objects = sorted(self.objects, self.order_func)
+
+    def order_func(self, val):
+        print(val.update_priority)
+        return val.update_priority
+
 class Text:
     def draw_self(self, window):
-        font = pygame.font.SysFont(self.text_font, round(self.size[1]), self.text_bold, self.text_italic)
-        temp_img = pygame.transform.rotate(font.render(self.text, True, self.text_colour), self.rot)
-        
+        font = pygame.font.SysFont(self.text_font, round(self.size[1]),
+                                   self.text_bold, self.text_italic)
+        temp_img = pygame.transform.rotate(font.render(self.text, True, self.text_colour),
+                                           self.rot)
+
         draw_surface(self, window, temp_img)
 
 class Image:

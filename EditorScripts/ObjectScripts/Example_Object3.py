@@ -11,8 +11,8 @@ container_name = "Example_Object2"
 class Example_Object3:
     def __init__(self):
         self.active = True
+        self.update_priority = 2
 
-        self.update_priority = 0
         self.img_dir = None
         self.activation_keys = {}
 

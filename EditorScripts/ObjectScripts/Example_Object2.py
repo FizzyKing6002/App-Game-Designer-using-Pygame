@@ -11,8 +11,8 @@ container_name = "Example_Object"
 class Example_Object2:
     def __init__(self):
         self.active = True
-
         self.update_priority = 0
+
         self.img_dir = "EditorTextures/pawn.png"
         self.activation_keys = {
             "SPACE" : True,
