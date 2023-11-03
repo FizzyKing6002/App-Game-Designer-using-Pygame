@@ -134,7 +134,21 @@ class Container:
                 mouse_pos, mouse_state, key_state)
 
     def reorder_objects(self):
-        self.objects = sorted(self.objects, self.order_func)
+        sorted_list = []
+        for obj in self.objects:
+            if len(sorted_list) == 0:
+                sorted_list.append(obj)
+                continue
+
+            for i, sorted_obj in enumerate(sorted_list):
+                if obj.update_priority >= sorted_obj.update_priority:
+                    sorted_list.insert(i, obj)
+                    break
+
+                if i == len(sorted_list) - 1:
+                    sorted_list.append(obj)
+
+        self.objects = copy.deepcopy(sorted_list)
 
     def order_func(self, val):
         print(val.update_priority)
@@ -157,7 +171,7 @@ class Image:
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(
             self.img, [round(self.size[0]), round(self.size[1])]), self.rot)
-        
+
         draw_surface(self, window, temp_img)
 
 def draw_surface(self, window, temp_img):

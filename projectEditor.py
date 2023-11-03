@@ -9,7 +9,7 @@ os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
 class Main:
     def __init__(self):
-        self.fps = 60
+        self.fps = 120
         self.clock = pygame.time.Clock()
 
         user32 = ctypes.windll.user32
@@ -84,6 +84,7 @@ class Main:
         run = True
         while run:
             elapsed_time = self.clock.tick(self.fps)
+            print(1000/elapsed_time)
 
             self.call_objects(elapsed_time)
 
