@@ -1,7 +1,7 @@
 object_type = {
     "container" : False,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : True,
     "hover_activated" : False,
     "key_activated" : False
@@ -13,7 +13,7 @@ class Example_Object4:
         self.active = False
         self.update_priority = 1
 
-        self.img_dir = None
+        self.img_dir = "EditorTextures/palms.png"
         self.activation_keys = {}
 
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
@@ -30,18 +30,26 @@ class Example_Object4:
         self.text_bold = False
         self.text_italic = False
 
-    def frame_update(self, global_scripts):
-        global_scripts.active1 = self.active
-        if global_scripts.active0 == global_scripts.active1:
-            global_scripts.active0 = True
-            self.update_priority += 2
+        self.triggered = False
 
-        if self.active:
-            print("ping")
+    def frame_update(self, global_scripts):
+        if self.triggered:
+            self.triggered = False
+            if not global_scripts.mousedown:
+                self.active = False
+                global_scripts.state = 0
+                global_scripts.mousedown = True
+                self.update_priority += 2
+        else:
+            if global_scripts.mousedown and self.active:
+                global_scripts.mousedown = False
+
+        if not self.active and global_scripts.state == 1:
+            self.active = True
 
 
     def left_clicked(self):
-        self.active = False
+        self.triggered = True
 
     def middle_clicked(self):
         pass

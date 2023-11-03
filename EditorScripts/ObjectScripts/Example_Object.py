@@ -30,14 +30,25 @@ class Example_Object:
         self.text_bold = False
         self.text_italic = False
 
+        self.triggered = False
+
     def frame_update(self, global_scripts):
-        global_scripts.active0 = self.active
-        if global_scripts.active0 == global_scripts.active1:
-            global_scripts.active1 = True
-            self.update_priority += 2
+        if self.triggered:
+            self.triggered = False
+            if not global_scripts.mousedown:
+                self.active = False
+                global_scripts.state = 1
+                global_scripts.mousedown = True
+                self.update_priority += 2
+        else:
+            if global_scripts.mousedown and self.active:
+                global_scripts.mousedown = False
+
+        if not self.active and global_scripts.state == 0:
+            self.active = True
 
     def left_clicked(self):
-        self.active = False
+        self.triggered = True
 
     def middle_clicked(self):
         pass

@@ -88,7 +88,6 @@ class Main:
         run = True
         while run:
             elapsed_time = self.clock.tick(self.fps)
-            print(1000/elapsed_time)
 
             self.call_objects(elapsed_time)
 
