@@ -148,7 +148,7 @@ class Container:
                 if i == len(sorted_list) - 1:
                     sorted_list.append(obj)
 
-        self.objects = copy.deepcopy(sorted_list)
+        self.objects = sorted_list
 
     def order_func(self, val):
         print(val.update_priority)
