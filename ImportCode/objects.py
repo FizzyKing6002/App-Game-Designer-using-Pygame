@@ -31,7 +31,7 @@ def Object(*args):
                      con_pos, con_size, con_rot, con_opa,
                      mouse_pos, mouse_state, key_state, global_scripts):
             if not self.active:
-                self.frame_update(time)
+                self.frame_update(global_scripts)
                 return
 
             self.animate(time)

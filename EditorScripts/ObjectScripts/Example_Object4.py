@@ -36,6 +36,9 @@ class Example_Object4:
             global_scripts.active0 = True
             self.update_priority += 2
 
+        if self.active:
+            print("ping")
+
 
     def left_clicked(self):
         self.active = False
