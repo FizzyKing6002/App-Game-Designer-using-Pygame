@@ -36,7 +36,7 @@ class Example_Object2:
 
         self.one_time = True
 
-    def frame_update(self, time):
+    def frame_update(self, global_scripts):
         if self.one_time:
             self.one_time = False
             self.create_animation(200, 1000, "posx", "x")

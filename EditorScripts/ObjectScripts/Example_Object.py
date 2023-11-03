@@ -30,11 +30,14 @@ class Example_Object:
         self.text_bold = False
         self.text_italic = False
 
-    def frame_update(self, time):
-        pass
+    def frame_update(self, global_scripts):
+        global_scripts.active0 = self.active
+        if global_scripts.active0 == global_scripts.active1:
+            global_scripts.active1 = True
+            self.update_priority += 2
 
     def left_clicked(self):
-        pass
+        self.active = False
 
     def middle_clicked(self):
         pass

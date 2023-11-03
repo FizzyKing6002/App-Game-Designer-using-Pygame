@@ -3,6 +3,7 @@ import os
 import pygame
 from ImportCode import objects
 from EditorScripts import ObjectScripts
+from EditorScripts import globalScripts
 
 pygame.init()
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
@@ -16,6 +17,8 @@ class Main:
         self.window_size = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1) - 70
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE)
         self.objects = []
+
+        self.global_scripts = globalScripts.globalScripts()
 
     def __call__(self):
         self.load_objects()
@@ -78,7 +81,8 @@ class Main:
                 [self.window.get_width(), self.window.get_height()],
                 0, 1,
                 pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
-                pygame.key.get_pressed())
+                pygame.key.get_pressed(),
+                self.global_scripts)
 
     def main_loop(self):
         run = True

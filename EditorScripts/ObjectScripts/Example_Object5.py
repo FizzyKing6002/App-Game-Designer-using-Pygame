@@ -30,7 +30,7 @@ class Example_Object5:
         self.text_bold = True
         self.text_italic = True
 
-    def frame_update(self, time):
+    def frame_update(self, global_scripts):
         pass
 
     def left_clicked(self):

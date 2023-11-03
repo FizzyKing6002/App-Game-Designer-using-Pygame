@@ -29,7 +29,7 @@ def Object(*args):
 
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
-                     mouse_pos, mouse_state, key_state):
+                     mouse_pos, mouse_state, key_state, global_scripts):
             if not self.active:
                 self.frame_update(time)
                 return
@@ -45,14 +45,14 @@ def Object(*args):
             if hasattr(self, "call_activated") and callable(self.call_activated):
                 self.call_activated(key_state)
 
-            self.frame_update(time)
+            self.frame_update(global_scripts)
 
             if hasattr(self, "draw_self") and callable(self.draw_self):
                 self.draw_self(window)
 
             if hasattr(self, "call_objects") and callable(self.call_objects):
                 self.call_objects(window, time,
-                                  mouse_pos, mouse_state, key_state)
+                                  mouse_pos, mouse_state, key_state, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -125,13 +125,13 @@ class Container:
         self.objects = []
 
     def call_objects(self, window, time,
-                     mouse_pos, mouse_state, key_state):
+                     mouse_pos, mouse_state, key_state, global_scripts):
         self.reorder_objects()
 
         for obj in self.objects:
             obj(window, time,
                 self.pos, self.size, self.rot, self.opa,
-                mouse_pos, mouse_state, key_state)
+                mouse_pos, mouse_state, key_state, global_scripts)
 
     def reorder_objects(self):
         sorted_list = []

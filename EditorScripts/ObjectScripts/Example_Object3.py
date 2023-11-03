@@ -30,8 +30,12 @@ class Example_Object3:
         self.text_bold = True
         self.text_italic = True
 
-    def frame_update(self, time):
-        pass
+        self.one_time = True
+
+    def frame_update(self, global_scripts):
+        if self.one_time:
+            self.one_time = False
+            self.create_animation(237, 11000, "rot", "x**3")
 
     def left_clicked(self):
         pass
