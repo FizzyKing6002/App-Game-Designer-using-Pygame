@@ -4,6 +4,7 @@ import pygame
 from ImportCode import objects
 from EditorScripts import ObjectScripts
 
+pygame.init()
 os.environ["SDL_VIDEO_WINDOW_POS"] = "%d, %d" % (0, 30)
 
 class Main:
@@ -57,6 +58,7 @@ class Main:
                     exec(f"object_class = ObjectScripts.{object_name}.{object_name}",
                          locals(), globals())
                     exec(f"""{path}.append(objects.Object(object_type['container'],
+                                                          object_type['text'],
                                                           object_type['image'],
                                                           object_type['button'],
                                                           object_type['hover_activated'],
@@ -67,7 +69,6 @@ class Main:
                     if object_type['container']:
                         self.recursive_create_objects(
                             objects_list, object_name, f"{path}[{i-1}].objects")
-
                 break
 
     def call_objects(self, elapsed_time):

@@ -1,14 +1,17 @@
 import pygame
 import math
+import copy
+from ImportCode import animation
 
 def Object(*args):
-    container, image, button, hover_activated, key_activated, object_class, *args = args
+    container, text, image, button, hover_activated, key_activated, object_class, *args = args
 
     class Object(Container if container else None1,
-                 Image if image else None2,
-                 Button if button else None3,
-                 Hover_Activated if hover_activated else None4,
-                 Key_Activated if key_activated else None5,
+                 Text if text else None2,
+                 Image if image else None3,
+                 Button if button else None4,
+                 Hover_Activated if hover_activated else None5,
+                 Key_Activated if key_activated else None6,
                  object_class):
         def __init__(self, *args):
             self.pos = [0, 0]
@@ -52,13 +55,54 @@ def Object(*args):
                                   mouse_pos, mouse_state, key_state)
 
         def animate(self, time):
-            pass
+            for anim in self.animations:
+                if anim[0]:
+                    continue
+
+                anim = animation.animate(anim, time)
+
+        def create_animation(self, val, time, anim_type, *args):
+            if len(args) == 0:
+                args = "x"
+
+            if isinstance(val, list):
+                self.animations.append([False, [0, 0], val, 0, time, anim_type, *args])
+            else:
+                self.animations.append([False, 0, val, 0, time, anim_type, *args])
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
-            pos_mod = self.position_modifiers
-            size_mod = self.size_modifiers
-            rot_mod = self.rotation_modifiers
-            opa_mod = self.opacity_modifiers
+            pos_mod = copy.deepcopy(self.position_modifiers)
+            size_mod = copy.deepcopy(self.size_modifiers)
+            rot_mod = copy.deepcopy(self.rotation_modifiers)
+            opa_mod = copy.deepcopy(self.opacity_modifiers)
+
+            for anim in self.animations:
+                if "%" in anim[-2]:
+                    j = 1
+                else:
+                    j = 0
+
+                if "x" in anim[-2]:
+                    i = 0
+                elif "y" in anim[-2] and not "opa" in anim[-2]:
+                    i = 1
+                else:
+                    if "pos" in anim[-2]:
+                        pos_mod[0][j] += anim[1][0]
+                        pos_mod[1][j] += anim[1][1]
+                    elif "size" in anim[-2]:
+                        size_mod[0][j] += anim[1][0]
+                        size_mod[1][j] += anim[1][1]
+                    elif "rot" in anim[-2]:
+                        rot_mod[j] += anim[1]
+                    elif "opa" in anim[-2]:
+                        opa_mod[j] += anim[1]
+                    continue
+
+                if "pos" in anim[-2]:
+                    pos_mod[i][j] += anim[1]
+                elif "size" in anim[-2]:
+                    size_mod[i][j] += anim[1]
 
             self.pos = [
                 con_pos[0] + con_size[0] * (pos_mod[0][1] - 0.5) + pos_mod[0][0],
@@ -74,8 +118,6 @@ def Object(*args):
             self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
             self.pos[1] -= (self.position_origin[1] - 0.5) * self.size[1]
 
-            #add animation values
-
     return Object(args)
 
 class Container:
@@ -84,10 +126,28 @@ class Container:
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state):
+        self.reorder_objects()
+
         for obj in self.objects:
             obj(window, time,
                 self.pos, self.size, self.rot, self.opa,
                 mouse_pos, mouse_state, key_state)
+
+    def reorder_objects(self):
+        self.objects = sorted(self.objects, self.order_func)
+
+    def order_func(self, val):
+        print(val.update_priority)
+        return val.update_priority
+
+class Text:
+    def draw_self(self, window):
+        font = pygame.font.SysFont(self.text_font, round(self.size[1]),
+                                   self.text_bold, self.text_italic)
+        temp_img = pygame.transform.rotate(font.render(self.text, True, self.text_colour),
+                                           self.rot)
+
+        draw_surface(self, window, temp_img)
 
 class Image:
     def __init__(self):
@@ -97,21 +157,24 @@ class Image:
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(
             self.img, [round(self.size[0]), round(self.size[1])]), self.rot)
+        
+        draw_surface(self, window, temp_img)
 
-        width = temp_img.get_width()
-        height = temp_img.get_height()
-        x_coord = round(self.pos[0] - width / 2)
-        y_coord = round(self.pos[1] - height / 2)
+def draw_surface(self, window, temp_img):
+    width = temp_img.get_width()
+    height = temp_img.get_height()
+    x_coord = round(self.pos[0] - width / 2)
+    y_coord = round(self.pos[1] - height / 2)
 
-        if self.opa == 1:
-            window.blit(temp_img, (x_coord, y_coord))
-            return
+    if self.opa == 1:
+        window.blit(temp_img, (x_coord, y_coord))
+        return
 
-        temp_surface = pygame.Surface((width, height)).convert()
-        temp_surface.blit(window, (-x_coord, -y_coord))
-        temp_surface.blit(temp_img, (0, 0))
-        temp_surface.set_alpha(255 * self.opa)
-        window.blit(temp_surface, (x_coord, y_coord))
+    temp_surface = pygame.Surface((width, height)).convert()
+    temp_surface.blit(window, (-x_coord, -y_coord))
+    temp_surface.blit(temp_img, (0, 0))
+    temp_surface.set_alpha(255 * self.opa)
+    window.blit(temp_surface, (x_coord, y_coord))
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):
@@ -181,4 +244,6 @@ class None3:
 class None4:
     pass
 class None5:
+    pass
+class None6:
     pass
