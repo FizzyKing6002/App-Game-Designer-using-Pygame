@@ -13,6 +13,7 @@ class Example_Object2:
         self.active = True
         self.update_priority = 0
 
+        self.objects_visible_outside_container = False
         self.img_dir = "EditorTextures/pawn.png"
         self.activation_keys = {
             "SPACE" : True,

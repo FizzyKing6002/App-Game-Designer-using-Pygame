@@ -128,10 +128,20 @@ class Container:
                      mouse_pos, mouse_state, key_state, global_scripts):
         self.reorder_objects()
 
-        for obj in self.objects:
-            obj(window, time,
-                self.pos, self.size, self.rot, self.opa,
-                mouse_pos, mouse_state, key_state, global_scripts)
+        if self.objects_visible_outside_container:
+            for obj in self.objects:
+                obj(window, time,
+                    self.pos, self.size, self.rot, self.opa,
+                    mouse_pos, mouse_state, key_state, global_scripts)
+
+        else:
+            surface = pygame.Surface(self.size).convert()
+            for obj in self.objects:
+                obj(surface, time,
+                    self.pos, self.size, self.rot, self.opa,
+                    mouse_pos, mouse_state, key_state, global_scripts)
+
+            draw_surface(self, window, surface)
 
     def reorder_objects(self):
         sorted_list = []
