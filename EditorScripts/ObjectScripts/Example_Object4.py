@@ -13,7 +13,7 @@ class Example_Object4:
         self.active = False
         self.update_priority = 1
 
-        self.objects_visible_outside_container = False
+        self.objects_visible_outside_container = True
         self.img_dir = "EditorTextures/palms.png"
         self.activation_keys = {}
 

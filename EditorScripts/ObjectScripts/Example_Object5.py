@@ -13,7 +13,7 @@ class Example_Object5:
         self.active = True
         self.update_priority = 1
 
-        self.objects_visible_outside_container = False
+        self.objects_visible_outside_container = True
         self.img_dir = None
         self.activation_keys = {}
 

@@ -136,6 +136,9 @@ class Container:
 
         else:
             surface = pygame.Surface(self.size).convert()
+            surface.blit(window, (
+                -(self.pos[0] - self.size[0] // 2), -(self.pos[1] - self.size[1] // 2)))
+
             for obj in self.objects:
                 obj(surface, time,
                     [self.size[0] // 2, self.size[1] // 2], self.size, self.rot, self.opa,
