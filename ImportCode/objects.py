@@ -138,7 +138,7 @@ class Container:
             surface = pygame.Surface(self.size).convert()
             for obj in self.objects:
                 obj(surface, time,
-                    self.pos, self.size, self.rot, self.opa,
+                    [self.size[0] // 2, self.size[1] // 2], self.size, self.rot, self.opa,
                     mouse_pos, mouse_state, key_state, global_scripts)
 
             draw_surface(self, window, surface)
