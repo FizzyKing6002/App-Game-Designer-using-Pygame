@@ -52,7 +52,7 @@ def Object(*args):
 
             if hasattr(self, "call_objects") and callable(self.call_objects):
                 self.call_objects(window, time,
-                                  mouse_pos, mouse_state, key_state, global_scripts)
+                                mouse_pos, mouse_state, key_state, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -123,6 +123,8 @@ def Object(*args):
 class Container:
     def __init__(self):
         self.objects = []
+        self.object_offset = 0
+        self.prev_offset = 0
 
     def call_objects(self, window, time,
                      mouse_pos, mouse_state, key_state, global_scripts):
@@ -135,16 +137,94 @@ class Container:
                     mouse_pos, mouse_state, key_state, global_scripts)
 
         else:
-            surface = pygame.Surface(self.size).convert()
-            surface.blit(window, (
-                -(self.pos[0] - self.size[0] // 2), -(self.pos[1] - self.size[1] // 2)))
+            surface = pygame.Surface(self.size).convert_alpha()
+            if self.rot == 0:
+                surface.blit(window, (
+                    -(self.pos[0] - self.size[0] / 2), -(self.pos[1] - self.size[1] / 2)))
+            else:
+                rotated_window = pygame.transform.rotate(window, -self.rot)
+                vector = pygame.math.Vector2(
+                    window.get_width() / 2 - self.pos[0],
+                    window.get_height() / 2 - self.pos[1]).rotate(self.rot)
+                surface.blit(rotated_window, (
+                    vector[0] + self.size[0] / 2 - rotated_window.get_width() / 2, vector[1] + self.size[1] / 2 - rotated_window.get_height() / 2))
 
+            mouse_pos = [
+                mouse_pos[0] - (self.pos[0] - self.size[0] / 2),
+                mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
+            ]
+
+            container_has_scroll_bar = False
             for obj in self.objects:
-                obj(surface, time,
-                    [self.size[0] // 2, self.size[1] // 2], self.size, self.rot, self.opa,
-                    mouse_pos, mouse_state, key_state, global_scripts)
+                if obj.is_scroll_bar:
+                    container_has_scroll_bar = True
 
+                    if obj.size[1] != 0 and self.size[1] - obj.size[1] != 0:
+                        scroll_offset = ((self.size[1] ** 2) / obj.size[1] - self.size[1]) \
+                            * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
+                                / (self.size[1] - obj.size[1]))
+                    else:
+                        scroll_offset = 0
+
+            if container_has_scroll_bar:
+                scroll_bar_size, object_offset = self.calc_size_scroll_bar()
+                self.object_offset = max(self.object_offset + object_offset, 0)
+                self.prev_offset = scroll_offset
+
+                for obj in self.objects:
+                    pos = [self.size[0] / 2, self.size[1] / 2]
+                    size = copy.deepcopy(self.size)
+
+                    if obj.is_scroll_bar:
+                        size[1] = scroll_bar_size
+                        pos[1] -= (self.size[1] - size[1]) / 2
+                        obj.scroll_bar_limit = self.size[1] - size[1]
+                    else:
+                        pos[1] += self.object_offset - scroll_offset
+
+                    obj(surface, time,
+                        pos, size, self.rot, self.opa,
+                        mouse_pos, mouse_state, key_state, global_scripts)
+
+            else:
+                pos = [self.size[0] / 2, self.size[1] / 2]
+
+                for obj in self.objects:
+                    obj(surface, time,
+                        pos, self.size, self.rot, self.opa,
+                        mouse_pos, mouse_state, key_state, global_scripts)
+
+            surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
+
+    def iterate_through_objects(self):
+        for obj in self.objects:
+            obj(surface, time,
+                [self.size[0] / 2, self.size[1] / 2], self.size, self.rot, self.opa,
+                mouse_pos, mouse_state, key_state, global_scripts)
+
+    def calc_size_scroll_bar(self):
+        if self.objects_visible_outside_container:
+            min_y = self.pos[1] - self.size[1] / 2
+            max_y = self.pos[1] + self.size[1] / 2
+        else:
+            min_y = 0
+            max_y = self.size[1]
+
+        for obj in self.objects:
+            obj_min_y = obj.pos[1] - obj.size[1] / 2 + self.prev_offset
+            obj_max_y = obj.pos[1] + obj.size[1] / 2 + self.prev_offset
+            if obj_min_y < min_y:
+                min_y = obj_min_y
+            if obj_max_y > max_y:
+                max_y = obj_max_y
+
+        if self.objects_visible_outside_container:
+            object_offset = self.pos[1] - self.size[1] / 2 - min_y
+        else:
+            object_offset = 0 - min_y
+
+        return (self.size[1] ** 2) / (max_y - min_y), object_offset
 
     def reorder_objects(self):
         sorted_list = []
@@ -163,10 +243,6 @@ class Container:
 
         self.objects = sorted_list
 
-    def order_func(self, val):
-        print(val.update_priority)
-        return val.update_priority
-
 class Text:
     def draw_self(self, window):
         font = pygame.font.SysFont(self.text_font, round(self.size[1]),
@@ -178,8 +254,7 @@ class Text:
 
 class Image:
     def __init__(self):
-        if self.img_dir is not None:
-            self.img = pygame.image.load(self.img_dir).convert_alpha()
+        self.img = pygame.image.load(self.img_dir).convert_alpha()
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(
@@ -205,21 +280,23 @@ def draw_surface(self, window, temp_img):
 
 class Button:
     def call_clicked(self, mouse_pos, mouse_state):
-        if hitbox_collision(self, mouse_pos):
+        collided = hitbox_collision(self, mouse_pos)
+        if collided or (self.is_scroll_bar and self.init_mouse_pos is not None):
             if hasattr(self, "call_hovered") and callable(self.call_hovered):
-                self.hovered_over()
+                self.hovered_over(mouse_pos)
 
             if mouse_state[0]:
-                self.left_clicked()
+                self.left_clicked(mouse_pos)
             if mouse_state[1]:
-                self.middle_clicked()
+                self.middle_clicked(mouse_pos)
             if mouse_state[2]:
-                self.right_clicked()
+                self.right_clicked(mouse_pos)
 
 class Hover_Activated:
     def call_hovered(self, mouse_pos):
-        if hitbox_collision(self, mouse_pos):
-            self.hovered_over()
+        collided = hitbox_collision(self, mouse_pos)
+        if collided:
+            self.hovered_over(mouse_pos)
 
 def hitbox_collision(self, mouse_pos):
     if not self.rot == 0:

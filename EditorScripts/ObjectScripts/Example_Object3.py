@@ -4,22 +4,24 @@ object_type = {
     "image" : False,
     "button" : False,
     "hover_activated" : False,
-    "key_activated" : False
+    "key_activated" : False,
+    "scroll_bar" : False
 }
 container_name = "Example_Object2"
 
 class Example_Object3:
     def __init__(self):
-        self.active = True
-        self.update_priority = 2
+        self.active = False
+        self.update_priority = 0
 
         self.objects_visible_outside_container = True
         self.img_dir = None
         self.activation_keys = {}
+        self.is_scroll_bar = False
 
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         self.size_modifiers = [[0, 1], [0, 0.3]]
-        self.rotation_modifiers = [0, 1]
+        self.rotation_modifiers = [0, 0]
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0.5, 0.5]
@@ -38,16 +40,16 @@ class Example_Object3:
             self.one_time = False
             self.create_animation(237, 11000, "rot", "x**3")
 
-    def left_clicked(self):
+    def left_clicked(self, mouse_pos):
         pass
 
-    def middle_clicked(self):
+    def middle_clicked(self, mouse_pos):
         pass
 
-    def right_clicked(self):
+    def right_clicked(self, mouse_pos):
         pass
 
-    def hovered_over(self):
+    def hovered_over(self, mouse_pos):
         pass
 
     def key_input(self, key):

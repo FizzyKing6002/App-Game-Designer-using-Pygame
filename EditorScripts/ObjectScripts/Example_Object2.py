@@ -4,7 +4,8 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : False,
-    "key_activated" : True
+    "key_activated" : True,
+    "scroll_bar" : False
 }
 container_name = "Example_Object"
 
@@ -20,10 +21,11 @@ class Example_Object2:
             "a" : True,
             "b" : False
         }
+        self.is_scroll_bar = False
 
         self.position_modifiers = [[10, 0], [10, 0]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
-        self.rotation_modifiers = [0, 1]
+        self.rotation_modifiers = [0, 0]
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0, 0]
@@ -40,18 +42,19 @@ class Example_Object2:
     def frame_update(self, global_scripts):
         if self.one_time:
             self.one_time = False
-            self.create_animation(200, 1000, "posx", "x")
+            self.create_animation(200, 10000, "posx", "x")
+            self.create_animation(-45, 1000, "rot", "x")
 
-    def left_clicked(self):
+    def left_clicked(self, mouse_pos):
         pass
 
-    def middle_clicked(self):
+    def middle_clicked(self, mouse_pos):
         pass
 
-    def right_clicked(self):
+    def right_clicked(self, mouse_pos):
         pass
 
-    def hovered_over(self):
+    def hovered_over(self, mouse_pos):
         pass
 
     def key_input(self, key):
