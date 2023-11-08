@@ -21,7 +21,7 @@ class Example_Object4:
 
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         self.size_modifiers = [[0, 1], [0, 1]]
-        self.rotation_modifiers = [0, 0]
+        self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0.5, 0.5]

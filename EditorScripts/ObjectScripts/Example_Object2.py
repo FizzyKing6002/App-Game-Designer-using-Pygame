@@ -14,7 +14,7 @@ class Example_Object2:
         self.active = True
         self.update_priority = 0
 
-        self.objects_visible_outside_container = False
+        self.objects_visible_outside_container = True
         self.img_dir = "EditorTextures/pawn.png"
         self.activation_keys = {
             "SPACE" : True,
@@ -25,7 +25,7 @@ class Example_Object2:
 
         self.position_modifiers = [[10, 0], [10, 0]]
         self.size_modifiers = [[0, 0.5], [0, 0.5]]
-        self.rotation_modifiers = [0, 0]
+        self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0, 0]
@@ -43,7 +43,7 @@ class Example_Object2:
         if self.one_time:
             self.one_time = False
             self.create_animation(200, 10000, "posx", "x")
-            self.create_animation(-45, 1000, "rot", "x")
+            #self.create_animation(-45, 1000, "rot", "x")
 
     def left_clicked(self, mouse_pos):
         pass

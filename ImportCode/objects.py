@@ -51,9 +51,9 @@ def Object(*args):
             if hasattr(self, "draw_self") and callable(self.draw_self):
                 self.draw_self(window)
 
-            if hasattr(self, "call_objects") and callable(self.call_objects):
-                self.call_objects(window, time,
-                                mouse_pos, mouse_state, key_state, global_scripts)
+            if hasattr(self, "container_update") and callable(self.container_update):
+                self.container_update(window, time,
+                                      mouse_pos, mouse_state, key_state, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -138,18 +138,16 @@ class Container:
         self.object_offset = 0
         self.prev_offset = 0
 
-    def call_objects(self, window, time,
-                     mouse_pos, mouse_state, key_state, global_scripts):
+    def container_update(self, window, time,
+                         mouse_pos, mouse_state, key_state, global_scripts):
         self.reorder_objects()
 
         if self.objects_visible_outside_container:
-            for obj in self.objects:
-                obj(window, time,
-                    self.pos, self.size, self.rot, self.opa,
-                    mouse_pos, mouse_state, key_state, global_scripts)
+            self.call_objects(window, time, mouse_pos, mouse_state, key_state, global_scripts)
 
         else:
             surface = pygame.Surface(self.size).convert_alpha()
+
             if self.rot == 0:
                 surface.blit(window, (
                     -(self.pos[0] - self.size[0] / 2), -(self.pos[1] - self.size[1] / 2)))
@@ -167,54 +165,66 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
-            container_has_scroll_bar = False
-            for obj in self.objects:
-                if obj.is_scroll_bar:
-                    container_has_scroll_bar = True
-
-                    if obj.size[1] != 0 and self.size[1] - obj.size[1] != 0:
-                        scroll_offset = ((self.size[1] ** 2) / obj.size[1] - self.size[1]) \
-                            * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
-                                / (self.size[1] - obj.size[1]))
-                    else:
-                        scroll_offset = 0
-
-            if container_has_scroll_bar:
-                scroll_bar_size, object_offset = self.calc_size_scroll_bar()
-                self.object_offset = max(self.object_offset + object_offset, 0)
-                self.prev_offset = scroll_offset
-
-                for obj in self.objects:
-                    pos = [self.size[0] / 2, self.size[1] / 2]
-                    size = copy.deepcopy(self.size)
-
-                    if obj.is_scroll_bar:
-                        size[1] = scroll_bar_size
-                        pos[1] -= (self.size[1] - size[1]) / 2
-                        obj.scroll_bar_limit = self.size[1] - size[1]
-                    else:
-                        pos[1] += self.object_offset - scroll_offset
-
-                    obj(surface, time,
-                        pos, size, self.rot, self.opa,
-                        mouse_pos, mouse_state, key_state, global_scripts)
-
-            else:
-                pos = [self.size[0] / 2, self.size[1] / 2]
-
-                for obj in self.objects:
-                    obj(surface, time,
-                        pos, self.size, self.rot, self.opa,
-                        mouse_pos, mouse_state, key_state, global_scripts)
+            self.call_objects(surface, time, mouse_pos, mouse_state, key_state, global_scripts)
 
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
 
-    def iterate_through_objects(self):
+    def iterate_through_objects(self, surface, time, pos, size,
+                                mouse_pos, mouse_state, key_state, global_scripts):
         for obj in self.objects:
             obj(surface, time,
-                [self.size[0] / 2, self.size[1] / 2], self.size, self.rot, self.opa,
+                pos, size, self.rot, self.opa,
                 mouse_pos, mouse_state, key_state, global_scripts)
+
+    def call_objects(self, surface, time,
+                     mouse_pos, mouse_state, key_state, global_scripts):
+        container_has_scroll_bar = False
+        for obj in self.objects:
+            if obj.is_scroll_bar:
+                container_has_scroll_bar = True
+
+                if obj.size[1] != 0 and self.size[1] - obj.size[1] != 0:
+                    scroll_offset = ((self.size[1] ** 2) / obj.size[1] - self.size[1]) \
+                        * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
+                            / (self.size[1] - obj.size[1]))
+                else:
+                    scroll_offset = 0
+
+        if container_has_scroll_bar:
+            scroll_bar_size, object_offset = self.calc_size_scroll_bar()
+            self.object_offset = max(self.object_offset + object_offset, 0)
+            self.prev_offset = scroll_offset
+
+            for obj in self.objects:
+                if self.objects_visible_outside_container:
+                    pos = copy.deepcopy(self.pos)
+                else:
+                    pos = [self.size[0] / 2, self.size[1] / 2]
+                size = copy.deepcopy(self.size)
+
+                if obj.is_scroll_bar:
+                    size[1] = scroll_bar_size
+                    pos[1] -= (self.size[1] - size[1]) / 2
+                    obj.scroll_bar_limit = self.size[1] - size[1]
+                else:
+                    pos[1] += self.object_offset - scroll_offset
+
+                obj(surface, time,
+                    pos, size, 0, self.opa,
+                    mouse_pos, mouse_state, key_state, global_scripts)
+
+        else:
+            if self.objects_visible_outside_container:
+                pos = copy.deepcopy(self.pos)
+            else:
+                pos = [self.size[0] / 2, self.size[1] / 2]
+            self.iterate_through_objects(surface, time, pos, self.size,
+                                            mouse_pos, mouse_state, key_state, global_scripts)
+            for obj in self.objects:
+                obj(surface, time,
+                    pos, self.size, 0, self.opa,
+                    mouse_pos, mouse_state, key_state, global_scripts)
 
     def calc_size_scroll_bar(self):
         if self.objects_visible_outside_container:
