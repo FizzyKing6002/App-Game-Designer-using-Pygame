@@ -1,6 +1,6 @@
 object_type = {
     "container" : False,
-    "text" : False,
+    "text" : True,
     "image" : True,
     "button" : False,
     "hover_activated" : False,
@@ -15,7 +15,7 @@ class Example_Object5:
         self.update_priority = 1
 
         self.objects_visible_outside_container = True
-        self.img_dir = "EditorTextures/box.png"
+        self.img_dir = ""
         self.activation_keys = {}
         self.is_scroll_bar = False
 
@@ -27,7 +27,7 @@ class Example_Object5:
         self.position_origin = [0.5, 0.5]
         self.animations = []
 
-        self.text = ""
+        self.text = "T"
         self.text_font = "Calibri"
         self.text_colour = (100, 0, 0)
         self.text_bold = True

@@ -12,7 +12,7 @@ container_name = "Example_Object2"
 class Example_Object6:
     def __init__(self):
         self.active = True
-        self.update_priority = 10
+        self.update_priority = 1000
 
         self.objects_visible_outside_container = True
         self.img_dir = "EditorTextures/box.png"

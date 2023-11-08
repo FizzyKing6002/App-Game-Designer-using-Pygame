@@ -140,7 +140,7 @@ class Container:
 
     def container_update(self, window, time,
                          mouse_pos, mouse_state, key_state, global_scripts):
-        self.reorder_objects()
+        self.objects.sort(key=lambda x: x.update_priority, reverse=False)
 
         container_has_scroll_bar = False
         scroll_offset = 0
@@ -153,7 +153,8 @@ class Container:
                         * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
                             / (self.size[1] - obj.size[1]))
 
-        if self.objects_visible_outside_container and not container_has_scroll_bar and self.rot == 0:
+        if self.objects_visible_outside_container \
+            and not container_has_scroll_bar and self.rot == 0:
             self.call_objects(window, time, mouse_pos, mouse_state, key_state,
                               global_scripts, False, 0)
 
@@ -238,23 +239,6 @@ class Container:
         object_offset = 0 - min_y
 
         return (self.size[1] ** 2) / (max_y - min_y), object_offset
-
-    def reorder_objects(self):
-        sorted_list = []
-        for obj in self.objects:
-            if len(sorted_list) == 0:
-                sorted_list.append(obj)
-                continue
-
-            for i, sorted_obj in enumerate(sorted_list):
-                if obj.update_priority >= sorted_obj.update_priority:
-                    sorted_list.insert(i, obj)
-                    break
-
-                if i == len(sorted_list) - 1:
-                    sorted_list.append(obj)
-
-        self.objects = sorted_list
 
 class Text:
     def draw_self(self, window):
