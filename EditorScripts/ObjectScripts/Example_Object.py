@@ -14,7 +14,7 @@ class Example_Object:
         self.active = True
         self.update_priority = 0
 
-        self.objects_visible_outside_container = True
+        self.objects_visible_outside_container = False
         self.img_dir = "EditorTextures/example_image.png"
         self.activation_keys = {}
         self.is_scroll_bar = False

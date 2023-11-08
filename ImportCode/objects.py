@@ -142,8 +142,20 @@ class Container:
                          mouse_pos, mouse_state, key_state, global_scripts):
         self.reorder_objects()
 
-        if self.objects_visible_outside_container:
-            self.call_objects(window, time, mouse_pos, mouse_state, key_state, global_scripts)
+        container_has_scroll_bar = False
+        scroll_offset = 0
+        for obj in self.objects:
+            if obj.is_scroll_bar:
+                container_has_scroll_bar = True
+
+                if obj.size[1] != 0 and self.size[1] - obj.size[1] != 0:
+                    scroll_offset = ((self.size[1] ** 2) / obj.size[1] - self.size[1]) \
+                        * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
+                            / (self.size[1] - obj.size[1]))
+
+        if self.objects_visible_outside_container and not container_has_scroll_bar and self.rot == 0:
+            self.call_objects(window, time, mouse_pos, mouse_state, key_state,
+                              global_scripts, False, 0)
 
         else:
             surface = pygame.Surface(self.size).convert_alpha()
@@ -165,7 +177,8 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
-            self.call_objects(surface, time, mouse_pos, mouse_state, key_state, global_scripts)
+            self.call_objects(surface, time, mouse_pos, mouse_state, key_state,
+                              global_scripts, container_has_scroll_bar, scroll_offset)
 
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
@@ -177,30 +190,15 @@ class Container:
                 pos, size, self.rot, self.opa,
                 mouse_pos, mouse_state, key_state, global_scripts)
 
-    def call_objects(self, surface, time,
-                     mouse_pos, mouse_state, key_state, global_scripts):
-        container_has_scroll_bar = False
-        for obj in self.objects:
-            if obj.is_scroll_bar:
-                container_has_scroll_bar = True
-
-                if obj.size[1] != 0 and self.size[1] - obj.size[1] != 0:
-                    scroll_offset = ((self.size[1] ** 2) / obj.size[1] - self.size[1]) \
-                        * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
-                            / (self.size[1] - obj.size[1]))
-                else:
-                    scroll_offset = 0
-
+    def call_objects(self, surface, time, mouse_pos, mouse_state, key_state,
+                     global_scripts, container_has_scroll_bar, scroll_offset):
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
             self.object_offset = max(self.object_offset + object_offset, 0)
             self.prev_offset = scroll_offset
 
             for obj in self.objects:
-                if self.objects_visible_outside_container:
-                    pos = copy.deepcopy(self.pos)
-                else:
-                    pos = [self.size[0] / 2, self.size[1] / 2]
+                pos = [self.size[0] / 2, self.size[1] / 2]
                 size = copy.deepcopy(self.size)
 
                 if obj.is_scroll_bar:
@@ -215,24 +213,19 @@ class Container:
                     mouse_pos, mouse_state, key_state, global_scripts)
 
         else:
-            if self.objects_visible_outside_container:
+            if self.objects_visible_outside_container and self.rot == 0:
                 pos = copy.deepcopy(self.pos)
             else:
                 pos = [self.size[0] / 2, self.size[1] / 2]
-            self.iterate_through_objects(surface, time, pos, self.size,
-                                            mouse_pos, mouse_state, key_state, global_scripts)
+
             for obj in self.objects:
                 obj(surface, time,
                     pos, self.size, 0, self.opa,
                     mouse_pos, mouse_state, key_state, global_scripts)
 
     def calc_size_scroll_bar(self):
-        if self.objects_visible_outside_container:
-            min_y = self.pos[1] - self.size[1] / 2
-            max_y = self.pos[1] + self.size[1] / 2
-        else:
-            min_y = 0
-            max_y = self.size[1]
+        min_y = 0
+        max_y = self.size[1]
 
         for obj in self.objects:
             obj_min_y = obj.pos[1] - obj.size[1] / 2 + self.prev_offset
@@ -242,10 +235,7 @@ class Container:
             if obj_max_y > max_y:
                 max_y = obj_max_y
 
-        if self.objects_visible_outside_container:
-            object_offset = self.pos[1] - self.size[1] / 2 - min_y
-        else:
-            object_offset = 0 - min_y
+        object_offset = 0 - min_y
 
         return (self.size[1] ** 2) / (max_y - min_y), object_offset
 
