@@ -24,7 +24,7 @@ def Object(*args):
 
             object_class.__init__(self)
 
-            if image:
+            if image and not text:
                 Image.__init__(self)
 
         def __call__(self, window, time,

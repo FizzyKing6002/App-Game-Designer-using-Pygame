@@ -85,6 +85,8 @@ class Main:
                 self.global_scripts)
 
     def main_loop(self):
+        self.call_objects(0)
+
         run = True
         while run:
             elapsed_time = self.clock.tick(self.fps)
