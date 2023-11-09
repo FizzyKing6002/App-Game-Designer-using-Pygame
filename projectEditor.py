@@ -25,7 +25,7 @@ import ctypes
 import os
 import pygame
 from ImportCode import objects
-# Import the package so that files within the folder can be accessed through the package
+# Imports the package so that files within the folder can be accessed through the package
 from EditorScripts import ObjectScripts
 from EditorScripts import globalScripts
 

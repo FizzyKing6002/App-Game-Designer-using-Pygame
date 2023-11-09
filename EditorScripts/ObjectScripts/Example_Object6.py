@@ -4,8 +4,7 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : False,
-    "key_activated" : False,
-    "scroll_bar" : True
+    "key_activated" : False
 }
 container_name = "Example_Object2"
 
