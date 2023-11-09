@@ -63,13 +63,7 @@ def Object(*args):
                 anim = animation.animate(anim, time)
 
         def create_animation(self, val, time, anim_type, *args):
-            if len(args) == 0:
-                args = "x"
-
-            if isinstance(val, list):
-                self.animations.append([False, [0, 0], val, 0, time, anim_type, *args])
-            else:
-                self.animations.append([False, 0, val, 0, time, anim_type, *args])
+            self.animations.append(animation.create_animation(val, time, anim_type, *args))
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = copy.deepcopy(self.position_modifiers)

@@ -20,6 +20,7 @@ Classes:
     Main
 """
 
+
 import ctypes
 import os
 import pygame
@@ -32,6 +33,7 @@ from EditorScripts import globalScripts
 pygame.init()
 # Initialises the position of a generated window
 os.environ["SDL_VIDEO_WINDOW_POS"] = "0, 30"
+
 
 class Main:
     """
@@ -191,6 +193,7 @@ class Main:
             # Get the amount of time that has passed during this frame,
             # waiting until the fps required time is reached if required
             elapsed_time = self.clock.tick(self.fps)
+            print(1000/elapsed_time)
 
         # Close the window after the program loop is exited
         pygame.quit()
