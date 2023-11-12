@@ -2,6 +2,7 @@
 Represents an object
 """
 
+
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {

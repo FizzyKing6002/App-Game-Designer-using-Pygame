@@ -62,7 +62,7 @@ from ImportCode import animation
 # Factory function is used that returns a class object,
 # neccessary as variables must be defined before class is initialised
 def Object(*args):
-    container, text, image, button, hover_activated, key_activated, object_class, *args = args
+    container, text, image, button, hover_activated, key_activated, object_class = args
 
     class Object(Container if container else None1,
                  Text if text else None2,
@@ -101,7 +101,7 @@ def Object(*args):
                 Returns new mouse position relative to the rotation of the object
         """
 
-        def __init__(self, *args):
+        def __init__(self):
             self.pos = [0, 0]
             self.size = [0, 0]
             self.rot = 0
@@ -235,7 +235,7 @@ def Object(*args):
             return mouse_pos
 
     # Returns instance of Object class
-    return Object(args)
+    return Object()
 
 class Container:
     """
