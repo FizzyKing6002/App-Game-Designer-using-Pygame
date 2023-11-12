@@ -398,6 +398,12 @@ class Container:
         return (self.size[1] ** 2) / (max_y - min_y), object_offset
 
 class Text:
+    """
+    Methods:
+        draw_self(window):
+            Draws the object's text to the window
+    """
+
     def draw_self(self, window):
         # Recalculates text as size may have changed
         font = pygame.font.SysFont(self.text_font, round(self.size[1]),
@@ -408,6 +414,16 @@ class Text:
         draw_surface(self, window, temp_img)
 
 class Image:
+    """
+    Attributes:
+        img:
+            The object's image imported by pygame
+
+    Methods:
+        draw_self(window):
+            Draws the object's image to the window
+    """
+
     def __init__(self):
         # Convert alpha allows images without background to remain this way
         self.img = pygame.image.load(self.img_dir).convert_alpha()
@@ -442,6 +458,13 @@ def draw_surface(self, window, temp_img):
     window.blit(temp_surface, (x_coord, y_coord))
 
 class Button:
+    """
+    Methods:
+        call_clicked(mouse_pos, mouse_state):
+            Calls the object's different clicked functions if the object was clicked this frame
+            Handles hovering over object logic if the object is both a button and hover_activated
+    """
+
     def call_clicked(self, mouse_pos, mouse_state):
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
@@ -461,6 +484,12 @@ class Button:
                 self.right_clicked(mouse_pos)
 
 class Hover_Activated:
+    """
+    Methods:
+        call_hovered(mouse_pos):
+            Calls the object's hovered_over method if the object was hovered over this frame
+    """
+
     def call_hovered(self, mouse_pos):
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
@@ -477,6 +506,13 @@ def hitbox_collision(self, mouse_pos):
     return False
 
 class Key_Activated:
+    """
+    Methods:
+        call_activated(key_state):
+            Calls the object's key_input method for each key that was pressed this frame
+            and that should activate the object
+    """
+
     def call_activated(self, key_state):
         # Dictionary processing rather than list processing
         for key in self.activation_keys:
