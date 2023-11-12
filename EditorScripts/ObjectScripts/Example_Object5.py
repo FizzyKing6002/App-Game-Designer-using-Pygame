@@ -24,7 +24,6 @@ class Example_Object5:
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0.5, 0.5]
-        self.animations = []
 
         self.text = "T"
         self.text_font = "Calibri"

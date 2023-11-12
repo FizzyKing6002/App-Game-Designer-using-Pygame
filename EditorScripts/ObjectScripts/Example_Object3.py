@@ -14,7 +14,7 @@ class Example_Object3:
         self.update_priority = 0
 
         self.objects_visible_outside_container = True
-        self.img_dir = None
+        self.img_dir = ""
         self.activation_keys = {}
         self.is_scroll_bar = False
 
@@ -24,7 +24,6 @@ class Example_Object3:
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0.5, 0.5]
-        self.animations = []
 
         self.text = "Hello World"
         self.text_font = "Calibri"

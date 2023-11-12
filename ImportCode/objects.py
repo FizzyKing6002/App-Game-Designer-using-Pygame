@@ -81,6 +81,8 @@ def Object(*args):
                 Current rotation of the object
             opa:
                 Current opacity of the object
+            animations:
+                Stores all animations of the object
 
         Methods:
             __call__(window, time,
@@ -104,6 +106,8 @@ def Object(*args):
             self.size = [0, 0]
             self.rot = 0
             self.opa = 1
+
+            self.animations = []
 
             if container:
                 # Initialises container class as the __init__ is overwritten
