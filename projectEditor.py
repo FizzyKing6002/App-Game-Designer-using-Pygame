@@ -101,8 +101,8 @@ class Main:
                 continue
 
             # Gets the container name attribute from the current file
-            exec(f"container_name = ObjectScripts.{file_name[:-3]}.container_name",
-                 locals(), globals())
+            file = getattr(ObjectScripts, file_name[:-3])
+            container_name = file.container_name
 
             # Base case - new list should be created if none already exist
             if len(objects_list) == 0:
@@ -134,11 +134,12 @@ class Main:
                     if i == 0:
                         continue
 
+                    file = getattr(ObjectScripts, object_name)
+
                     # Get the object types and class of the object from the object's file
-                    exec(f"object_type = ObjectScripts.{object_name}.object_type",
-                         locals(), globals())
-                    exec(f"object_class = ObjectScripts.{object_name}.{object_name}",
-                         locals(), globals())
+                    object_type = file.object_type
+                    object_class = getattr(file, object_name)
+
                     # Creates the object inside the correct container given by the path
                     exec(f"""{path}.append(objects.Object(object_type['container'],
                                                           object_type['text'],
