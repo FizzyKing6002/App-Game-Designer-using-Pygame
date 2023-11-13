@@ -163,7 +163,7 @@ class Main:
         window_size = [self.window.get_width(), self.window.get_height()]
 
         mouse_pos = pygame.mouse.get_pos()
-        mouse_state = pygame.mouse.get_pressed()
+        mouse_state = list(pygame.mouse.get_pressed())
         key_state = pygame.key.get_pressed()
 
         # Add mouse wheel movement to the middle click in mouse state
