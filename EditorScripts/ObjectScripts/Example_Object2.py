@@ -56,4 +56,4 @@ class Example_Object2:
         pass
 
     def key_input(self, key):
-        pass
+        print(key)

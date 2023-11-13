@@ -520,11 +520,9 @@ class Key_Activated:
                 # Gets the name given by pygame of the key clicked
                 # Length error avoidance
                 if len(key) >= 2 and key[:2] == "K_":
-                    exec(f"pygame_key = pygame.{key}",
-                         locals(), globals())
+                    pygame_key = getattr(pygame, key)
                 else:
-                    exec(f"pygame_key = pygame.K_{key}",
-                         locals(), globals())
+                    pygame_key = getattr(pygame, f"K_{key}")
 
                 # If the key has been clicked
                 if key_state[pygame_key]:
