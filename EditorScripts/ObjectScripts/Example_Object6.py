@@ -15,7 +15,9 @@ class Example_Object6:
 
         self.objects_visible_outside_container = True
         self.img_dir = "EditorTextures/box.png"
-        self.activation_keys = {}
+        self.activation_keys = {
+            "MOUSEWHEEL" : True
+        }
         self.is_scroll_bar = True
 
         self.position_modifiers = [[0, 0.975], [0, 0.5]]
@@ -70,4 +72,4 @@ class Example_Object6:
         pass
 
     def key_input(self, key):
-        pass
+        print(key)

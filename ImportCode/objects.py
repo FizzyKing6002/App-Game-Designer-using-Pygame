@@ -478,7 +478,7 @@ class Button:
             # 0 = left mouse button, 1 = middle mouse button, 2 = right mouse button
             if mouse_state[0]:
                 self.left_clicked(mouse_pos)
-            if mouse_state[1]:
+            if mouse_state[1][0] and mouse_state[1][1] == 0:
                 self.middle_clicked(mouse_pos)
             if mouse_state[2]:
                 self.right_clicked(mouse_pos)

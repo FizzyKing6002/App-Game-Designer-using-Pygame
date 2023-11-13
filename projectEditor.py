@@ -157,17 +157,24 @@ class Main:
                             objects_list, object_name, f"{path}[{i-1}].objects")
                 break
 
-    def call_objects(self, elapsed_time):
+    def call_objects(self, elapsed_time, mouse_wheel_movement):
+        # Center coordinates of window is (half its width, half its height)
+        window_pos = [self.window.get_width() / 2, self.window.get_height() / 2]
+        window_size = [self.window.get_width(), self.window.get_height()]
+
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_state = pygame.mouse.get_pressed()
+        key_state = pygame.key.get_pressed()
+
+        # Add mouse wheel movement to the middle click in mouse state
+        mouse_state[1] = [mouse_state[1], mouse_wheel_movement]
+
         for obj in self.objects:
             # Calls the object's __call__ method
-            obj(self.window, elapsed_time,
-                # Center coordinates of window is (half its width, half its height)
-                [self.window.get_width() / 2, self.window.get_height() / 2],
-                [self.window.get_width(), self.window.get_height()],
+            obj(self.window, elapsed_time, window_pos, window_size,
                 # Rotation of window is zero, opacity is one
                 0, 1,
-                pygame.mouse.get_pos(), pygame.mouse.get_pressed(),
-                pygame.key.get_pressed(),
+                mouse_pos, mouse_state, key_state,
                 self.global_scripts)
 
     def main_loop(self):
@@ -178,23 +185,27 @@ class Main:
         elapsed_time = 0
 
         while run:
-            # Update every object
-            self.call_objects(elapsed_time)
-
+            # Mouse wheel movement set to zero each frame
+            # as if there is no mousewheel event, the previous movement would persist
+            mouse_wheel_movement = 0
             for event in pygame.event.get():
                 # If the close button in the title bar is clicked
                 if event.type == pygame.QUIT:
                     run = False
 
+                # Mouse wheel movement must be fetched from the event handler
                 if event.type == pygame.MOUSEWHEEL:
-                    run = False
+                    # Mouse wheel movement is fetched, mouse wheel only moves in y direction
+                    mouse_wheel_movement = event.y
+
+            # Update every object
+            self.call_objects(elapsed_time, mouse_wheel_movement)
 
             pygame.display.update()
 
             # Get the amount of time that has passed during this frame,
             # waiting until the fps required time is reached if required
             elapsed_time = self.clock.tick(self.fps)
-            print(1000/elapsed_time)
 
         # Close the window after the program loop is exited
         pygame.quit()
