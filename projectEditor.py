@@ -179,7 +179,9 @@ class Main:
 
     def main_loop(self):
         # Objects are called once before the program begins so that everything is initialised
-        self.call_objects(0)
+        # Elapsed time is zero so that animations are not progressed,
+        # mouse scroll is defaulted to zero
+        self.call_objects(0, 0)
 
         run = True
         elapsed_time = 0
