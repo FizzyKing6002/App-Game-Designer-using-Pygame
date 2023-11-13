@@ -353,6 +353,7 @@ class Container:
                     pos[1] -= (self.size[1] - size[1]) / 2
                     # Maximum distance the scroll bar can be moved to stay within the container
                     obj.scroll_bar_limit = self.size[1] - size[1]
+                    obj.mouse_scroll_amount = mouse_state[1][1]
                 else:
                     # Object is moved to take into account the amount the user has scrolled
                     pos[1] += self.object_offset - scroll_offset
@@ -478,7 +479,7 @@ class Button:
             # 0 = left mouse button, 1 = middle mouse button, 2 = right mouse button
             if mouse_state[0]:
                 self.left_clicked(mouse_pos)
-            if mouse_state[1][0] and mouse_state[1][1] == 0:
+            if mouse_state[1][0]:
                 self.middle_clicked(mouse_pos)
             if mouse_state[2]:
                 self.right_clicked(mouse_pos)
