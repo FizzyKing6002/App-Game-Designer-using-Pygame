@@ -289,6 +289,11 @@ class Container:
                         * ((obj.position_modifiers[1][0] + obj.mouse_pos_diff) \
                             / (self.size[1] - obj.size[1]))
 
+                    # Amount scroll wheel has been moved since last frame
+                    obj.mouse_scroll_amount = 0
+                    if hitbox_collision(self, mouse_pos):
+                        obj.mouse_scroll_amount = mouse_state[1][1]
+
         # Containers that are rotated or have a scroll bar must make use of a surface
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
@@ -351,9 +356,9 @@ class Container:
                     size[1] = scroll_bar_size
                     # Moves the scroll bar to the top of the container
                     pos[1] -= (self.size[1] - size[1]) / 2
+
                     # Maximum distance the scroll bar can be moved to stay within the container
                     obj.scroll_bar_limit = self.size[1] - size[1]
-                    obj.mouse_scroll_amount = mouse_state[1][1]
                 else:
                     # Object is moved to take into account the amount the user has scrolled
                     pos[1] += self.object_offset - scroll_offset

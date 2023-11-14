@@ -43,7 +43,7 @@ class Example_Object6:
         self.pos[1] += self.mouse_pos_diff
 
         total_diff = self.mouse_pos_diff + self.position_modifiers[1][0]
-        total_diff_scroll = total_diff - self.mouse_scroll_amount * 0.05 * self.scroll_bar_limit
+        total_diff_scroll = total_diff - self.mouse_scroll_amount * 0.05 * self.size[1]
 
         if total_diff_scroll > self.scroll_bar_limit:
             self.pos[1] += self.scroll_bar_limit - total_diff
@@ -52,8 +52,8 @@ class Example_Object6:
             self.pos[1] -= total_diff
             self.position_modifiers[1][0] -= total_diff
         else:
-            self.pos[1] -= self.mouse_scroll_amount * 0.05 * self.scroll_bar_limit
-            self.position_modifiers[1][0] -= self.mouse_scroll_amount * 0.05 * self.scroll_bar_limit
+            self.pos[1] -= self.mouse_scroll_amount * 0.05 * self.size[1]
+            self.position_modifiers[1][0] -= self.mouse_scroll_amount * 0.05 * self.size[1]
 
         if not self.clicked and self.init_mouse_pos is not None:
             self.init_mouse_pos = None
