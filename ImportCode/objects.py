@@ -385,6 +385,8 @@ class Container:
         # Min and max y are set to the bounds of the container
         min_y = 0
         max_y = self.size[1]
+        cont_min = 0
+        cont_max = max_y
 
         # Checks whether any object within the container goes out of the bounds of the container
         for obj in self.objects:
@@ -401,7 +403,8 @@ class Container:
         object_offset = 0 - min_y
 
         # Returns size the scroll bar should be and object_offset
-        return (self.size[1] ** 2) / (max_y - min_y), object_offset
+        return (self.size[1] ** 2) / (max(max_y - self.object_offset, cont_max) \
+               - min(min_y - self.object_offset, cont_min)), object_offset
 
 class Text:
     """
@@ -431,8 +434,12 @@ class Image:
     """
 
     def __init__(self):
-        # Convert alpha allows images without background to remain this way
-        self.img = pygame.image.load(self.img_dir).convert_alpha()
+        try:
+            # convert_alpha allows images without background to remain this way
+            self.img = pygame.image.load(self.img_dir).convert_alpha()
+        except:
+            self.img = pygame.Surface((5, 5)).convert_alpha()
+            pygame.draw.rect(self.img, (0, 0, 0), pygame.Rect(0, 0, 0, 0))
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(

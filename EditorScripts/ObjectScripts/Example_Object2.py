@@ -40,7 +40,7 @@ class Example_Object2:
     def frame_update(self, global_scripts):
         if self.one_time:
             self.one_time = False
-            self.create_animation(400, 1000, "posx", "x")
+            self.create_animation(-400, 1000, "posy", "x")
             self.create_animation(0, 1000, "rot", "x")
 
     def left_clicked(self, mouse_pos):
