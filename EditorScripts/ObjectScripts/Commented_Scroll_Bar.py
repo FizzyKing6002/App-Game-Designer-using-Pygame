@@ -13,7 +13,7 @@ object_type = {
     "key_activated" : False
 }
 # Name should match container that contains the data that needs to be scrolled
-container_name = None
+container_name = "None"
 
 # Class name must be the same as the file name (without .py)
 class Commented_Scroll_Bar:

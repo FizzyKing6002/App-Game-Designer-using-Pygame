@@ -417,7 +417,7 @@ class Text:
         # Recalculates text as size may have changed
         font = pygame.font.SysFont(self.text_font, round(self.size[1]),
                                    self.text_bold, self.text_italic)
-        temp_img = pygame.transform.rotate(font.render(self.text, True, self.text_colour),
+        temp_img = pygame.transform.rotate(font.render(self.text, True, self.object_colour),
                                            self.rot)
 
         draw_surface(self, window, temp_img)
@@ -442,7 +442,7 @@ class Image:
             # Create a surface representing the object's image
             self.img = pygame.Surface((1, 1)).convert_alpha()
             # Draw a black rectangle onto the surface so that the object is visible on the screen
-            pygame.draw.rect(self.img, (0, 0, 0), pygame.Rect(0, 0, 1, 1))
+            pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(

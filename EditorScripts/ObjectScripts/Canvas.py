@@ -6,9 +6,9 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : False,
+    "container" : True,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -16,21 +16,21 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "None"
+container_name = "Background"
 
 # Class name must be the same as the file name (without .py)
-class Commented_Object:
+class Canvas:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 5
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
-        self.objects_visible_outside_container = True
+        self.objects_visible_outside_container = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
@@ -41,9 +41,9 @@ class Commented_Object:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[0, 0.4], [0, 0.575]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, 0.8], [0, 0.85]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -51,7 +51,7 @@ class Commented_Object:
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (255, 255, 255)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]

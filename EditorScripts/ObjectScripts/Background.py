@@ -6,9 +6,9 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : False,
+    "container" : True,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -16,14 +16,14 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "None"
+container_name = None
 
 # Class name must be the same as the file name (without .py)
-class Commented_Object:
+class Background:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
         self.update_priority = 0
@@ -51,7 +51,7 @@ class Commented_Object:
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (149, 152, 161)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]
