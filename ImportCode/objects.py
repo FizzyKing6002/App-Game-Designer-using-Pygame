@@ -437,9 +437,12 @@ class Image:
         try:
             # convert_alpha allows images without background to remain this way
             self.img = pygame.image.load(self.img_dir).convert_alpha()
-        except:
-            self.img = pygame.Surface((5, 5)).convert_alpha()
-            pygame.draw.rect(self.img, (0, 0, 0), pygame.Rect(0, 0, 0, 0))
+        # If the image directory provided does not lead to an image
+        except FileNotFoundError:
+            # Create a surface representing the object's image
+            self.img = pygame.Surface((1, 1)).convert_alpha()
+            # Draw a black rectangle onto the surface so that the object is visible on the screen
+            pygame.draw.rect(self.img, (0, 0, 0), pygame.Rect(0, 0, 1, 1))
 
     def draw_self(self, window):
         temp_img = pygame.transform.rotate(pygame.transform.scale(

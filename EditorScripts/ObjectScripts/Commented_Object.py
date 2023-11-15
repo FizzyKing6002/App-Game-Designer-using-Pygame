@@ -23,7 +23,7 @@ class Commented_Object:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = True
+        self.active = False
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
         self.update_priority = 0

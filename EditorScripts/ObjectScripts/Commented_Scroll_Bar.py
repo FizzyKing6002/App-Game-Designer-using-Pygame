@@ -13,12 +13,12 @@ object_type = {
     "key_activated" : False
 }
 # Name should match container that contains the data that needs to be scrolled
-container_name = "Example_Object"
+container_name = None
 
 # Class name must be the same as the file name (without .py)
 class Commented_Scroll_Bar:
     def __init__(self):
-        self.active = True
+        self.active = False
         # Scroll bar should be drawn over all other images in the container
         self.update_priority = 10000
 
