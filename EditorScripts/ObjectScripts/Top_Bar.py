@@ -19,7 +19,7 @@ object_type = {
 container_name = "Background"
 
 # Class name must be the same as the file name (without .py)
-class Side_Bar:
+class Top_Bar:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
@@ -41,9 +41,9 @@ class Side_Bar:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.9], [0, 0.5]]
+        self.position_modifiers = [[0, 0.4], [0, 0.075]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.19], [0, 0.98]]
+        self.size_modifiers = [[0, 0.79], [0, 0.13]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
