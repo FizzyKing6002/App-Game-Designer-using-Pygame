@@ -38,11 +38,11 @@ class Commented_Scroll_Bar:
         self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
+        self.object_colour = (0, 0, 0)
         self.position_origin = [0.5, 0.5]
 
         self.text = ""
         self.text_font = ""
-        self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 
