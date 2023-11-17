@@ -14,7 +14,7 @@ object_type = {
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
-# Must be the same as the container's file/class name (without .py)
+# Must be the same as the container's file/class name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 container_name = "None"
 

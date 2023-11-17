@@ -23,10 +23,13 @@ Classes:
 
 import ctypes
 import os
+import importlib
+
 import pygame
+
 from ImportCode import objects
 # Imports the package so that files within the folder can be accessed through the package
-from EditorScripts import ObjectScripts
+#from EditorScripts import ObjectScripts
 from EditorScripts import globalScripts
 
 # Initialises pygame, including pygame.font, allowing certain pygame methods to be used
@@ -92,8 +95,11 @@ class Main:
         # Creates a list of lists, where each list's first item is the container name and
         # the rest of the items are object's file names that belong to the specified container
         objects_list = []
+        # Imports all the objects from the object scripts folder and composes a list of these files
+        # Passes path from this file to the folder
+        object_files = self.import_objects("EditorScripts/ObjectScripts/")
         # List is created of all the file names within the ObjectScripts folder
-        object_files = os.listdir("EditorScripts/ObjectScripts")
+        #object_files = os.listdir("EditorScripts/ObjectScripts")
 
         for file_name in object_files:
             # The __init__.py file and non python files cannot be loaded, so are ignored
@@ -122,6 +128,21 @@ class Main:
 
         # Calls method to create objects using the ordered list just created
         self.recursive_create_objects(objects_list, None, "self.objects")
+
+    def import_objects(self, path):
+        object_files = []
+        for file in os.listdir(f"{os.path.dirname(__file__)}/{path}"):
+            if file == "__init__.py" or file[-3:] != ".py":
+                if os.path.isdir(f"{os.path.dirname(__file__)}/{path}{file}"):
+                    self.import_objects(f"{path}{file}/")
+                continue
+
+            path = path.replace("/", ".")
+            print(f"{path}{file[:-3]}")
+            importlib.__import__(f"{path}{file[:-3]}", globals(), locals(), [], 1)
+            del file
+
+        return object_files
 
     def recursive_create_objects(self, objects_list, val, path):
         # Gets all of the lists of objects belonging to containers
