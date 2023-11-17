@@ -6,20 +6,20 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
-    "image" : False,
-    "button" : False,
-    "hover_activated" : False,
-    "key_activated" : False
+    "image" : True,
+    "button" : True,
+    "hover_activated" : True,
+    "key_activated" : True
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Top_Bar"
+container_name = "Menu_Bar1"
 
 # Class name must be the same as the file name (without .py)
-class Menu_Bar:
+class Test_Play:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
@@ -33,17 +33,21 @@ class Menu_Bar:
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorTextures/Menu_Icons/play-button.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
+        self.activation_keys = {
+            "LCTRL" : True,
+            "RCTRL" : True,
+            "p" : True
+        }
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.15], [0, 0.5]]
+        self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.3], [0, 1]]
+        self.size_modifiers = [[0, 0.85/3], [0, 0.8]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
