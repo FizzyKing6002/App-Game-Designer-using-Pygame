@@ -97,51 +97,47 @@ class Main:
         objects_list = []
         # Imports all the objects from the object scripts folder and composes a list of these files
         # Passes path from this file to the folder
-        object_files = self.import_objects("EditorScripts/ObjectScripts/")
+        object_files = self.import_objects("EditorScripts/ObjectScripts/", [])
+        #for obj in object_files:
+         #   print(obj.container_name)
         # List is created of all the file names within the ObjectScripts folder
         #object_files = os.listdir("EditorScripts/ObjectScripts")
 
-        for file_name in object_files:
-            # The __init__.py file and non python files cannot be loaded, so are ignored
-            if file_name == "__init__.py" or file_name[-3:] != ".py":
-                continue
-
+        for file in object_files:
             # Gets the container name attribute from the current file
-            file = getattr(ObjectScripts, file_name[:-3])
             container_name = file.container_name
 
             # Base case - new list should be created if none already exist
             if len(objects_list) == 0:
-                objects_list.append([container_name, file_name[:-3]])
+                objects_list.append([container_name, file])
                 continue
             # Searches through existing lists for matching container names
             for container_type in objects_list:
                 # When matching container name is found, adds current file name to the list
                 if container_name == container_type[0]:
-                    container_type.append(file_name[:-3])
+                    container_type.append(file)
                     break
 
                 # If matching container name is not found, creates a new list
                 if container_type == objects_list[-1]:
-                    objects_list.append([container_name, file_name[:-3]])
+                    objects_list.append([container_name, file])
                     break
 
         # Calls method to create objects using the ordered list just created
         self.recursive_create_objects(objects_list, None, "self.objects")
 
-    def import_objects(self, path):
-        object_files = []
+    def import_objects(self, path, object_files):
         for file in os.listdir(f"{os.path.dirname(__file__)}/{path}"):
             if file == "__init__.py" or file[-3:] != ".py":
                 if os.path.isdir(f"{os.path.dirname(__file__)}/{path}{file}"):
-                    self.import_objects(f"{path}{file}/")
+                    self.import_objects(f"{path}{file}/", object_files)
                 continue
 
-            path = path.replace("/", ".")
-            print(f"{path}{file[:-3]}")
-            importlib.__import__(f"{path}{file[:-3]}", globals(), locals(), [], 1)
+            #importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}")
+            object_files.append(importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}"))
             del file
 
+        #print(globals())
         return object_files
 
     def recursive_create_objects(self, objects_list, val, path):
@@ -150,16 +146,15 @@ class Main:
             # If the container for the objects matches the target container name
             if container_type[0] == val:
                 # Gets the objects that should belong to this container
-                for i, object_name in enumerate(container_type):
+                for i, file in enumerate(container_type):
                     # Ignore the container name as it is not an object
                     if i == 0:
                         continue
 
-                    file = getattr(ObjectScripts, object_name)
-
-                    # Get the object types and class of the object from the object's file
+                    # Get the object types, file name, and class of the file
                     object_type = file.object_type
-                    object_class = getattr(file, object_name)
+                    file_name = file.__name__.split(".")[-1]
+                    object_class = getattr(file, file_name)
 
                     # Creates the object inside the correct container given by the path
                     exec(f"""{path}.append(objects.Object(object_type['container'],
@@ -175,7 +170,7 @@ class Main:
                     if object_type['container']:
                         # Search for and add objects to it that should belong to it
                         self.recursive_create_objects(
-                            objects_list, object_name, f"{path}[{i-1}].objects")
+                            objects_list, file_name, f"{path}[{i-1}].objects")
                 break
 
     def call_objects(self, elapsed_time, mouse_wheel_movement):
