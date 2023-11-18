@@ -18,8 +18,8 @@ object_type = {
 # If the object is not contained within any others, choose None
 container_name = "Background"
 
-# Class name must be the same as the file name (without .py)
-class Side_Bar:
+# Class in which methods and attributes are used - DO NOT RENAME
+class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called

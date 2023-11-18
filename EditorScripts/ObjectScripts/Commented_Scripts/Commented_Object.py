@@ -6,7 +6,7 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : False,
     "button" : False,
@@ -14,12 +14,12 @@ object_type = {
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
-# Must be the same as the container's file/class name (without .py)
+# Must be the same as the container's file/class name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
-container_name = "Top_Bar"
+container_name = "None"
 
-# Class name must be the same as the file name (without .py)
-class Menu_Bar3:
+# Class in which methods and attributes are used - DO NOT RENAME
+class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
@@ -41,9 +41,9 @@ class Menu_Bar3:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.15], [0, 0.5]]
+        self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.3], [0, 1]]
+        self.size_modifiers = [[0, 1], [0, 1]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]

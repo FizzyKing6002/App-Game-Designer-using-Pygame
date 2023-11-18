@@ -61,6 +61,8 @@ class Main:
         load_objects():
             Locates the object files and orders them based on which containers they belong to
             Calls recursive_create_objects after object ordering
+        import_objects(path, object_files):
+            Imports all objects from Object Scripts into a list
         recursive_create_objects(objects_list, val, path):
             Searches through the objects_list for objects that belong to the container named 'val',
             appends these objects the list located within that container given by 'path'
@@ -98,10 +100,6 @@ class Main:
         # Imports all the objects from the object scripts folder and composes a list of these files
         # Passes path from this file to the folder
         object_files = self.import_objects("EditorScripts/ObjectScripts/", [])
-        #for obj in object_files:
-         #   print(obj.container_name)
-        # List is created of all the file names within the ObjectScripts folder
-        #object_files = os.listdir("EditorScripts/ObjectScripts")
 
         for file in object_files:
             # Gets the container name attribute from the current file
@@ -127,22 +125,26 @@ class Main:
         self.recursive_create_objects(objects_list, None, "self.objects")
 
     def import_objects(self, path, object_files):
+        # Iterates through every file in the folder
         for file in os.listdir(f"{os.path.dirname(__file__)}/{path}"):
+            # Ignore non object scripts
             if file == "__init__.py" or file[-3:] != ".py":
+                # If the non object script is a folder import the objects in that folder
                 if os.path.isdir(f"{os.path.dirname(__file__)}/{path}{file}"):
                     self.import_objects(f"{path}{file}/", object_files)
                 continue
 
-            #importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}")
+            # Append the imported files into a list so they can be acessed
+            # importlib.import_module does not import the file into globals so this is neccessary
             object_files.append(importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}"))
             del file
 
         #print(globals())
         return object_files
 
-    def recursive_create_objects(self, objects_list, val, path):
-        # Gets all of the lists of objects belonging to containers
-        for container_type in objects_list:
+    def recursive_create_objects(self, file_list, val, path):
+        # Iterates through lists of files belonging to different containers
+        for container_type in file_list:
             # If the container for the objects matches the target container name
             if container_type[0] == val:
                 # Gets the objects that should belong to this container
@@ -151,10 +153,10 @@ class Main:
                     if i == 0:
                         continue
 
-                    # Get the object types, file name, and class of the file
+                    # Get the object types, file name, and main class of the file
                     object_type = file.object_type
                     file_name = file.__name__.split(".")[-1]
-                    object_class = getattr(file, file_name)
+                    object_class = file.Main
 
                     # Creates the object inside the correct container given by the path
                     exec(f"""{path}.append(objects.Object(object_type['container'],
@@ -170,7 +172,9 @@ class Main:
                     if object_type['container']:
                         # Search for and add objects to it that should belong to it
                         self.recursive_create_objects(
-                            objects_list, file_name, f"{path}[{i-1}].objects")
+                            file_list, file_name, f"{path}[{i-1}].objects")
+
+                # If the correct list is found, the others do not need to be checked
                 break
 
     def call_objects(self, elapsed_time, mouse_wheel_movement):
