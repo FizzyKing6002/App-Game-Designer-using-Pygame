@@ -16,7 +16,7 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Menu_Bar1"
+container_name = "Menu_Bar2"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,7 +33,7 @@ class Main:
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = "EditorTextures/Menu_Icons/play-button.png"
+        self.img_dir = "EditorTextures/Menu_Icons/pause.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {
             "LCTRL" : True,
@@ -73,7 +73,7 @@ class Main:
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.clicked:
-            global_scripts.menu_state = 1
+            global_scripts.menu_state = 2
 
             self.clicked = False
 

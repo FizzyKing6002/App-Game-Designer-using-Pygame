@@ -1,4 +1,3 @@
 class globalScripts:
     def __init__(self):
-        self.mousedown = False
-        self.state = 0
+        self.menu_state = 0

@@ -16,7 +16,7 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Menu_Bar1"
+container_name = "Menu_Bar3"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
