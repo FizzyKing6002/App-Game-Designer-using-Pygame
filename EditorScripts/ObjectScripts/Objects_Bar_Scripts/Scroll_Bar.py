@@ -6,24 +6,24 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
-    "button" : False,
-    "hover_activated" : False,
-    "key_activated" : False
+    "button" : True,
+    "hover_activated" : True,
+    "key_activated" : True
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Top_Bar"
+container_name = "Objects_Bar"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
         self.update_priority = 0
@@ -33,17 +33,23 @@ class Main:
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorTextures/Objects_Icons/scroll.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
+        self.activation_keys = {
+            "LCTRL" : True,
+            "RCTRL" : True,
+            "LSHIFT" : True,
+            "RSHIFT" : True,
+            "s" : True
+        }
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.15], [0, 0.5]]
+        self.position_modifiers = [[0, 0.18 + 11*0.76/14], [0, 0.4]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.3], [0, 1]]
+        self.size_modifiers = [[0, 0.76/7], [0, 0.6]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -51,7 +57,7 @@ class Main:
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (149, 152, 161)
+        self.object_colour = (0, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]
@@ -68,10 +74,7 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.menu_state == 2 and not self.active:
-            self.active = True
-        elif global_scripts.menu_state != 2 and self.active:
-            self.active = False
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

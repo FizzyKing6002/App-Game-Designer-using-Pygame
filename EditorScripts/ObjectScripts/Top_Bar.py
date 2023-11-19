@@ -8,7 +8,7 @@ Represents an object
 object_type = {
     "container" : True,
     "text" : False,
-    "image" : True,
+    "image" : False,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -41,9 +41,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.4], [0, 0.075]]
+        self.position_modifiers = [[0, 0.4035], [0, 0.075]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.79], [0, 0.13]]
+        self.size_modifiers = [[0, 0.793], [0, 0.13]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]

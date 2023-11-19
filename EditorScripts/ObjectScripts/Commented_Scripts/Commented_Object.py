@@ -14,7 +14,7 @@ object_type = {
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
-# Must be the same as the container's file/class name (without .py and without any folder path)
+# Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 container_name = "None"
 
@@ -95,7 +95,7 @@ class Main:
 
 """
 To create an animation:
-Call self.create_animation(x, y, z{, a})
+Call self.create_animation(x, y, z[, a])
     x -> float -> final value of the animation (initial value is always zero)
     y -> int -> total time for the animation to take place over in milliseconds
     z -> string -> type of animation ->
@@ -104,9 +104,9 @@ Call self.create_animation(x, y, z{, a})
             if neither, its assumed the animation is in both x and y directions
             if neither, a list can be used for x and a
         include % if the animation controls the percentage modifiers
-    a -> this parameter can be ignored (therefore is shown in curly braces) ->
-        string -> easing function for animation -> use "x" as the subject of the function
-        if none given, defaults to linear easing function
+    a -> this parameter can be ignored (therefore is shown in square braces) ->
+        string -> easing function for animation -> use "x" as the subject of the function ->
+        if none given, defaults to linear easing function (simply "y = x")
 e.g. self.create_animation(500, 5000, "posx") ->
     moves object 500 pixels to the right over 5 seconds
 e.g. self.create_animation([0.5, 0.1], 2000, "size%", ["x", "x**3"]) ->
