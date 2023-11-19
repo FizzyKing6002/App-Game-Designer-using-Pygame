@@ -6,17 +6,17 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : False,
+    "container" : True,
     "text" : False,
-    "image" : True,
-    "button" : True,
-    "hover_activated" : True,
-    "key_activated" : True
+    "image" : False,
+    "button" : False,
+    "hover_activated" : False,
+    "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Menu_Bar1"
+container_name = "Top_Bar"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,21 +33,17 @@ class Main:
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = "EditorTextures/Menu_Icons/play-button.png"
+        self.img_dir = ""
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {
-            "LCTRL" : True,
-            "RCTRL" : True,
-            "p" : True
-        }
+        self.activation_keys = {}
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[0, 0.65], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.85/3], [0, 0.8]]
+        self.size_modifiers = [[0, 0.7], [0, 1]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -68,25 +64,15 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.clicked = False
-        self.prev_clicked = False
-        self.hovered = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if not self.clicked and self.prev_clicked and self.hovered:
-            global_scripts.menu_state = 1
-
-        self.prev_clicked = False
-        self.hovered = False
-
-        if self.clicked:
-            self.prev_clicked = True
-            self.clicked = False
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        self.clicked = True
+        pass
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -98,7 +84,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        self.hovered = True
+        pass
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
     def key_input(self, key):

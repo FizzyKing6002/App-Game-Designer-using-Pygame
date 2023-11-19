@@ -69,12 +69,19 @@ class Main:
 
         # Additional attributes:
         self.clicked = False
+        self.prev_clicked = False
+        self.hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.clicked:
+        if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.menu_state = 2
 
+        self.prev_clicked = False
+        self.hovered = False
+
+        if self.clicked:
+            self.prev_clicked = True
             self.clicked = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
@@ -91,7 +98,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
     def key_input(self, key):

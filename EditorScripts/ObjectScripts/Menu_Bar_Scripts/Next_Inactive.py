@@ -9,9 +9,9 @@ object_type = {
     "container" : False,
     "text" : False,
     "image" : True,
-    "button" : True,
-    "hover_activated" : True,
-    "key_activated" : True
+    "button" : False,
+    "hover_activated" : False,
+    "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
