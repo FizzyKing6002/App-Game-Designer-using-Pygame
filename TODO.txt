@@ -8,3 +8,5 @@ Belonging to multiple containers
 Add timer feature
 Global scripts gets variables like mouse position for follow mouse etc.
 Recalculate image every frame
+Give animations names and methods for instantly completing them, 
+    progressing them, reversing them, deleting them

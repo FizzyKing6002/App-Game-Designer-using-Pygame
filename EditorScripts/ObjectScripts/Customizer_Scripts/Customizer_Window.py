@@ -41,9 +41,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.3]]
+        self.position_modifiers = [[0, 0.5], [0, 0.61]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 0.6]]
+        self.size_modifiers = [[0, 1], [0, 0.39]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -54,7 +54,7 @@ class Main:
         self.object_colour = (149, 152, 161)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
-        self.position_origin = [0.5, 0.5]
+        self.position_origin = [0.5, 0]
 
         # Content of the text - TEXT ONLY
         self.text = ""
