@@ -39,7 +39,7 @@ user32 = ctypes.windll.user32
 # Window height is reduced by 70 pixels to account for the taskbar and title bar
 window_size = int(user32.GetSystemMetrics(0) / 1.5), int((user32.GetSystemMetrics(1) - 70) / 1.5)
 # Initialises the position of a generated window
-os.environ["SDL_VIDEO_WINDOW_POS"] = f"{window_size[0] / 2}, {30 + window_size[0] / 2}"
+os.environ["SDL_VIDEO_WINDOW_POS"] = f"{window_size[0] / 2}, {(30 + window_size[0]) / 2}"
 
 
 class Main:
