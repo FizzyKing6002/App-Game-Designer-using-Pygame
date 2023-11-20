@@ -6,9 +6,9 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : False,
-    "text" : True,
-    "image" : False,
+    "container" : True,
+    "text" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -41,9 +41,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.05], [0, 0.02]]
+        self.position_modifiers = [[0, 0.05], [0, 0.13]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 0.1]]
+        self.size_modifiers = [[0, 0.9], [0, 0.82]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -51,16 +51,16 @@ class Main:
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (175, 179, 189)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0, 0]
 
         # Content of the text - TEXT ONLY
-        self.text = "Objects:"
+        self.text = ""
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
-        self.text_bold = True
+        self.text_bold = False
         self.text_italic = False
 
         # Additional attributes:
