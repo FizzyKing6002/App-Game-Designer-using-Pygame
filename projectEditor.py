@@ -190,6 +190,9 @@ class Main:
         # Add mouse wheel movement to the middle click in mouse state
         mouse_state[1] = [mouse_state[1], mouse_wheel_movement]
 
+        # Calls global update function before objects
+        self.global_scripts.early_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+
         for obj in self.objects:
             # Calls the object's __call__ method
             obj(self.window, elapsed_time, window_pos, window_size,
@@ -197,6 +200,9 @@ class Main:
                 0, 1,
                 mouse_pos, mouse_state, key_state,
                 self.global_scripts)
+
+        # Calls global update function after objects
+        self.global_scripts.late_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
 
     def main_loop(self):
         # Objects are called once before the program begins so that everything is initialised
