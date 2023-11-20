@@ -6,8 +6,8 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
-    "text" : False,
+    "container" : False,
+    "text" : True,
     "image" : False,
     "button" : False,
     "hover_activated" : False,
@@ -16,7 +16,7 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Background"
+container_name = "List_Window"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -30,7 +30,7 @@ class Main:
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
-        self.objects_visible_outside_container = False
+        self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
@@ -41,9 +41,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.9], [0, 0.5]]
+        self.position_modifiers = [[0, 0.03], [0, 0.01]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.19], [0, 0.98]]
+        self.size_modifiers = [[0, 1], [0, 0.1]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -54,13 +54,13 @@ class Main:
         self.object_colour = (0, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
-        self.position_origin = [0.5, 0.5]
+        self.position_origin = [0, 0]
 
         # Content of the text - TEXT ONLY
-        self.text = ""
+        self.text = "Objects:"
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
-        self.text_bold = False
+        self.text_bold = True
         self.text_italic = False
 
         # Additional attributes:

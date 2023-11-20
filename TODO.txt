@@ -6,3 +6,5 @@ Text boxes
 Generate object method for containers
 Belonging to multiple containers
 Add timer feature
+Global scripts gets variables like mouse position for follow mouse etc.
+Recalculate image every frame

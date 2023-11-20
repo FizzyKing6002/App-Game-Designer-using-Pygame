@@ -420,6 +420,9 @@ class Text:
         temp_img = pygame.transform.rotate(font.render(self.text, True, self.object_colour),
                                            self.rot)
 
+        # Aligns text dynamically depending on the text width as this is unpredictable
+        self.pos[0] += (self.position_origin[0] - 0.5) * self.size[0]
+        self.pos[0] -= (self.position_origin[0] - 0.5) * temp_img.get_width()
         draw_surface(self, window, temp_img)
 
 class Image:

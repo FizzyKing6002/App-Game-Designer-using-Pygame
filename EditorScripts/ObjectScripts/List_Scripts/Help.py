@@ -6,17 +6,17 @@ Represents an object
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
-    "image" : False,
-    "button" : False,
-    "hover_activated" : False,
-    "key_activated" : False
+    "image" : True,
+    "button" : True,
+    "hover_activated" : True,
+    "key_activated" : True
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Background"
+container_name = "List_Window"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -30,20 +30,24 @@ class Main:
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
-        self.objects_visible_outside_container = False
+        self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorTextures/List_Icons/question.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
+        self.activation_keys = {
+            "LCTRL" : True,
+            "RCTRL" : True,
+            "h" : True
+        }
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.9], [0, 0.5]]
+        self.position_modifiers = [[0, 0.97], [0, 0.01]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.19], [0, 0.98]]
+        self.size_modifiers = [[0, 0.1], [0, 0.05]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -54,7 +58,7 @@ class Main:
         self.object_colour = (0, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
-        self.position_origin = [0.5, 0.5]
+        self.position_origin = [1, 0]
 
         # Content of the text - TEXT ONLY
         self.text = ""
