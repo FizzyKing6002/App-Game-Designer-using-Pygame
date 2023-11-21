@@ -548,8 +548,12 @@ class Key_Activated:
     """
 
     def call_activated(self, key_state):
+        # List of keys that activate the object that have been pressed since the last frame
+        activated_keys = []
+
         # Dictionary processing rather than list processing
         for key in self.activation_keys:
+            # For each key in the dictionary that has been pressed
             if self.activation_keys[key]:
                 # Gets the name given by pygame of the key clicked
                 # Length error avoidance
@@ -560,9 +564,13 @@ class Key_Activated:
 
                 # If the key has been clicked
                 if key_state[pygame_key]:
-                    # Call the key input function for each key that is pressed
-                    # and should be reacted to, passing the name of the key
-                    self.key_input(key)
+                    # Add the activated key to the list
+                    activated_keys.append(key)
+
+
+        # Call the key input function with each key that has been pressed
+        # and should be reacted to, passing the name of the key
+        self.key_input(activated_keys)
 
 # None classes are throwaways for conditional inheritance
 class None1:

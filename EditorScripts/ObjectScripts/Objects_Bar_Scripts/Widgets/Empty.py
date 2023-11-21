@@ -3,6 +3,9 @@ Represents an object
 """
 
 
+from copy import deepcopy
+
+
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
@@ -70,6 +73,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.clicked = False
+
+        self.dragging = False
+        self.key_dragging = False
+
         self.hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
@@ -80,9 +88,25 @@ class Main:
         else:
             self.opacity_modifiers[1] = 1
 
+        if self.clicked:
+            self.dragging = True
+            self.clicked = False
+
+        if self.key_dragging and global_scripts.mouse_state[0]:
+            self.dragging = True
+            self.key_dragging = False
+        
+        if self.dragging and not global_scripts.mouse_state[0]:
+            self.dragging = False
+
+            print(global_scripts.mouse_pos)
+
+        if self.dragging or self.key_dragging:
+            self.pos = deepcopy(global_scripts.mouse_pos)
+
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -96,9 +120,13 @@ class Main:
     def hovered_over(self, mouse_pos):
         self.hovered = True
 
-    # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, key):
-        pass
+    # Called if a key in activation_keys was pressed this frame,
+    # passes list of all pressed keys in activation_keys
+    def key_input(self, keys):
+        if "e" in keys \
+            and ("LCTRL" in keys or "RCTRL" in keys) \
+                and ("LSHIFT" in keys or "RSHIFT" in keys):
+            self.key_dragging = True
 
     # Additional methods:
 

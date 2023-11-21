@@ -128,5 +128,5 @@ class Main:
     def hovered_over(self, mouse_pos):
         pass
 
-    def key_input(self, key):
+    def key_input(self, keys):
         pass

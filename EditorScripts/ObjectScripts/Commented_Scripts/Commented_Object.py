@@ -86,8 +86,9 @@ class Main:
     def hovered_over(self, mouse_pos):
         pass
 
-    # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, key):
+    # Called if a key in activation_keys was pressed this frame,
+    # passes list of all pressed keys in activation_keys
+    def key_input(self, keys):
         pass
 
     # Additional methods:
