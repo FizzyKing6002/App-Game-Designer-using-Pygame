@@ -1,11 +1,10 @@
 Call key_activated once with a list
-Hover over buttons
 Key activate buttons
 Animations for switching menu states
 Text boxes
 Generate object method for containers
 Belonging to multiple containers
 Add timer feature
-Recalculate image every frame
 Give animations names and methods for instantly completing them, 
     progressing them, reversing them, deleting them
+Add dialogue to actions

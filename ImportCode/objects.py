@@ -423,6 +423,7 @@ class Text:
         # Aligns text dynamically depending on the text width as this is unpredictable
         self.pos[0] += (self.position_origin[0] - 0.5) * self.size[0]
         self.pos[0] -= (self.position_origin[0] - 0.5) * temp_img.get_width()
+
         draw_surface(self, window, temp_img)
 
 class Image:
@@ -447,7 +448,21 @@ class Image:
             # Draw a black rectangle onto the surface so that the object is visible on the screen
             pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))
 
+        self.prev_img_dir = self.img_dir
+
     def draw_self(self, window):
+        # If the image directory of the object has been changed
+        if self.prev_img_dir != self.img_dir:
+            # Recreate the pygame image
+            try:
+                self.img = pygame.image.load(self.img_dir).convert_alpha()
+            except (FileNotFoundError, pygame.error):
+                self.img = pygame.Surface((1, 1)).convert_alpha()
+                pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))
+
+            self.prev_img_dir = self.img_dir
+
+        # Transform the object's image based upon its current attributes
         temp_img = pygame.transform.rotate(pygame.transform.scale(
             self.img, [round(self.size[0]), round(self.size[1])]), self.rot)
 
