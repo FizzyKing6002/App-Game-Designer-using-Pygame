@@ -13,9 +13,13 @@ def create_animation(val, time, anim_type, *args):
     # Args describes the easing function for the animation which is not required
     args = list(args)
     if len(args) == 0:
-        # Default easing function is linear
-        args = "x"
+        # Default easing function is linear, default name is nothing
+        args = ["time_ratio", ""]
     else:
+        # Gives the animation the default name of nothing
+        if len(args) == 1:
+            args.append("")
+
         # If multiple easing functions are given
         if isinstance(args[0], list):
             # Rewrite easing functions in terms of time_ratio

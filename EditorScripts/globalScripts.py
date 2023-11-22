@@ -6,9 +6,10 @@ The file containing global variables and methods, used in object scripts
 class globalScripts:
     def __init__(self):
         # Globals go here
-        self.menu_state = 0
         self.mouse_pos = [0, 0]
         self.mouse_state = [False, [False, 0], False]
+
+        self.menu_state = 0
 
         self.dragging = False
         self.key_dragging = False

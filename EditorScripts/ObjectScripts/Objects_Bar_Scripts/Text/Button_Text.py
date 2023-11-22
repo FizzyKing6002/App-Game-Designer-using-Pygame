@@ -68,7 +68,8 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if global_scripts.menu_state != 0:
+            self.opa = 0.5
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

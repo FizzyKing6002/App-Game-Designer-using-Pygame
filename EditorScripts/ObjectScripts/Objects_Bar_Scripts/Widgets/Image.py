@@ -77,18 +77,22 @@ class Main:
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.hovered:
-            self.opacity_modifiers[1] = 0.5
+            self.opa = 0.5
             self.hovered = False
         else:
-            self.opacity_modifiers[1] = 1
+            self.opa = 1
 
-        if self.key_clicked:
-            global_scripts.key_dragging = True
-            self.key_clicked = False
+        if global_scripts.menu_state != 0:
+            self.opa = 0.5
+        else:
+            if self.key_clicked:
+                global_scripts.key_dragging = True
 
-        elif self.clicked:
-            global_scripts.dragging = True
-            self.clicked = False
+            elif self.clicked:
+                global_scripts.dragging = True
+
+        self.clicked = False
+        self.key_clicked = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
