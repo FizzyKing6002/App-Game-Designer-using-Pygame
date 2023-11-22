@@ -70,15 +70,26 @@ class Main:
         # Additional attributes:
         self.one_time = True
         self.hovered = False
+        self.prev_hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.one_time:
-            self.create_animation(-45, 500, "rot")
+            self.create_animation(-45, 200, "rot", "x", "hover_turn")
+            self.reverse_animation("hover_turn")
+            #self.animations[0][8] = True
             self.one_time = False
 
-        if self.hovered:
-            pass
+        if self.hovered and not self.prev_hovered:
+            self.reverse_animation("hover_turn")
+            #self.animations[0][8] = False
+        if not self.hovered and self.prev_hovered:
+            self.reverse_animation("hover_turn")
+            #self.animations[0][8] = True
+
+        self.prev_hovered = self.hovered
+        self.hovered = False
+
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

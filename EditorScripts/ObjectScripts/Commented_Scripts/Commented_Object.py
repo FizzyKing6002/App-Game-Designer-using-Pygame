@@ -96,7 +96,7 @@ class Main:
 
 """
 To create an animation:
-Call self.create_animation(x, y, z[, a])
+Call self.create_animation(x, y, z[, a, b])
     x -> float -> final value of the animation (initial value is always zero)
     y -> int -> total time for the animation to take place over in milliseconds
     z -> string -> type of animation ->
@@ -108,9 +108,15 @@ Call self.create_animation(x, y, z[, a])
     a -> this parameter can be ignored (therefore is shown in square braces) ->
         string -> easing function for animation -> use "x" as the subject of the function ->
         if none given, defaults to linear easing function (simply "y = x")
+    b -> this parameter can be ignored (therefore is shown in square braces) ->
+        string -> name of the animation -> used to manipulate the animation
 e.g. self.create_animation(500, 5000, "posx") ->
     moves object 500 pixels to the right over 5 seconds
-e.g. self.create_animation([0.5, 0.1], 2000, "size%", ["x", "x**3"]) ->
+e.g. self.create_animation([0.5, 0.1], 2000, "size%", ["x", "x**3"], "resize_me") ->
     resizes the object in both x and y by percentages of their container over 2 seconds
 Remember to only create the animation once as animations stack with each other
+
+To reverse an animation (this makes the animation progress backwards):
+Call self.reverse_animation(b)
+    b -> string -> name of animation used to locate the correct animation
 """

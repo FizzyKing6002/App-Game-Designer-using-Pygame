@@ -157,7 +157,7 @@ def Object(*args):
         def animate(self, time):
             for anim in self.animations:
                 # If the animation already completed
-                if anim[0]:
+                if (anim[0] == 2 and not anim[8]) or (anim[0] == 0 and anim[8]):
                     continue
 
                 # Update animation
@@ -166,6 +166,22 @@ def Object(*args):
         def create_animation(self, val, time, anim_type, *args):
             # Create animation from animation file
             self.animations.append(animation.create_animation(val, time, anim_type, *args))
+
+        def delete_animation(self, name):
+            temp_anim_list = copy.deepcopy(self.animations)
+
+            for i, anim in enumerate(temp_anim_list):
+                # If the target animation is found
+                if anim[7] == name:
+                    # Delete the animation
+                    self.animations.remove(i)
+
+        def reverse_animation(self, name):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    # Reverse the animation
+                    anim[8] = not anim[8]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = copy.deepcopy(self.position_modifiers)
@@ -176,29 +192,29 @@ def Object(*args):
             # Add values from object's animations to attributes
             for anim in self.animations:
                 j = 0
-                if "%" in anim[-2]:
+                if "%" in anim[5]:
                     j = 1
 
-                if "x" in anim[-2]:
+                if "x" in anim[5]:
                     i = 0
-                elif "y" in anim[-2] and not "opa" in anim[-2]:
+                elif "y" in anim[5] and not "opa" in anim[5]:
                     i = 1
                 else:
-                    if "pos" in anim[-2]:
+                    if "pos" in anim[5]:
                         pos_mod[0][j] += anim[1][0]
                         pos_mod[1][j] += anim[1][1]
-                    elif "size" in anim[-2]:
+                    elif "size" in anim[5]:
                         size_mod[0][j] += anim[1][0]
                         size_mod[1][j] += anim[1][1]
-                    elif "rot" in anim[-2]:
+                    elif "rot" in anim[5]:
                         rot_mod[j] += anim[1]
                     elif "opa" in anim[-2]:
                         opa_mod[j] += anim[1]
                     continue
 
-                if "pos" in anim[-2]:
+                if "pos" in anim[5]:
                     pos_mod[i][j] += anim[1]
-                elif "size" in anim[-2]:
+                elif "size" in anim[5]:
                     size_mod[i][j] += anim[1]
 
             self.pos = [
