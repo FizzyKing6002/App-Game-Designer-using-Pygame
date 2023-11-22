@@ -74,10 +74,7 @@ class Main:
 
         # Additional attributes:
         self.clicked = False
-
-        self.dragging = False
-        self.key_dragging = False
-
+        self.key_clicked = False
         self.hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
@@ -88,21 +85,13 @@ class Main:
         else:
             self.opacity_modifiers[1] = 1
 
-        if self.clicked:
-            self.dragging = True
+        if self.key_clicked:
+            global_scripts.key_dragging = True
+            self.key_clicked = False
+
+        elif self.clicked:
+            global_scripts.dragging = True
             self.clicked = False
-
-        if self.key_dragging and global_scripts.mouse_state[0]:
-            self.dragging = True
-            self.key_dragging = False
-        
-        if self.dragging and not global_scripts.mouse_state[0]:
-            self.dragging = False
-
-            print(global_scripts.mouse_pos)
-
-        if self.dragging or self.key_dragging:
-            self.pos = deepcopy(global_scripts.mouse_pos)
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
@@ -126,7 +115,7 @@ class Main:
         if "e" in keys \
             and ("LCTRL" in keys or "RCTRL" in keys) \
                 and ("LSHIFT" in keys or "RSHIFT" in keys):
-            self.key_dragging = True
+            self.key_clicked = True
 
     # Additional methods:
 

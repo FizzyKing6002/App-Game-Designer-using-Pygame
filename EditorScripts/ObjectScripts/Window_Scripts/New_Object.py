@@ -3,20 +3,23 @@ Represents an object
 """
 
 
+from copy import deepcopy
+
+
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : False,
+    "container" : True,
     "text" : False,
     "image" : True,
-    "button" : True,
-    "hover_activated" : True,
-    "key_activated" : True
+    "button" : False,
+    "hover_activated" : False,
+    "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Objects_Bar"
+container_name = "Background"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -26,38 +29,32 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 10
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = "EditorTextures/Objects_Icons/insert-picture-icon.png"
+        self.img_dir = ""
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {
-            "LCTRL" : True,
-            "RCTRL" : True,
-            "LSHIFT" : True,
-            "RSHIFT" : True,
-            "i" : True
-        }
+        self.activation_keys = {}
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.09 + 5*0.76/14], [0, 0.4]]
+        self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.76/7], [0, 0.6]]
+        self.size_modifiers = [[0, 0.1], [0, 0.1]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [0, 1]
+        self.opacity_modifiers = [0, 0]
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (200, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]
@@ -70,29 +67,21 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.clicked = False
-        self.key_clicked = False
-        self.hovered = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.hovered:
-            self.opacity_modifiers[1] = 0.5
-            self.hovered = False
+        if global_scripts.dragging or global_scripts.key_dragging:
+            self.pos = deepcopy(global_scripts.mouse_pos)
+
+            self.opa = 0.8
+
         else:
-            self.opacity_modifiers[1] = 1
-
-        if self.key_clicked:
-            global_scripts.key_dragging = True
-            self.key_clicked = False
-
-        elif self.clicked:
-            global_scripts.dragging = True
-            self.clicked = False
+            self.opa = 0
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        self.clicked = True
+        pass
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -104,14 +93,11 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        self.hovered = True
+        pass
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, keys):
-        if "i" in keys \
-            and ("LCTRL" in keys or "RCTRL" in keys) \
-                and ("LSHIFT" in keys or "RSHIFT" in keys):
-            self.key_clicked = True
+    def key_input(self, key):
+        pass
 
     # Additional methods:
 

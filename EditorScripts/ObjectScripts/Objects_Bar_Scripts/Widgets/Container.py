@@ -70,6 +70,8 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.clicked = False
+        self.key_clicked = False
         self.hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
@@ -80,9 +82,17 @@ class Main:
         else:
             self.opacity_modifiers[1] = 1
 
+        if self.key_clicked:
+            global_scripts.key_dragging = True
+            self.key_clicked = False
+
+        elif self.clicked:
+            global_scripts.dragging = True
+            self.clicked = False
+
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -97,8 +107,11 @@ class Main:
         self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, key):
-        pass
+    def key_input(self, keys):
+        if "c" in keys \
+            and ("LCTRL" in keys or "RCTRL" in keys) \
+                and ("LSHIFT" in keys or "RSHIFT" in keys):
+            self.key_clicked = True
 
     # Additional methods:
 

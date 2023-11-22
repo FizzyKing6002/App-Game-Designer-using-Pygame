@@ -10,6 +10,9 @@ class globalScripts:
         self.mouse_pos = [0, 0]
         self.mouse_state = [False, [False, 0], False]
 
+        self.dragging = False
+        self.key_dragging = False
+
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
     def early_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -18,4 +21,9 @@ class globalScripts:
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
-        pass
+        if self.key_dragging and self.mouse_state[0]:
+            self.dragging = True
+            self.key_dragging = False
+        
+        if self.dragging and not self.mouse_state[0]:
+            self.dragging = False

@@ -11,7 +11,7 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : True,
-    "key_activated" : True
+    "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
@@ -35,13 +35,7 @@ class Main:
         # If image does not exist, defaults to black rectangle
         self.img_dir = "EditorTextures/Objects_Icons/scroll.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {
-            "LCTRL" : True,
-            "RCTRL" : True,
-            "LSHIFT" : True,
-            "RSHIFT" : True,
-            "s" : True
-        }
+        self.activation_keys = {}
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
@@ -70,6 +64,7 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.clicked = False
         self.hovered = False
 
     # Called every frame, passes the object of globalScripts.py class
@@ -80,9 +75,13 @@ class Main:
         else:
             self.opacity_modifiers[1] = 1
 
+        if self.clicked:
+            global_scripts.dragging = True
+            self.clicked = False
+
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -97,7 +96,7 @@ class Main:
         self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, key):
+    def key_input(self, keys):
         pass
 
     # Additional methods:

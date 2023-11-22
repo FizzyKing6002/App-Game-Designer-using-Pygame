@@ -8,3 +8,4 @@ Add timer feature
 Give animations names and methods for instantly completing them, 
     progressing them, reversing them, deleting them
 Add dialogue to actions
+Size based upon object's other size component
