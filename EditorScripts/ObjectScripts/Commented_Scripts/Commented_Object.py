@@ -116,7 +116,22 @@ e.g. self.create_animation([0.5, 0.1], 2000, "size%", ["x", "x**3"], "resize_me"
     resizes the object in both x and y by percentages of their container over 2 seconds
 Remember to only create the animation once as animations stack with each other
 
-To reverse an animation (this makes the animation progress backwards):
-Call self.reverse_animation(b)
+To instantly complete an animation:
+Call self.complete_animation(b)
     b -> string -> name of animation used to locate the correct animation
+
+To delete an animation (this moves the object back to where it was before):
+Call self.delete_animation(b)
+    b -> string -> name of animation used to locate the correct animation
+
+To progress an animation (moves the animations forwards by an amount of time):
+Call self.progress_animation(b, c)
+    b -> string -> name of animation used to locate the correct animation
+    c -> integer -> milliseconds to move the animation forward by
+
+To reverse an animation (this makes the animation progress backwards):
+Call self.reverse_animation(b[, d])
+    b -> string -> name of animation used to locate the correct animation
+    d -> this parameter can be ignored if the state of reversal wants to be switched ->
+        specifies either reversed or not -> boolean -> True = reversed, False = not reversed
 """

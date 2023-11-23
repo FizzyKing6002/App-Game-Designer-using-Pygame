@@ -75,17 +75,14 @@ class Main:
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.one_time:
-            self.create_animation(-45, 200, "rot", "x", "hover_turn")
+            self.create_animation(-45, 100, "rot", "math.sqrt(x)", "hover_turn")
             self.reverse_animation("hover_turn")
-            #self.animations[0][8] = True
             self.one_time = False
 
         if self.hovered and not self.prev_hovered:
-            self.reverse_animation("hover_turn")
-            #self.animations[0][8] = False
+            self.reverse_animation("hover_turn", False)
         if not self.hovered and self.prev_hovered:
-            self.reverse_animation("hover_turn")
-            #self.animations[0][8] = True
+            self.reverse_animation("hover_turn", True)
 
         self.prev_hovered = self.hovered
         self.hovered = False

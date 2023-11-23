@@ -167,21 +167,44 @@ def Object(*args):
             # Create animation from animation file
             self.animations.append(animation.create_animation(val, time, anim_type, *args))
 
+        def complete_animation(self, name):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    # Complete the animation
+                    if anim[8]:
+                        anim[3] = 0
+                    else:
+                        anim[3] = anim[4]
+
         def delete_animation(self, name):
             temp_anim_list = copy.deepcopy(self.animations)
 
-            for i, anim in enumerate(temp_anim_list):
+            for anim in temp_anim_list:
                 # If the target animation is found
                 if anim[7] == name:
                     # Delete the animation
-                    self.animations.remove(i)
+                    self.animations.remove(anim)
 
-        def reverse_animation(self, name):
+        def progress_animation(self, name, time):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    # Complete the animation
+                    if anim[8]:
+                        anim[3] -= time
+                    else:
+                        anim[3] += time
+
+        def reverse_animation(self, name, *args):
             for anim in self.animations:
                 # If the target animation is found
                 if anim[7] == name:
                     # Reverse the animation
-                    anim[8] = not anim[8]
+                    if len(args) == 0:
+                        anim[8] = not anim[8]
+                    else:
+                        anim[8] = args[0]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = copy.deepcopy(self.position_modifiers)
