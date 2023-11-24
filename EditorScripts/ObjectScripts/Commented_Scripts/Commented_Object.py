@@ -122,6 +122,11 @@ e.g. self.create_animation([0.5, 0.1], 2000, "size%", ["x", "x**3"], "resize_me"
     resizes the object in both x and y by percentages of their container over 2 seconds
 Remember to only create the animation once as animations stack with each other
 
+To check if an animation is completed:
+Call self.get_complete_animation(b)
+    b -> string -> name of animation used to locate the correct animation
+Returns true or false
+
 To instantly complete an animation:
 Call self.complete_animation(b)
     b -> string -> name of animation used to locate the correct animation

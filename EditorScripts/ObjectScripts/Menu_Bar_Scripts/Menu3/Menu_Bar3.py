@@ -68,10 +68,12 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.menu_state == 2 and not self.active:
+        if global_scripts.menu_state == 2 and not self.active and global_scripts.change_state:
             self.active = True
+            global_scripts.change_state = False
         elif global_scripts.menu_state != 2 and self.active:
             self.active = False
+            global_scripts.change_state = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

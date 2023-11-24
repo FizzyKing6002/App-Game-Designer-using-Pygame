@@ -10,6 +10,7 @@ class globalScripts:
         self.mouse_state = [False, [False, 0], False]
 
         self.menu_state = 0
+        self.change_state = False
 
         self.dragging = False
         self.key_dragging = False

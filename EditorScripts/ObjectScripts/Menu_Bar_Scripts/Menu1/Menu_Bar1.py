@@ -64,14 +64,22 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.one_time = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.menu_state == 0 and not self.active:
+        if global_scripts.menu_state == 0 and not self.active and global_scripts.change_state:
             self.active = True
-        elif global_scripts.menu_state != 0 and self.active:
+            global_scripts.change_state = False
+        elif global_scripts.menu_state != 0 and self.active and self.one_time:
+            self.create_animation([-0.3, -1], 200, "sizexy%", "x", "shrink")
+            self.one_time = False
+            
+        if self.get_complete_animation("shrink"):
             self.active = False
+            self.one_time = True
+            global_scripts.change_state = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

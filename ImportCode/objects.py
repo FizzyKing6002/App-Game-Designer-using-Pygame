@@ -167,6 +167,15 @@ def Object(*args):
             # Create animation from animation file
             self.animations.append(animation.create_animation(val, time, anim_type, *args))
 
+        def get_complete_animation(self, name):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    # Complete the animation
+                    if anim[0]:
+                        return True
+                    return False
+
         def complete_animation(self, name):
             for anim in self.animations:
                 # If the target animation is found
@@ -231,7 +240,7 @@ def Object(*args):
                         size_mod[1][j] += anim[1][1]
                     elif "rot" in anim[5]:
                         rot_mod[j] += anim[1]
-                    elif "opa" in anim[-2]:
+                    elif "opa" in anim[5]:
                         opa_mod[j] += anim[1]
                     continue
 
