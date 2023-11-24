@@ -258,6 +258,17 @@ def Object(*args):
             self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
             self.pos[1] -= (self.position_origin[1] - 0.5) * self.size[1]
 
+            # Resizes the object based upon its limits of ratio of x and y
+            if hasattr(self, "min_max_size"):
+                if self.min_max_size[0][0] is not None:
+                    self.size[0] = max(self.size[0], self.min_max_size[0][0] * self.size[1])
+                if self.min_max_size[1][0] is not None:
+                    self.size[1] = max(self.size[1], self.min_max_size[1][0] * self.size[0])
+                if self.min_max_size[0][1] is not None:
+                    self.size[0] = min(self.size[0], self.min_max_size[0][1] * self.size[1])
+                if self.min_max_size[1][1] is not None:
+                    self.size[1] = min(self.size[1], self.min_max_size[1][1] * self.size[0])
+
         def calc_mouse_pos(self, mouse_pos):
             # Mouse position does not need to be recalculated if the object is not rotated
             if self.rot != 0:

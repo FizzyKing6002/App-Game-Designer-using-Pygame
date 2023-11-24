@@ -4,4 +4,5 @@ Generate object method for containers
 Belonging to multiple containers
 Add timer feature
 Add dialogue to actions
-Size based upon object's other size component
+>>> Size based upon object's other size component
+Error protection -> if hasattr()

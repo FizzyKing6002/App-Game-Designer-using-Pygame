@@ -59,6 +59,10 @@ class Main:
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]
+        # limits x and y size to a percentage of each other
+        # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
+        # e.g. [[None, 1], [None, 1]] ensures object is square
+        self.min_max_size = [[None, 1], [None, 1]]
 
         # Content of the text - TEXT ONLY
         self.text = ""
