@@ -72,11 +72,16 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if self.hovered:
+            self.opa = 0.5
+            self.hovered = False
+        else:
+            self.opa = 1
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
@@ -92,7 +97,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
     def key_input(self, key):

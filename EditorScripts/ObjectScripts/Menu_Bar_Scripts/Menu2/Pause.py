@@ -81,8 +81,13 @@ class Main:
         if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.menu_state = 2
 
+        if self.hovered:
+            self.opa = 0.5
+            self.hovered = False
+        else:
+            self.opa = 1
+
         self.prev_clicked = False
-        self.hovered = False
 
         if self.clicked:
             self.prev_clicked = True
