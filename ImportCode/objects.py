@@ -171,10 +171,10 @@ def Object(*args):
             for anim in self.animations:
                 # If the target animation is found
                 if anim[7] == name:
-                    # Complete the animation
-                    if anim[0]:
-                        return True
-                    return False
+                    # Return if the animation is complete or not
+                    if anim[0] == 1:
+                        return False
+                    return True
 
         def complete_animation(self, name):
             for anim in self.animations:
@@ -211,8 +211,12 @@ def Object(*args):
                 if anim[7] == name:
                     # Reverse the animation
                     if len(args) == 0:
+                        anim[0] = 1
                         anim[8] = not anim[8]
                     else:
+                        if anim[8] != args[0]:
+                            anim[0] = 1
+
                         anim[8] = args[0]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
@@ -227,9 +231,9 @@ def Object(*args):
                 if "%" in anim[5]:
                     j = 1
 
-                if "x" in anim[5]:
+                if "x" in anim[5] and "y" not in anim[5]:
                     i = 0
-                elif "y" in anim[5] and not "opa" in anim[5]:
+                elif "y" in anim[5] and "x" not in anim[5] and "opa" not in anim[5]:
                     i = 1
                 else:
                     if "pos" in anim[5]:
