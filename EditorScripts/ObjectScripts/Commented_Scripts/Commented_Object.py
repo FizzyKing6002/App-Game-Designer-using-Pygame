@@ -126,16 +126,16 @@ To instantly complete an animation:
 Call self.complete_animation(b)
     b -> string -> name of animation used to locate the correct animation
 
-To delete an animation (this moves the object back to where it was before):
+To delete an animation (moves the object back to where it was before):
 Call self.delete_animation(b)
     b -> string -> name of animation used to locate the correct animation
 
-To progress an animation (moves the animations forwards by an amount of time):
+To progress an animation (moves the animation forwards by an amount of time):
 Call self.progress_animation(b, c)
     b -> string -> name of animation used to locate the correct animation
     c -> integer -> milliseconds to move the animation forward by
 
-To reverse an animation (this makes the animation progress backwards):
+To reverse an animation (makes the animation progress backwards):
 Call self.reverse_animation(b[, d])
     b -> string -> name of animation used to locate the correct animation
     d -> this parameter can be ignored if the state of reversal wants to be switched ->

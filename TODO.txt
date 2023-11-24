@@ -1,6 +1,5 @@
 Animations for switching menu states
 Text boxes
 Generate object method for containers
-Add timer feature
 Add dialogue to actions
 Error protection -> if hasattr()
