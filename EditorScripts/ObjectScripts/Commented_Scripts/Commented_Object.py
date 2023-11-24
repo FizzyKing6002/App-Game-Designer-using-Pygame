@@ -16,6 +16,7 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
+# If the object belongs to multiple containers, a list can be used
 container_name = "None"
 
 # Class in which methods and attributes are used - DO NOT RENAME

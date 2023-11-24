@@ -104,23 +104,28 @@ class Main:
 
         for file in object_files:
             # Gets the container name attribute from the current file
-            container_name = file.container_name
+            container_names = file.container_name
 
-            # Base case - new list should be created if none already exist
-            if len(objects_list) == 0:
-                objects_list.append([container_name, file])
-                continue
-            # Searches through existing lists for matching container names
-            for container_type in objects_list:
-                # When matching container name is found, adds current file name to the list
-                if container_name == container_type[0]:
-                    container_type.append(file)
-                    break
+            # Turns container_names into a list iterable
+            if not isinstance(container_names, list):
+                container_names = [container_names]
 
-                # If matching container name is not found, creates a new list
-                if container_type == objects_list[-1]:
+            for container_name in container_names:
+                # Base case - new list should be created if none already exist
+                if len(objects_list) == 0:
                     objects_list.append([container_name, file])
-                    break
+                    continue
+                # Searches through existing lists for matching container names
+                for container_type in objects_list:
+                    # When matching container name is found, adds current file name to the list
+                    if container_name == container_type[0]:
+                        container_type.append(file)
+                        break
+
+                    # If matching container name is not found, creates a new list
+                    if container_type == objects_list[-1]:
+                        objects_list.append([container_name, file])
+                        break
 
         # Calls method to create objects using the ordered list just created
         self.recursive_create_objects(objects_list, None, "self.objects")
