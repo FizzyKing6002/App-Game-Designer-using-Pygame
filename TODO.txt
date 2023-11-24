@@ -3,3 +3,4 @@ Text boxes
 Generate object method for containers
 Add dialogue to actions
 Error protection -> if hasattr()
+Fix opacity bug
