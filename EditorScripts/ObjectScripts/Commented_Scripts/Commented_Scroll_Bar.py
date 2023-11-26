@@ -1,5 +1,5 @@
 """
-Scroll Bar Object
+Represents a Scroll Bar
 """
 
 
@@ -27,6 +27,7 @@ class Main:
         self.img_dir = ""
         self.object_colour = (0, 0, 0)
         self.activation_keys = {}
+        self.uses_text_input = False
         # Object is a scroll bar
         self.is_scroll_bar = True
 
