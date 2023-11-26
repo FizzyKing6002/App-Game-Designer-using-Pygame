@@ -183,8 +183,10 @@ def Object(*args):
                     # Complete the animation
                     if anim[8]:
                         anim[3] = 0
+                        anim[0] = 0
                     else:
                         anim[3] = anim[4]
+                        anim[0] = 2
 
         def delete_animation(self, name):
             temp_anim_list = copy.deepcopy(self.animations)
