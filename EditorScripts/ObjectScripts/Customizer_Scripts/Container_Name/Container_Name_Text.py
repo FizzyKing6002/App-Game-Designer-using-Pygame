@@ -60,6 +60,8 @@ class Main:
         self.text = "Container Name:"
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
+        self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 

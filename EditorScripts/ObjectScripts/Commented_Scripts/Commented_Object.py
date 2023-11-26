@@ -4,7 +4,6 @@ Represents an object
 
 
 # Determines the type of object
-# text, image are mutually exclusive, text takes precedence
 object_type = {
     "container" : False,
     "text" : False,
@@ -35,8 +34,14 @@ class Main:
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
-        # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
+        # colour is used if the object's image does not exist - IMAGE ONLY
+        self.object_colour = (0, 0, 0)
+        # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
+        # Passes the unicode text input as first item in keys list in key_input method
+        # KEY_ACTIVATED ONLY
+        self.uses_text_input = False
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
@@ -50,9 +55,6 @@ class Main:
         # [percentage opacity, percent of container's opacity]
         self.opacity_modifiers = [0, 1]
 
-        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
-        # colour is used for text and if the object's image does not exist
-        self.object_colour = (0, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         # e.g. [0, 0] allows the object's top left corner to be aligned no matter the object's size
@@ -66,6 +68,8 @@ class Main:
         self.text = ""
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
+        self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 

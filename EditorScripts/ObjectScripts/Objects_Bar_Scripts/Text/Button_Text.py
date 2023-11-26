@@ -60,6 +60,8 @@ class Main:
         self.text = "Button"
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
+        self.text_colour = (0, 0, 0)
         self.text_bold = True
         self.text_italic = False
 

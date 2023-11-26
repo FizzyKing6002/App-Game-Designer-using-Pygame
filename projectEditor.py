@@ -183,7 +183,7 @@ class Main:
                 # If the correct list is found, the others do not need to be checked
                 break
 
-    def call_objects(self, elapsed_time, mouse_wheel_movement):
+    def call_objects(self, elapsed_time, mouse_wheel_movement, text_input):
         # Center coordinates of window is (half its width, half its height)
         window_pos = [self.window.get_width() / 2, self.window.get_height() / 2]
         window_size = [self.window.get_width(), self.window.get_height()]
@@ -203,7 +203,7 @@ class Main:
             obj(self.window, elapsed_time, window_pos, window_size,
                 # Rotation of window is zero, opacity is one
                 0, 1,
-                mouse_pos, mouse_state, key_state,
+                mouse_pos, mouse_state, key_state, text_input,
                 self.global_scripts)
 
         # Calls global update function after objects
@@ -213,15 +213,17 @@ class Main:
         # Objects are called once before the program begins so that everything is initialised
         # Elapsed time is zero so that animations are not progressed,
         # mouse scroll is defaulted to zero
-        self.call_objects(0, 0)
+        self.call_objects(0, 0, "")
 
         run = True
         elapsed_time = 0
 
         while run:
-            # Mouse wheel movement set to zero each frame
-            # as if there is no mousewheel event, the previous movement would persist
+            # Mouse wheel movement set to zero each frame as previous movement would persist
             mouse_wheel_movement = 0
+            # Likewise for text input
+            text_input = ""
+
             for event in pygame.event.get():
                 # If the close button in the title bar is clicked
                 if event.type == pygame.QUIT:
@@ -232,8 +234,15 @@ class Main:
                     # Mouse wheel movement is fetched, mouse wheel only moves in y direction
                     mouse_wheel_movement = event.y
 
+                # Getting unicode text input is done through the event handler
+                # to avoid unnecessary processing
+                if event.type == pygame.KEYDOWN:
+                    if event.key not in (pygame.K_BACKSPACE, pygame.K_RETURN):
+                        # Turns the text related event into unicode
+                        text_input = event.unicode
+
             # Update every object
-            self.call_objects(elapsed_time, mouse_wheel_movement)
+            self.call_objects(elapsed_time, mouse_wheel_movement, text_input)
 
             pygame.display.update()
 

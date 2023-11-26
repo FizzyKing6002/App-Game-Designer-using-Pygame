@@ -7,11 +7,11 @@ Represents an object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
     "container" : False,
-    "text" : False,
+    "text" : True,
     "image" : True,
-    "button" : False,
-    "hover_activated" : False,
-    "key_activated" : False
+    "button" : True,
+    "hover_activated" : True,
+    "key_activated" : True
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
@@ -35,7 +35,11 @@ class Main:
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
+        self.activation_keys = {
+            "BACKSPACE" : True,
+            "RETURN" : True
+        }
+        self.uses_text_input = True
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
@@ -57,22 +61,41 @@ class Main:
         self.position_origin = [1, 0]
 
         # Content of the text - TEXT ONLY
-        self.text = "Container Name:"
+        self.text = ""
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
+        self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 
         # Additional attributes:
+        self.activated = False
+        self.clicked = False
+        self.prev_clicked = False
+        self.hovered = False
+        self.prev_backspace = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if not self.clicked and self.prev_clicked and self.hovered:
+            self.activated = True
+        elif global_scripts.mouse_state[0] and not self.hovered:
+            self.activated = False
+
+        if self.clicked:
+            self.prev_clicked = True
+            self.clicked = False
+        else:
+            self.prev_clicked = False
+
+        self.hovered = False
+
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -84,11 +107,22 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
-    def key_input(self, key):
-        pass
+    def key_input(self, keys):
+        if self.activated:
+            if "BACKSPACE" in keys:
+                if not self.prev_backspace:
+                    self.text = self.text[:-1]
+                    self.prev_backspace = True
+            else:
+                self.prev_backspace = False
+
+                if "RETURN" in keys:
+                    self.activated = False
+                else:
+                    self.text += keys[0]
 
     # Additional methods:
 

@@ -116,13 +116,13 @@ def Object(*args):
             # Initialises object class as the __init__ is overwritten
             object_class.__init__(self)
 
-            if image and not text:
+            if image:
                 # Initialises image class as the __init__ is overwritten
                 Image.__init__(self)
 
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
-                     mouse_pos, mouse_state, key_state, global_scripts):
+                     mouse_pos, mouse_state, key_state, text_input, global_scripts):
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
@@ -143,16 +143,18 @@ def Object(*args):
                 self.call_hovered(mouse_pos)
 
             if hasattr(self, "call_activated") and callable(self.call_activated):
-                self.call_activated(key_state)
+                self.call_activated(key_state, text_input)
 
             self.frame_update(global_scripts)
 
-            if hasattr(self, "draw_self") and callable(self.draw_self):
-                self.draw_self(window)
+            if hasattr(self, "draw_image") and callable(self.draw_image):
+                self.draw_image(window)
+            if hasattr(self, "draw_text") and callable(self.draw_text):
+                self.draw_text(window)
 
             if hasattr(self, "container_update") and callable(self.container_update):
-                self.container_update(window, time,
-                                      mouse_pos, mouse_state, key_state, global_scripts)
+                self.container_update(window, time, mouse_pos, mouse_state,
+                                      key_state, text_input, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -335,7 +337,8 @@ class Container:
         self.object_offset = 0
         self.prev_scroll_offset = 0
 
-    def container_update(self, window, time, mouse_pos, mouse_state, key_state, global_scripts):
+    def container_update(self, window, time, mouse_pos, mouse_state,
+                         key_state, text_input, global_scripts):
         # Objects are sorted by their update_priority attribute
         self.objects.sort(key=lambda x: x.update_priority, reverse=False)
 
@@ -362,7 +365,7 @@ class Container:
         # Containers that are rotated or have a scroll bar must make use of a surface
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
-            self.call_objects(window, time, mouse_pos, mouse_state, key_state,
+            self.call_objects(window, time, mouse_pos, mouse_state, key_state, text_input,
                               global_scripts, False, 0)
 
         else:
@@ -392,14 +395,14 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
-            self.call_objects(surface, time, mouse_pos, mouse_state, key_state,
+            self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
                               global_scripts, container_has_scroll_bar, scroll_offset)
 
             # Draws surface to screen
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
 
-    def call_objects(self, surface, time, mouse_pos, mouse_state, key_state,
+    def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
                      global_scripts, container_has_scroll_bar, scroll_offset):
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
@@ -431,7 +434,7 @@ class Container:
                 # Calls the object
                 obj(surface, time,
                     pos, size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, global_scripts)
+                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -444,7 +447,7 @@ class Container:
                 # Calls the object
                 obj(surface, time,
                     pos, self.size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, global_scripts)
+                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
@@ -474,15 +477,15 @@ class Container:
 class Text:
     """
     Methods:
-        draw_self(window):
+        draw_text(window):
             Draws the object's text to the window
     """
 
-    def draw_self(self, window):
+    def draw_text(self, window):
         # Recalculates text as size may have changed
         font = pygame.font.SysFont(self.text_font, round(self.size[1]),
                                    self.text_bold, self.text_italic)
-        temp_img = pygame.transform.rotate(font.render(self.text, True, self.object_colour),
+        temp_img = pygame.transform.rotate(font.render(self.text, True, self.text_colour),
                                            self.rot)
 
         # Aligns text dynamically depending on the text width as this is unpredictable
@@ -498,7 +501,7 @@ class Image:
             The object's image imported by pygame
 
     Methods:
-        draw_self(window):
+        draw_image(window):
             Draws the object's image to the window
     """
 
@@ -515,7 +518,7 @@ class Image:
 
         self.prev_img_dir = self.img_dir
 
-    def draw_self(self, window):
+    def draw_image(self, window):
         # If the image directory of the object has been changed
         if self.prev_img_dir != self.img_dir:
             # Recreate the pygame image
@@ -612,9 +615,12 @@ class Key_Activated:
             and that should activate the object
     """
 
-    def call_activated(self, key_state):
+    def call_activated(self, key_state, text_input):
         # List of keys that activate the object that have been pressed since the last frame
-        activated_keys = []
+        if hasattr(self, "uses_text_input") and self.uses_text_input:
+            activated_keys = [text_input]
+        else:
+            activated_keys = []
 
         # Dictionary processing rather than list processing
         for key in self.activation_keys:
@@ -631,7 +637,6 @@ class Key_Activated:
                 if key_state[pygame_key]:
                     # Add the activated key to the list
                     activated_keys.append(key)
-
 
         # Call the key input function with each key that has been pressed
         # and should be reacted to, passing the name of the key

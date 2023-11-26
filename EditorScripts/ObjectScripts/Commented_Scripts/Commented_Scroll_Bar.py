@@ -25,6 +25,7 @@ class Main:
         self.objects_visible_outside_container = True
         # Image directory for the scroll bar (path from main.py)
         self.img_dir = ""
+        self.object_colour = (0, 0, 0)
         self.activation_keys = {}
         # Object is a scroll bar
         self.is_scroll_bar = True
@@ -38,11 +39,12 @@ class Main:
         self.rotation_modifiers = [0, 1]
         self.opacity_modifiers = [0, 1]
 
-        self.object_colour = (0, 0, 0)
         self.position_origin = [0.5, 0.5]
+        self.min_max_size = [[None, None], [None, None]]
 
         self.text = ""
         self.text_font = ""
+        self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 
