@@ -474,6 +474,23 @@ class Container:
         return (self.size[1] ** 2) / (max(max_y - self.object_offset, cont_max) \
                - min(min_y - self.object_offset, cont_min)), object_offset
 
+    def generate_object(self, global_scripts, name):
+        for file in global_scripts.object_files:
+            # If the name matches the file name
+            if file.__name__.split(".")[-1] == name:
+                # Get the object types and main class of the file
+                object_type = file.object_type
+                object_class = file.Main
+
+                # Creates the object inside this container
+                self.objects.append(Object(object_type['container'],
+                                           object_type['text'],
+                                           object_type['image'],
+                                           object_type['button'],
+                                           object_type['hover_activated'],
+                                           object_type['key_activated'],
+                                           object_class))
+
 class Text:
     """
     Methods:

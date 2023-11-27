@@ -19,6 +19,7 @@ class Main:
     def __init__(self):
         self.active = True
         self.update_priority = 0
+        self.generated_value = None
 
         self.objects_visible_outside_container = True
         # Background image for text box - most use a colour rather than image

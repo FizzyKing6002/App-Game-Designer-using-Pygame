@@ -101,6 +101,7 @@ class Main:
         # Imports all the objects from the object scripts folder and composes a list of these files
         # Passes path from this file to the folder
         object_files = self.import_objects("EditorScripts/ObjectScripts/", [])
+        self.global_scripts.object_files = object_files
 
         for file in object_files:
             # Gets the container name attribute from the current file
@@ -145,7 +146,6 @@ class Main:
             object_files.append(importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}"))
             del file
 
-        #print(globals())
         return object_files
 
     def recursive_create_objects(self, file_list, val, path):

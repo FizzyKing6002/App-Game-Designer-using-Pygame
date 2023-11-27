@@ -21,6 +21,7 @@ class Main:
         self.active = False
         # Scroll bar should be drawn over all other images in the container
         self.update_priority = 10000
+        self.generated_value = None
 
         self.objects_visible_outside_container = True
         # Image directory for the scroll bar (path from main.py)

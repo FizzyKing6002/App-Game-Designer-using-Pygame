@@ -6,8 +6,8 @@ Represents an object
 # Determines the type of object
 object_type = {
     "container" : False,
-    "text" : False,
-    "image" : False,
+    "text" : True,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -23,7 +23,7 @@ class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
         self.update_priority = 0
@@ -52,7 +52,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, 0.2], [0, 0.3]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -77,11 +77,14 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.one_time = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if self.one_time:
+            self.create_animation(200, 2000, "posx")
+            self.one_time = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
