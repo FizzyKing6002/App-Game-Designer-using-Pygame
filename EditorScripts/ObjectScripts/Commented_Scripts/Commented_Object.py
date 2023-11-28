@@ -31,23 +31,6 @@ class Main:
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
 
-        # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
-        # For rotated containers and containers that have a scroll bar, this becomes False
-        self.objects_visible_outside_container = True
-        # Image directory for this object (path from main.py) - IMAGE ONLY
-        # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
-        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
-        # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (0, 0, 0)
-        # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
-        # Passes the unicode text input as first item in keys list in key_input method
-        # KEY_ACTIVATED ONLY
-        self.uses_text_input = False
-        # Determines whether object is a scroll bar
-        self.is_scroll_bar = False
-
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
@@ -66,6 +49,23 @@ class Main:
         # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
         # e.g. [[None, 1], [None, 1]] ensures object is square
         self.min_max_size = [[None, None], [None, None]]
+
+        # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
+        # For rotated containers and containers that have a scroll bar, this becomes False
+        self.objects_visible_outside_container = True
+        # Image directory for this object (path from main.py) - IMAGE ONLY
+        # If image does not exist, defaults to black rectangle
+        self.img_dir = ""
+        # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
+        # colour is used if the object's image does not exist - IMAGE ONLY
+        self.object_colour = (0, 0, 0)
+        # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
+        self.activation_keys = {}
+        # Passes the unicode text input as first item in keys list in key_input method
+        # KEY_ACTIVATED ONLY
+        self.uses_text_input = False
+        # Determines whether object is a scroll bar
+        self.is_scroll_bar = False
 
         # Content of the text - TEXT ONLY
         self.text = ""
@@ -108,6 +108,14 @@ class Main:
 
 
 """
+To dynamically create an object (ONLY FOR CONTAINERS):
+Call self.generate_object(global_scripts, n[, m])
+    global_scripts -> this is already passed into the frame_update method,
+        therefore this method must be called from frame_update
+    n -> string -> name of the object that is to be created
+    m -> variable -> value that is passed to the generated object,
+        can be ignored (therefore shown in square braces)
+
 To create an animation:
 Call self.create_animation(x, y, z[, a, b])
     x -> float -> final value of the animation (initial value is always zero)

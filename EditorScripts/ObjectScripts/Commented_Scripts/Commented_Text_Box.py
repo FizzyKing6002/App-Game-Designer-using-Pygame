@@ -21,6 +21,20 @@ class Main:
         self.update_priority = 0
         self.generated_value = None
 
+        # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
+        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
+        self.size_modifiers = [[0, 1], [0, 1]]
+        # [degrees, percent of container's rotation]
+        self.rotation_modifiers = [0, 1]
+        # [percentage opacity, percent of container's opacity]
+        self.opacity_modifiers = [0, 1]
+
+        # Aligns text within the text box and alters position
+        # [percent of object size, percent of object size] -> [x, y]
+        self.position_origin = [0.5, 0.5]
+        self.min_max_size = [[None, None], [None, None]]
+
         self.objects_visible_outside_container = True
         # Background image for text box - most use a colour rather than image
         self.img_dir = ""
@@ -36,20 +50,6 @@ class Main:
         self.uses_text_input = True
         self.is_scroll_bar = False
 
-        # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
-        # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
-        # [degrees, percent of container's rotation]
-        self.rotation_modifiers = [0, 1]
-        # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [0, 1]
-
-        # Aligns text within the text box and alters position
-        # [percent of object size, percent of object size] -> [x, y]
-        self.position_origin = [0.5, 0.5]
-        self.min_max_size = [[None, None], [None, None]]
-
         # Content of the text
         self.text = ""
         # Text box font
@@ -59,7 +59,7 @@ class Main:
         self.text_bold = False
         self.text_italic = False
 
-        # Text box variable definitions
+        # Text box variable definitions:
         # The text box has been clicked on and can be written in
         self.activated = False
         self.clicked = False
@@ -69,7 +69,6 @@ class Main:
         self.prev_backspace = False
 
 
-    # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         # If the mouse has been released on the text box meaning it has been clicked
         if not self.clicked and self.prev_clicked and self.hovered:

@@ -64,14 +64,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.one_time = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.one_time:
-            self.generate_object(global_scripts, "animated_example", global_scripts.mouse_pos)
-            self.one_time = False
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

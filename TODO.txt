@@ -1,3 +1,5 @@
-Generate object method for containers
-Add dialogue to actions
-Error protection -> if hasattr()
+>>> Create objects by dragging
+Med-Low prio:
+    Add dialogue to actions
+Low prio:
+    Error protection -> if hasattr()

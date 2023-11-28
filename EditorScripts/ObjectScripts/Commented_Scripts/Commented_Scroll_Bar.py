@@ -23,15 +23,6 @@ class Main:
         self.update_priority = 10000
         self.generated_value = None
 
-        self.objects_visible_outside_container = True
-        # Image directory for the scroll bar (path from main.py)
-        self.img_dir = ""
-        self.object_colour = (0, 0, 0)
-        self.activation_keys = {}
-        self.uses_text_input = False
-        # Object is a scroll bar
-        self.is_scroll_bar = True
-
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         # Aligns scroll bar to right side of container (for 5% container width scroll bar)
         self.position_modifiers = [[0, 0.975], [0, 0.5]]
@@ -44,13 +35,22 @@ class Main:
         self.position_origin = [0.5, 0.5]
         self.min_max_size = [[None, None], [None, None]]
 
+        self.objects_visible_outside_container = True
+        # Image directory for the scroll bar (path from main.py)
+        self.img_dir = ""
+        self.object_colour = (0, 0, 0)
+        self.activation_keys = {}
+        self.uses_text_input = False
+        # Object is a scroll bar
+        self.is_scroll_bar = True
+
         self.text = ""
         self.text_font = ""
         self.text_colour = (0, 0, 0)
         self.text_bold = False
         self.text_italic = False
 
-        # Scroll bar variable definitions
+        # Scroll bar variable definitions:
         self.clicked = False
         self.init_mouse_pos = None
         self.mouse_pos_diff = 0
@@ -58,6 +58,7 @@ class Main:
         self.mouse_scroll_amount = 0
         # Changes how far the scroll bar moves when scrolled -> {float > 0}
         self.scroll_factor = 0.15
+
 
     def frame_update(self, global_scripts):
         # While scroll bar is being dragged, it must be moved to the correct position every frame
