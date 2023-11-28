@@ -50,7 +50,7 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[0, 0], [0, 0]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.2], [0, 0.3]]
         # [degrees, percent of container's rotation]
@@ -83,7 +83,9 @@ class Main:
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.one_time:
-            self.create_animation(200, 2000, "posx")
+            print(self.generated_value)
+            self.position_modifiers[0][0] += self.generated_value[0]
+            self.position_modifiers[1][0] += self.generated_value[1]
             self.one_time = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]

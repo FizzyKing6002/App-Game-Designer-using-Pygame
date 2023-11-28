@@ -474,7 +474,9 @@ class Container:
         return (self.size[1] ** 2) / (max(max_y - self.object_offset, cont_max) \
                - min(min_y - self.object_offset, cont_min)), object_offset
 
-    def generate_object(self, global_scripts, name):
+    def generate_object(self, global_scripts, name, *args):
+        if len(args) == 0:
+            args = [None]
         for file in global_scripts.object_files:
             # If the name matches the file name
             if file.__name__.split(".")[-1] == name:
@@ -490,6 +492,7 @@ class Container:
                                            object_type['hover_activated'],
                                            object_type['key_activated'],
                                            object_class))
+                self.objects[-1].generated_value = args[0]
 
 class Text:
     """
