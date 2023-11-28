@@ -537,10 +537,11 @@ class Image:
             pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))
 
         self.prev_img_dir = self.img_dir
+        self.prev_obj_col = self.object_colour
 
     def draw_image(self, window):
         # If the image directory of the object has been changed
-        if self.prev_img_dir != self.img_dir:
+        if self.prev_img_dir != self.img_dir or self.prev_obj_col != self.object_colour:
             # Recreate the pygame image
             try:
                 self.img = pygame.image.load(self.img_dir).convert_alpha()
@@ -549,6 +550,7 @@ class Image:
                 pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))
 
             self.prev_img_dir = self.img_dir
+            self.prev_obj_col = self.object_colour
 
         # Transform the object's image based upon its current attributes
         temp_img = pygame.transform.rotate(pygame.transform.scale(

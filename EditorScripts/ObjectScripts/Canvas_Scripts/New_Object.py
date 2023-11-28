@@ -3,13 +3,14 @@ Represents an object
 """
 
 
+import random
 from copy import deepcopy
 
 
 # Determines the type of object
 # text, image are mutually exclusive, text takes precedence
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
     "button" : False,
@@ -46,7 +47,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.1], [0, 0.1]]
+        self.size_modifiers = [[0, 0.8 * 0.1], [0, 0.85 * 0.1]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -54,10 +55,11 @@ class Main:
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist
-        self.object_colour = (200, 0, 0)
+        self.object_colour = (0, 0, 0)
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         self.position_origin = [0.5, 0.5]
+        self.min_max_size = [[None, 1], [None, 1]]
 
         # Content of the text - TEXT ONLY
         self.text = ""
@@ -67,17 +69,24 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.prev_dragging = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if global_scripts.dragging or global_scripts.key_dragging:
-            self.pos = deepcopy(global_scripts.mouse_pos)
+            if not self.prev_dragging:
+                self.object_colour = (random.randint(0, 255),
+                                      random.randint(0, 255),
+                                      random.randint(0, 255))
 
+            self.pos = deepcopy(global_scripts.mouse_pos)
             self.opa = 0.8
+            self.prev_dragging = True
 
         else:
             self.opa = 0
+            self.prev_dragging = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
