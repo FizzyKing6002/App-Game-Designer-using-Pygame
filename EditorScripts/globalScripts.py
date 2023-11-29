@@ -14,6 +14,10 @@ class globalScripts:
 
         self.dragging = False
         self.key_dragging = False
+        self.prev_dragging = False
+
+        self.generator_colour = (0, 0, 0)
+        self.generator_pos = [0, 0]
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called

@@ -85,8 +85,12 @@ class Main:
             self.prev_dragging = True
 
         else:
+            if self.prev_dragging:
+                global_scripts.generator_colour = self.object_colour
+                global_scripts.generator_pos = list(global_scripts.mouse_pos)
+                self.prev_dragging = False
+
             self.opa = 0
-            self.prev_dragging = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

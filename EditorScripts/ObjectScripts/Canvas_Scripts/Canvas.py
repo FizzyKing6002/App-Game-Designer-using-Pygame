@@ -64,11 +64,31 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.prev_dragging = False
+        self.next_time = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if global_scripts.dragging or global_scripts.key_dragging:
+            self.prev_dragging = True
+
+        else:
+            if self.next_time:
+                global_scripts.generator_pos[0] = (global_scripts.generator_pos[0] \
+                                                   + self.size[0] / 2 - self.pos[0]) / self.size[0]
+                global_scripts.generator_pos[1] = (global_scripts.generator_pos[1] \
+                                                   + self.size[1] / 2 - self.pos[1]) / self.size[0]
+
+                self.generate_object(global_scripts, "Generator_Object",
+                                     [global_scripts.generator_colour,
+                                     global_scripts.generator_pos])
+                
+                self.next_time = False
+
+            if self.prev_dragging:
+                self.next_time = True
+                self.prev_dragging = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
