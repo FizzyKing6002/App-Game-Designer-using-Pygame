@@ -78,7 +78,7 @@ class Main:
                 global_scripts.generator_pos[0] = (global_scripts.generator_pos[0] \
                                                    + self.size[0] / 2 - self.pos[0]) / self.size[0]
                 global_scripts.generator_pos[1] = (global_scripts.generator_pos[1] \
-                                                   + self.size[1] / 2 - self.pos[1]) / self.size[0]
+                                                   + self.size[1] / 2 - self.pos[1]) / self.size[1]
 
                 self.generate_object(global_scripts, "Generator_Object",
                                      [global_scripts.generator_colour,
