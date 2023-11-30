@@ -33,7 +33,7 @@ class Main:
         self.objects_visible_outside_container = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = "EditorTextures/Objects_Icons/container.png"
+        self.img_dir = "EditorAssets/Textures/Objects_Icons/container.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {
             "LCTRL" : True,
