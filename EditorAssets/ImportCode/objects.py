@@ -122,7 +122,7 @@ def Object(*args):
 
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa,
-                     mouse_pos, mouse_state, key_state, text_input, global_scripts):
+                     mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts):
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
@@ -136,6 +136,24 @@ def Object(*args):
 
             # hasattr() checks whether the attribute exists,
             # callable() checks whether the attribute is a method or not
+            
+            # If the 
+            if is_lame:
+                self.frame_update(global_scripts)
+
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(window)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(window)
+
+                if hasattr(self, "container_update") and callable(self.container_update):
+                    self.container_update(window, time, mouse_pos, mouse_state,
+                                        key_state, text_input, True, global_scripts)
+                return
+            
+            # If this object makes contained objects lame
+            if hasattr(self, "objects_are_lame") and not self.objects_are_lame:
+                is_lame = True
 
             if hasattr(self, "call_clicked") and callable(self.call_clicked):
                 self.call_clicked(mouse_pos, mouse_state)
@@ -154,7 +172,7 @@ def Object(*args):
 
             if hasattr(self, "container_update") and callable(self.container_update):
                 self.container_update(window, time, mouse_pos, mouse_state,
-                                      key_state, text_input, global_scripts)
+                                      key_state, text_input, is_lame, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -338,7 +356,7 @@ class Container:
         self.prev_scroll_offset = 0
 
     def container_update(self, window, time, mouse_pos, mouse_state,
-                         key_state, text_input, global_scripts):
+                         key_state, text_input, is_lame, global_scripts):
         # Objects are sorted by their update_priority attribute
         self.objects.sort(key=lambda x: x.update_priority, reverse=False)
 
@@ -366,7 +384,7 @@ class Container:
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
             self.call_objects(window, time, mouse_pos, mouse_state, key_state, text_input,
-                              global_scripts, False, 0)
+                              is_lame, global_scripts, False, 0)
 
         else:
             # Create surface matching container's size
@@ -396,14 +414,14 @@ class Container:
             ]
 
             self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
-                              global_scripts, container_has_scroll_bar, scroll_offset)
+                              is_lame, global_scripts, container_has_scroll_bar, scroll_offset)
 
             # Draws surface to screen
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
-                     global_scripts, container_has_scroll_bar, scroll_offset):
+                     is_lame, global_scripts, container_has_scroll_bar, scroll_offset):
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
             # Object offset difference from last frame is added to total object offset
@@ -434,7 +452,7 @@ class Container:
                 # Calls the object
                 obj(surface, time,
                     pos, size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
+                    mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -447,7 +465,7 @@ class Container:
                 # Calls the object
                 obj(surface, time,
                     pos, self.size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
+                    mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
