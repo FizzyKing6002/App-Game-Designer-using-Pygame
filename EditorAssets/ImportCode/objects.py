@@ -56,7 +56,7 @@ Classes:
 import copy
 import pygame
 # Import is relative to the Project Editor file
-from ImportCode import animation
+from EditorAssets.ImportCode import animation
 
 
 # Factory function is used that returns a class object,

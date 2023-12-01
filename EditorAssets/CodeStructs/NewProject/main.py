@@ -27,10 +27,10 @@ import importlib
 
 import pygame
 
-from EditorAssets.ImportCode import objects
+from Assets.ImportCode import objects
 # Imports the package so that files within the folder can be accessed through the package
 #from EditorScripts import ObjectScripts
-from EditorAssets.EditorScripts import globalScripts
+from Assets.Scripts import globalScripts
 
 # Initialises pygame, including pygame.font, allowing certain pygame methods to be used
 pygame.init()
@@ -100,7 +100,7 @@ class Main:
         objects_list = []
         # Imports all the objects from the object scripts folder and composes a list of these files
         # Passes path from this file to the folder
-        object_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
+        object_files = self.import_objects("Assets/Scripts/ObjectScripts/", [])
         self.global_scripts.object_files = object_files
 
         for file in object_files:

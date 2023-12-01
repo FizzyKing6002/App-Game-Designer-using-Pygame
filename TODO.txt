@@ -1,4 +1,6 @@
 >>> Create objects by dragging
+    >>> Add lameness to objects
+    Load objects from current project
 Med-Low prio:
     Add dialogue to actions
 Low prio:

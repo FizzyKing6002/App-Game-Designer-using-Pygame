@@ -8,7 +8,9 @@ Methods:
         Resposible for progressing animations passed to it based upon how much time has passed
 """
 
+
 import math
+
 
 def create_animation(val, time, anim_type, *args):
     # Args describes the easing function for the animation which is not required
