@@ -36,6 +36,7 @@ class Main:
         self.min_max_size = [[None, None], [None, None]]
 
         self.objects_visible_outside_container = True
+        self.objects_are_lame = False
         # Image directory for the scroll bar (path from main.py)
         self.img_dir = ""
         self.object_colour = (0, 0, 0)

@@ -53,7 +53,9 @@ class Main:
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = True
-        # Determines whether objects of the container are allowed to run their code - CONTAINER ONLY
+        # Determines whether objects belonging to this container are lame - CONTAINER ONLY
+        # Lame objects cannot be clicked or hovered over, do not react to key input,
+        # and do not get their frame_update method called
         self.objects_are_lame = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle

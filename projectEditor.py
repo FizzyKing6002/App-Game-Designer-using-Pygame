@@ -204,6 +204,8 @@ class Main:
                 # Rotation of window is zero, opacity is one
                 0, 1,
                 mouse_pos, mouse_state, key_state, text_input,
+                # The objects should not be lame by default
+                False,
                 self.global_scripts)
 
         # Calls global update function after objects

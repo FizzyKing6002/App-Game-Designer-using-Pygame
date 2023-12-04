@@ -136,11 +136,9 @@ def Object(*args):
 
             # hasattr() checks whether the attribute exists,
             # callable() checks whether the attribute is a method or not
-            
-            # If the 
-            if is_lame:
-                self.frame_update(global_scripts)
 
+            # If the object is lame, only call the methods that are necessary
+            if is_lame:
                 if hasattr(self, "draw_image") and callable(self.draw_image):
                     self.draw_image(window)
                 if hasattr(self, "draw_text") and callable(self.draw_text):
@@ -150,7 +148,7 @@ def Object(*args):
                     self.container_update(window, time, mouse_pos, mouse_state,
                                         key_state, text_input, True, global_scripts)
                 return
-            
+
             # If this object makes contained objects lame
             if hasattr(self, "objects_are_lame") and not self.objects_are_lame:
                 is_lame = True

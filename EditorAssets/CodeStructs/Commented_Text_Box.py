@@ -36,6 +36,7 @@ class Main:
         self.min_max_size = [[None, None], [None, None]]
 
         self.objects_visible_outside_container = True
+        self.objects_are_lame = False
         # Background image for text box - most use a colour rather than image
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
