@@ -150,7 +150,7 @@ def Object(*args):
                 return
 
             # If this object makes contained objects lame
-            if hasattr(self, "objects_are_lame") and not self.objects_are_lame:
+            if hasattr(self, "objects_are_lame") and self.objects_are_lame:
                 is_lame = True
 
             if hasattr(self, "call_clicked") and callable(self.call_clicked):
