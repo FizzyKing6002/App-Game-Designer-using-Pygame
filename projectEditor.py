@@ -105,7 +105,7 @@ class Main:
             os.mkdir("_CurrentProject")
         current_projects = os.listdir("_CurrentProject")
         if len(current_projects) == 0:
-            shutil.copytree("EditorAssets/CodeStructs/NewProject", "_CurrentProject")
+            shutil.copytree("EditorAssets/CodeStructs/NewProject", "_CurrentProject/NewProject")
             project_name = "NewProject"
         else:
             project_name = current_projects[0]
