@@ -24,14 +24,13 @@ Classes:
 import ctypes
 import os
 import importlib
-import shutil
 
 import pygame
 
-from EditorAssets.ImportCode import objects
+from Assets.ImportCode import objects
 # Imports the package so that files within the folder can be accessed through the package
 #from EditorScripts import ObjectScripts
-from EditorAssets.EditorScripts import globalScripts
+from Assets.Scripts import globalScripts
 
 # Initialises pygame, including pygame.font, allowing certain pygame methods to be used
 pygame.init()
@@ -99,28 +98,12 @@ class Main:
         # Creates a list of lists, where each list's first item is the container name and
         # the rest of the items are object's file names that belong to the specified container
         objects_list = []
+        # Imports all the objects from the object scripts folder and composes a list of these files
+        # Passes path from this file to the folder
+        object_files = self.import_objects("Assets/Scripts/ObjectScripts/", [])
+        self.global_scripts.object_files = object_files
 
-        # Ensures the directories exist before importing user objects
-        if not os.path.isdir("_CurrentProject"):
-            os.mkdir("_CurrentProject")
-        current_projects = os.listdir("_CurrentProject")
-        if len(current_projects) == 0:
-            shutil.copytree("EditorAssets/CodeStructs/NewProject", "_CurrentProject")
-            project_name = "NewProject"
-        else:
-            project_name = current_projects[0]
-
-        # Imports all the objects from the object scripts folders and composes a list of these files
-        # Passes path from this file to the folders
-
-        editor_obj_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
-        project_obj_files = self.import_objects(
-            f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [])
-
-        # Allows the object files to be accessible from other files
-        self.global_scripts.object_files = editor_obj_files
-
-        for file in editor_obj_files:
+        for file in object_files:
             # Gets the container name attribute from the current file
             container_names = file.container_name
 
@@ -129,41 +112,24 @@ class Main:
                 container_names = [container_names]
 
             for container_name in container_names:
-                self.fill_container_list(objects_list, file, container_name)
+                # Base case - new list should be created if none already exist
+                if len(objects_list) == 0:
+                    objects_list.append([container_name, file])
+                    continue
+                # Searches through existing lists for matching container names
+                for container_type in objects_list:
+                    # When matching container name is found, adds current file name to the list
+                    if container_name == container_type[0]:
+                        container_type.append(file)
+                        break
 
-        for file in project_obj_files:
-            # Gets the container name attribute from the current file
-            container_names = file.container_name
-
-            # Turns container_names into a list iterable
-            if not isinstance(container_names, list):
-                container_names = [container_names]
-
-            for container_name in container_names:
-                # If the object shouldn't be in a container, it is placed in the canvas
-                if container_name == None:
-                    container_name = "Canvas"
-                self.fill_container_list(objects_list, file, container_name)
+                    # If matching container name is not found, creates a new list
+                    if container_type == objects_list[-1]:
+                        objects_list.append([container_name, file])
+                        break
 
         # Calls method to create objects using the ordered list just created
         self.recursive_create_objects(objects_list, None, "self.objects")
-
-    def fill_container_list(self, objects_list, file, container_name):
-        # Base case - new list should be created if none already exist
-        if len(objects_list) == 0:
-            objects_list.append([container_name, file])
-            return
-        # Searches through existing lists for matching container names
-        for container_type in objects_list:
-            # When matching container name is found, adds current file name to the list
-            if container_name == container_type[0]:
-                container_type.append(file)
-                break
-
-            # If matching container name is not found, creates a new list
-            if container_type == objects_list[-1]:
-                objects_list.append([container_name, file])
-                break
 
     def import_objects(self, path, object_files):
         # Iterates through every file in the folder
@@ -238,8 +204,6 @@ class Main:
                 # Rotation of window is zero, opacity is one
                 0, 1,
                 mouse_pos, mouse_state, key_state, text_input,
-                # The objects should not be lame by default
-                False,
                 self.global_scripts)
 
         # Calls global update function after objects
