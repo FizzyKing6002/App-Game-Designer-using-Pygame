@@ -1,5 +1,4 @@
->>> Create objects by draggin
-    >>> Create a new project for the user if none exist
+>>> Create objects by dragging
 Med-Low prio:
     Add dialogue to actions
 Low prio:

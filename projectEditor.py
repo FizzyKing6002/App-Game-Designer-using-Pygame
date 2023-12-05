@@ -109,6 +109,8 @@ class Main:
             project_name = "NewProject"
         else:
             project_name = current_projects[0]
+        if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
+            os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
 
         # Imports all the objects from the object scripts folders and composes a list of these files
         # Passes path from this file to the folders
