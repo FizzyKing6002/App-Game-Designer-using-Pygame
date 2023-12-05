@@ -7,7 +7,7 @@ Represents an object
 object_type = {
     "container" : False,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "None"
+container_name = None
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:

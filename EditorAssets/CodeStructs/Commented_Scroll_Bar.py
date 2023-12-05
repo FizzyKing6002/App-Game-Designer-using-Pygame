@@ -18,7 +18,7 @@ container_name = "None"
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
     def __init__(self):
-        self.active = False
+        self.active = True
         # Scroll bar should be drawn over all other images in the container
         self.update_priority = 10000
         self.generated_value = None

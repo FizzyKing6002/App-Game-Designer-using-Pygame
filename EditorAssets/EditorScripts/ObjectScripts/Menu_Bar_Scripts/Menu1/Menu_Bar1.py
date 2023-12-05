@@ -31,7 +31,7 @@ class Main:
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = True
-        self.objects_are_lame = True
+        self.objects_are_lame = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
