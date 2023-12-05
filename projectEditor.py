@@ -101,7 +101,7 @@ class Main:
         # Imports all the objects from the object scripts folder and composes a list of these files
         # Passes path from this file to the folder
         editor_obj_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
-        project_obj_files = self.import_objects("_CurrentProject/Assets/Scripts/ObjectScripts", [])
+        project_obj_files = self.import_objects("_CurrentProject/Assets/Scripts/ObjectScripts/", [])
         self.global_scripts.object_files = editor_obj_files
 
         for file in editor_obj_files:
