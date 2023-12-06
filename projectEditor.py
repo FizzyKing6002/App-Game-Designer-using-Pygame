@@ -93,7 +93,6 @@ class Main:
     def __call__(self):
         # Objects are loaded before the program loop begins
         self.load_editor_objects()
-        self.load_project_objects()
         self.main_loop()
 
     def load_editor_objects(self):
@@ -158,24 +157,7 @@ class Main:
         # Calls method to create objects using the ordered list just created
         # self.objects[0] goes into the background object
         # .objects[0] goes into the canvas object (AS OBJECTS HAVE NOT BEEN SORTED YET)
-        self.recursive_create_objects(objects_list, None, "self.objects[0].objects[0].objects")
-
-    def fill_container_list(self, objects_list, file, container_name):
-        # Base case - new list should be created if none already exist
-        if len(objects_list) == 0:
-            objects_list.append([container_name, file])
-            return
-        # Searches through existing lists for matching container names
-        for container_type in objects_list:
-            # When matching container name is found, adds current file name to the list
-            if container_name == container_type[0]:
-                container_type.append(file)
-                break
-
-            # If matching container name is not found, creates a new list
-            if container_type == objects_list[-1]:
-                objects_list.append([container_name, file])
-                break
+        self.recursive_create_objects(objects_list, None, "self.objects[0].objects[-2].objects")
 
     def import_objects(self, path, object_files):
         # Iterates through every file in the folder
@@ -193,6 +175,23 @@ class Main:
             del file
 
         return object_files
+
+    def fill_container_list(self, objects_list, file, container_name):
+        # Base case - new list should be created if none already exist
+        if len(objects_list) == 0:
+            objects_list.append([container_name, file])
+            return
+        # Searches through existing lists for matching container names
+        for container_type in objects_list:
+            # When matching container name is found, adds current file name to the list
+            if container_name == container_type[0]:
+                container_type.append(file)
+                break
+
+            # If matching container name is not found, creates a new list
+            if container_type == objects_list[-1]:
+                objects_list.append([container_name, file])
+                break
 
     def recursive_create_objects(self, file_list, val, path):
         # Iterates through lists of files belonging to different containers
@@ -263,6 +262,9 @@ class Main:
         # mouse scroll is defaulted to zero
         self.call_objects(0, 0, "")
 
+        # Project objects are loaded after the editor objects have been ordered correctly
+        self.load_project_objects()
+
         run = True
         elapsed_time = 0
 
@@ -288,6 +290,10 @@ class Main:
                     if event.key not in (pygame.K_BACKSPACE, pygame.K_RETURN):
                         # Turns the text related event into unicode
                         text_input = event.unicode
+
+            if self.global_scripts.refresh:
+                # Refreshing objects involved reloading all project objects
+                self.load_project_objects()
 
             # Update every object
             self.call_objects(elapsed_time, mouse_wheel_movement, text_input)
