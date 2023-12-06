@@ -71,27 +71,22 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.dragging or global_scripts.key_dragging:
-            self.prev_dragging = True
+        if self.next_time:
+            self.generate_object(global_scripts, "Generator_Object",
+                                    [global_scripts.generator_colour,
+                                    global_scripts.generator_pos])
 
-        else:
-            if self.next_time:
-                self.generate_object(global_scripts, "Generator_Object",
-                                     [global_scripts.generator_colour,
-                                     global_scripts.generator_pos])
+            self.objects[-1].object_colour = global_scripts.generator_colour
+            self.objects[-1].position_modifiers[0][1] += (global_scripts.generator_pos[0] \
+                                                            + self.size[0] / 2 - self.pos[0]) \
+                                                            / self.size[0]
+            self.objects[-1].position_modifiers[1][1] += (global_scripts.generator_pos[1] \
+                                                            + self.size[1] / 2 - self.pos[1]) \
+                                                            / self.size[1]
+            self.next_time = False
 
-                self.objects[-1].object_colour = global_scripts.generator_colour
-                self.objects[-1].position_modifiers[0][1] += (global_scripts.generator_pos[0] \
-                                                              + self.size[0] / 2 - self.pos[0]) \
-                                                                / self.size[0]
-                self.objects[-1].position_modifiers[1][1] += (global_scripts.generator_pos[1] \
-                                                              + self.size[1] / 2 - self.pos[1]) \
-                                                                / self.size[1]
-                self.next_time = False
-
-            if self.prev_dragging:
-                self.next_time = True
-                self.prev_dragging = False
+        if global_scripts.dropped:
+            self.next_time = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

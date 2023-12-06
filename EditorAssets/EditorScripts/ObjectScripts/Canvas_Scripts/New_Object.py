@@ -74,6 +74,8 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        self.opa = 0
+
         if global_scripts.dragging or global_scripts.key_dragging:
             if not self.prev_dragging:
                 self.object_colour = (random.randint(0, 255),
@@ -84,13 +86,10 @@ class Main:
             self.opa = 0.8
             self.prev_dragging = True
 
-        else:
-            if self.prev_dragging:
-                global_scripts.generator_colour = self.object_colour
-                global_scripts.generator_pos = list(global_scripts.mouse_pos)
-                self.prev_dragging = False
-
-            self.opa = 0
+        if global_scripts.dropped:
+            global_scripts.generator_colour = self.object_colour
+            global_scripts.generator_pos = list(global_scripts.mouse_pos)
+            self.prev_dragging = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

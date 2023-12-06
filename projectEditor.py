@@ -92,10 +92,37 @@ class Main:
 
     def __call__(self):
         # Objects are loaded before the program loop begins
-        self.load_objects()
+        self.load_editor_objects()
+        self.load_project_objects()
         self.main_loop()
 
-    def load_objects(self):
+    def load_editor_objects(self):
+        # Creates a list of lists, where each list's first item is the container name and
+        # the rest of the items are object's file names that belong to the specified container
+        objects_list = []
+
+        # Imports all the objects from the object scripts folders and composes a list of these files
+        # Passes path from this file to the folders
+        editor_obj_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
+
+        # Allows the object files to be accessible from other files
+        self.global_scripts.object_files = editor_obj_files
+
+        for file in editor_obj_files:
+            # Gets the container name attribute from the current file
+            container_names = file.container_name
+
+            # Turns container_names into a list iterable
+            if not isinstance(container_names, list):
+                container_names = [container_names]
+
+            for container_name in container_names:
+                self.fill_container_list(objects_list, file, container_name)
+
+        # Calls method to create objects using the ordered list just created
+        self.recursive_create_objects(objects_list, None, "self.objects")
+
+    def load_project_objects(self):
         # Creates a list of lists, where each list's first item is the container name and
         # the rest of the items are object's file names that belong to the specified container
         objects_list = []
@@ -114,24 +141,8 @@ class Main:
 
         # Imports all the objects from the object scripts folders and composes a list of these files
         # Passes path from this file to the folders
-
-        editor_obj_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
         project_obj_files = self.import_objects(
             f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [])
-
-        # Allows the object files to be accessible from other files
-        self.global_scripts.object_files = editor_obj_files
-
-        for file in editor_obj_files:
-            # Gets the container name attribute from the current file
-            container_names = file.container_name
-
-            # Turns container_names into a list iterable
-            if not isinstance(container_names, list):
-                container_names = [container_names]
-
-            for container_name in container_names:
-                self.fill_container_list(objects_list, file, container_name)
 
         for file in project_obj_files:
             # Gets the container name attribute from the current file
@@ -142,13 +153,12 @@ class Main:
                 container_names = [container_names]
 
             for container_name in container_names:
-                # If the object shouldn't be in a container, it is placed in the canvas
-                if container_name == None:
-                    container_name = "Canvas"
                 self.fill_container_list(objects_list, file, container_name)
 
         # Calls method to create objects using the ordered list just created
-        self.recursive_create_objects(objects_list, None, "self.objects")
+        # self.objects[0] goes into the background object
+        # .objects[0] goes into the canvas object (AS OBJECTS HAVE NOT BEEN SORTED YET)
+        self.recursive_create_objects(objects_list, None, "self.objects[0].objects[0].objects")
 
     def fill_container_list(self, objects_list, file, container_name):
         # Base case - new list should be created if none already exist
