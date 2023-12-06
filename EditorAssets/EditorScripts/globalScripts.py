@@ -25,6 +25,7 @@ class globalScripts:
         self.generated_obj_num = 0
 
         self.refresh = False
+        self.create_new = False
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
@@ -34,8 +35,6 @@ class globalScripts:
 
         if self.refresh:
             self.refresh = False
-        if self.dropped:
-            self.refresh = True
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -49,6 +48,9 @@ class globalScripts:
         if self.dragging and not self.mouse_state[0]:
             self.dragging = False
             self.dropped = True
+
+        if self.create_new:
+            self.create_new = False
 
             project_name = os.listdir("_CurrentProject")[0]
             shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",

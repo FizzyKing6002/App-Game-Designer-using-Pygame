@@ -10,7 +10,7 @@ object_type = {
     "text" : False,
     "image" : True,
     "button" : False,
-    "hover_activated" : False,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
@@ -68,11 +68,18 @@ class Main:
         self.prev_dragging = False
         self.next_time = False
 
+        self.hovered = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.refresh:
+        if global_scripts.dropped and self.hovered:
+            global_scripts.refresh = True
+            global_scripts.create_new = True
             self.objects = []
+
+        if self.hovered:
+            self.hovered = False
 
 #        if self.next_time:
  #           self.generate_object(global_scripts, "Generator_Object",
@@ -105,7 +112,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        self.hovered = True
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
     def key_input(self, key):
