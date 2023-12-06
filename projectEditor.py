@@ -90,7 +90,7 @@ class Main:
         # Creates an instance of the class located within globalScripts.py
         self.global_scripts = globalScripts.globalScripts()
 
-        
+        # Ensures project object modules are saved so they can be reloaded later
         self.project_obj_files = []
 
     def __call__(self):
@@ -144,7 +144,7 @@ class Main:
         # Invalidates cached imports so that when modules are reloaded,
         # they are done so with the updated file
         importlib.invalidate_caches()
-        # Imports all the objects from the object scripts folders and composes a list of these files
+        # Imports all the objects from the object scripts folders and extends a list of these files
         # Passes path from this file to the folders
         self.project_obj_files += self.import_objects(
             f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [])

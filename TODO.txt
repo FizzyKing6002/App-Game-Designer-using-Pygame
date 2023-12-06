@@ -1,5 +1,6 @@
->>> Edit user objects upon creation
-    >>> Hook up refresh button
+High prio:
+    Edit user objects upon creation
+    >>> Ensure invalidate caches and reload module is needed
 Med-Low prio:
     Add dialogue to actions
 Low prio:
