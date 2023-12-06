@@ -73,6 +73,9 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if global_scripts.refresh:
+            self.objects = []
+
         if global_scripts.dropped and self.hovered:
             global_scripts.refresh = True
             global_scripts.create_new = True

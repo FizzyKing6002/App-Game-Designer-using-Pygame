@@ -90,6 +90,9 @@ class Main:
         # Creates an instance of the class located within globalScripts.py
         self.global_scripts = globalScripts.globalScripts()
 
+        
+        self.project_obj_files = []
+
     def __call__(self):
         # Objects are loaded before the program loop begins
         self.load_editor_objects()
@@ -138,12 +141,15 @@ class Main:
         if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
 
+        # Invalidates cached imports so that when modules are reloaded,
+        # they are done so with the updated file
+        importlib.invalidate_caches()
         # Imports all the objects from the object scripts folders and composes a list of these files
         # Passes path from this file to the folders
-        project_obj_files = self.import_objects(
+        self.project_obj_files += self.import_objects(
             f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [])
 
-        for file in project_obj_files:
+        for file in self.project_obj_files:
             # Gets the container name attribute from the current file
             container_names = file.container_name
 
@@ -169,9 +175,15 @@ class Main:
                     self.import_objects(f"{path}{file}/", object_files)
                 continue
 
-            # Append the imported files into a list so they can be acessed
-            # importlib.import_module does not import the file into globals so this is neccessary
-            object_files.append(importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}"))
+            # importlib.import_module returns the imported module
+            module = importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}")
+
+            # If the module has been imported before
+            if module in self.project_obj_files:
+                # Reload the module so that changes are up to date
+                importlib.reload(module)
+            else:
+                object_files.append(module)
             del file
 
         return object_files
