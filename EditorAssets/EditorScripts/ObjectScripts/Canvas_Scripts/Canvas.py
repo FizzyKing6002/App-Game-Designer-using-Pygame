@@ -31,6 +31,7 @@ class Main:
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = False
+        self.objects_are_lame = True
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
@@ -75,15 +76,17 @@ class Main:
 
         else:
             if self.next_time:
-                global_scripts.generator_pos[0] = (global_scripts.generator_pos[0] \
-                                                   + self.size[0] / 2 - self.pos[0]) / self.size[0]
-                global_scripts.generator_pos[1] = (global_scripts.generator_pos[1] \
-                                                   + self.size[1] / 2 - self.pos[1]) / self.size[1]
-
                 self.generate_object(global_scripts, "Generator_Object",
                                      [global_scripts.generator_colour,
                                      global_scripts.generator_pos])
-                
+
+                self.objects[-1].object_colour = global_scripts.generator_colour
+                self.objects[-1].position_modifiers[0][1] += (global_scripts.generator_pos[0] \
+                                                              + self.size[0] / 2 - self.pos[0]) \
+                                                                / self.size[0]
+                self.objects[-1].position_modifiers[1][1] += (global_scripts.generator_pos[1] \
+                                                              + self.size[1] / 2 - self.pos[1]) \
+                                                                / self.size[1]
                 self.next_time = False
 
             if self.prev_dragging:

@@ -77,17 +77,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.one_time = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.one_time:
-            self.object_colour = self.generated_value[0]
-            self.position_modifiers[0][1] += self.generated_value[1][0]
-            self.position_modifiers[1][1] += self.generated_value[1][1]
-
-            self.one_time = False
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
