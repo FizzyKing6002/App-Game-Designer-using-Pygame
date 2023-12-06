@@ -1,4 +1,4 @@
->>> Create objects by dragging
+>>> Edit user objects upon creation
 Med-Low prio:
     Add dialogue to actions
 Low prio:

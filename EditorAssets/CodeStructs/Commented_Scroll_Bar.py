@@ -13,7 +13,7 @@ object_type = {
     "key_activated" : False
 }
 # Name should match container that contains the data that needs to be scrolled
-container_name = "None"
+container_name = None
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:

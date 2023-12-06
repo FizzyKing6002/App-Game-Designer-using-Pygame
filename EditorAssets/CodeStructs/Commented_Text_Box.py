@@ -12,7 +12,7 @@ object_type = {
     "hover_activated" : True,
     "key_activated" : True
 }
-container_name = "None"
+container_name = None
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:

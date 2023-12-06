@@ -3,6 +3,10 @@ The file containing global variables and methods, used in object scripts
 """
 
 
+import os
+import shutil
+
+
 class globalScripts:
     def __init__(self):
         # Globals go here
@@ -18,6 +22,7 @@ class globalScripts:
 
         self.generator_colour = (0, 0, 0)
         self.generator_pos = [0, 0]
+        self.generated_obj_num = 0
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
@@ -33,7 +38,25 @@ class globalScripts:
         if self.key_dragging and self.mouse_state[0]:
             self.dragging = True
             self.key_dragging = False
-        
+
         if self.dragging and not self.mouse_state[0]:
             self.dragging = False
             self.dropped = True
+
+            project_name = os.listdir("_CurrentProject")[0]
+            shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
+                        f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+
+            while True:
+                try:
+                    os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+Commented_Object.py",
+                            f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+Commented_Object{self.generated_obj_num}.py")
+
+                except FileExistsError:
+                    self.generated_obj_num += 1
+                    continue
+                break
+
+            self.generated_obj_num += 1
