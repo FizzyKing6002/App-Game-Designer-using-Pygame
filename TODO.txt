@@ -1,6 +1,5 @@
 >>> Edit user objects upon creation
-    >>> Refresh user objects when an object is created
-    Hook up refresh button
+    >>> Hook up refresh button
 Med-Low prio:
     Add dialogue to actions
 Low prio:

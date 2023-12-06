@@ -77,6 +77,9 @@ class Main:
         self.hovered = False
         self.prev_hovered = False
 
+        self.clicked = False
+        self.prev_clicked = False
+
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if self.one_time:
@@ -89,13 +92,20 @@ class Main:
         if not self.hovered and self.prev_hovered:
             self.reverse_animation("hover_turn", True)
 
+        if not self.clicked and self.prev_clicked and self.hovered:
+            global_scripts.refresh = True
+
         self.prev_hovered = self.hovered
         self.hovered = False
+        self.prev_clicked = False
 
+        if self.clicked:
+            self.prev_clicked = True
+            self.clicked = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
