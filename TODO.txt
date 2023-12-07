@@ -1,6 +1,5 @@
 High prio:
-    Edit user objects upon creation
-    >>> Ensure invalidate caches and reload module is needed
+    >>> Edit user objects upon creation
 Med-Low prio:
     Add dialogue to actions
 Low prio:

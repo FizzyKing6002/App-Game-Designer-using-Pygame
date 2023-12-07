@@ -105,7 +105,7 @@ class Main:
 
         # Imports all the objects from the object scripts folders and composes a list of these files
         # Passes path from this file to the folders
-        editor_obj_files = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [])
+        editor_obj_files, _ = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [], [])
 
         # Allows the object files to be accessible from other files
         self.global_scripts.object_files = editor_obj_files
@@ -141,13 +141,25 @@ class Main:
         if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
 
+        # Create a pointer list to show whether modules are still being used
+        pointer_list = []
+        for _ in self.project_obj_files:
+            pointer_list.append(False)
+
         # Invalidates cached imports so that when modules are reloaded,
         # they are done so with the updated file
         importlib.invalidate_caches()
         # Imports all the objects from the object scripts folders and extends a list of these files
         # Passes path from this file to the folders
-        self.project_obj_files += self.import_objects(
-            f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [])
+        object_files, pointer_list = self.import_objects(
+            f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/", [], pointer_list)
+        self.project_obj_files += object_files
+
+        # All the unused modules are removed from the project object files list
+        len_pointer_list = len(pointer_list)
+        for i, bool in enumerate(pointer_list):
+            if not bool:
+                self.project_obj_files.pop(i - len_pointer_list)
 
         for file in self.project_obj_files:
             # Gets the container name attribute from the current file
@@ -165,14 +177,14 @@ class Main:
         # .objects[0] goes into the canvas object (AS OBJECTS HAVE NOT BEEN SORTED YET)
         self.recursive_create_objects(objects_list, None, "self.objects[0].objects[-2].objects")
 
-    def import_objects(self, path, object_files):
+    def import_objects(self, path, object_files, pointer_list):
         # Iterates through every file in the folder
         for file in os.listdir(f"{os.path.dirname(__file__)}/{path}"):
             # Ignore non object scripts
             if file == "__init__.py" or file[-3:] != ".py":
                 # If the non object script is a folder import the objects in that folder
                 if os.path.isdir(f"{os.path.dirname(__file__)}/{path}{file}"):
-                    self.import_objects(f"{path}{file}/", object_files)
+                    self.import_objects(f"{path}{file}/", object_files, pointer_list)
                 continue
 
             # importlib.import_module returns the imported module
@@ -182,11 +194,14 @@ class Main:
             if module in self.project_obj_files:
                 # Reload the module so that changes are up to date
                 importlib.reload(module)
+                # Update the pointer list to show that the module is still being used
+                index = self.project_obj_files.index(module)
+                pointer_list[index] = True
             else:
                 object_files.append(module)
             del file
 
-        return object_files
+        return object_files, pointer_list
 
     def fill_container_list(self, objects_list, file, container_name):
         # Base case - new list should be created if none already exist

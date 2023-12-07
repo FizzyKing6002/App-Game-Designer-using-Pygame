@@ -94,6 +94,9 @@ class Main:
 
         if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.refresh = True
+        
+        if self.clicked:
+            self.opa = 0.5
 
         self.prev_hovered = self.hovered
         self.hovered = False
