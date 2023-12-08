@@ -76,6 +76,8 @@ class Main:
         self.hovered = False
         self.prev_backspace = False
 
+        self.broadcast_value = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
@@ -92,6 +94,15 @@ class Main:
 
         self.hovered = False
 
+        if self.broadcast_value:
+            self.broadcast_value = False
+
+            try:
+                float(self.text)
+                global_scripts.customizer_input(
+                    "]", f" {self.text}", "self.rotation_modifiers", "[", ",")
+            except ValueError:
+                global_scripts.add_dialogue("Invalid Input")
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
@@ -121,6 +132,7 @@ class Main:
 
                 if "RETURN" in keys:
                     self.activated = False
+                    self.broadcast_value = True
                 else:
                     self.text += keys[0]
 

@@ -1,5 +1,10 @@
 High prio:
-    >>> Edit user objects upon creation
+    Objects list bar
+    >>> Customizer input edits object attributes
+    Change type of object based upon object type dragged
+    Duplicate button
+Med prio:
+    Add new boxes to customizer window depending on object type
 Med-Low prio:
     Add dialogue to actions
 Low prio:

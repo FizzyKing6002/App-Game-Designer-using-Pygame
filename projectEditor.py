@@ -157,8 +157,8 @@ class Main:
 
         # All the unused modules are removed from the project object files list
         len_pointer_list = len(pointer_list)
-        for i, bool in enumerate(pointer_list):
-            if not bool:
+        for i, boolean in enumerate(pointer_list):
+            if not boolean:
                 self.project_obj_files.pop(i - len_pointer_list)
 
         for file in self.project_obj_files:

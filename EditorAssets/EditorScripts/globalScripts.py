@@ -16,19 +16,22 @@ class globalScripts:
         self.menu_state = 0
         self.change_state = False
 
+        self.dialogue = ["Project Editor opened", "[Project Name] loaded"]
+
         self.dragging = False
         self.key_dragging = False
         self.dropped = False
 
+        self.generated_obj_num = 0
         self.generator_colour = (0, 0, 0)
         self.generator_pos = [0, 0]
-        self.generated_obj_num = 0
+        self.canvas_pos = [0, 0]
+        self.canvas_size = [0, 0]
 
         self.refresh = False
         self.create_new = False
 
-        self.canvas_pos = [0, 0]
-        self.canvas_size = [0, 0]
+        self.current_path = ""
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
@@ -41,6 +44,17 @@ class globalScripts:
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
+        self.check_dragging_objects()
+
+    def add_dialogue(self, val):
+        self.dialogue.pop(0)
+        self.dialogue.append(val)
+
+    def customizer_input(self, target_until, new_val, *after_strings):
+        self.refresh = True
+        self.change_file_str(self.current_path, target_until, new_val, *after_strings)
+
+    def check_dragging_objects(self):
         if self.dropped:
             self.dropped = False
 
@@ -55,8 +69,12 @@ class globalScripts:
         if self.create_new:
             self.create_new = False
 
-            self.generator_pos[0] = (self.generator_pos[0] + self.canvas_size[0] / 2 - self.canvas_pos[0]) / self.canvas_size[0]
-            self.generator_pos[1] = (self.generator_pos[1] + self.canvas_size[1] / 2 - self.canvas_pos[1]) / self.canvas_size[1]
+            self.generator_pos[0] = (
+                self.generator_pos[0] + self.canvas_size[0] / 2 - self.canvas_pos[0]) \
+                    / self.canvas_size[0]
+            self.generator_pos[1] = (
+                self.generator_pos[1] + self.canvas_size[1] / 2 - self.canvas_pos[1]) \
+                    / self.canvas_size[1]
 
             self.create_object_file()
 
@@ -67,10 +85,10 @@ class globalScripts:
 
         while True:
             try:
-                path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+                self.current_path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
 Commented_Object{self.generated_obj_num}.py"
                 os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-Commented_Object.py", path)
+Commented_Object.py", self.current_path)
 
             except FileExistsError:
                 self.generated_obj_num += 1
@@ -79,35 +97,40 @@ Commented_Object.py", path)
 
         self.generated_obj_num += 1
 
-        self.change_file_str(path, "[[0, 0.5], [0, 0.5]]",
-                                f"[[0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}]]",
-                                "self.position_modifiers")
-        self.change_file_str(path, "[[0, 1], [0, 1]]",
-                                "[[0, 0.15], [0, 0.15]]",
-                                "self.size_modifiers")
-        self.change_file_str(path, "(0, 0, 0)", f"{self.generator_colour}", "self.object_colour")
+        self.change_file_str(self.current_path, "]]",
+                             f"0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}",
+                                "self.position_modifiers", "[[")
+        self.change_file_str(
+            self.current_path, "]]", "0, 0.15], [0, 0.15", "self.size_modifiers", "[[")
+        self.change_file_str(
+            self.current_path, ")", f"{self.generator_colour}"[1:-1], "self.object_colour", "(")
 
-    def change_file_str(self, path, target, new_val, *required_strings):
+    def change_file_str(self, path, target_until, new_val, *after_strings):
         with open(path, "r") as file:
             file_data = file.read()
-        
+
         split_data = file_data.split("\n")
         for i, line in enumerate(split_data):
-            for string in required_strings:
-                if string not in line:
+            edited_line = line
+            for string in after_strings:
+                if string not in edited_line:
                     break
+                edited_line = edited_line[edited_line.index(string) + len(string):]
             else:
                 new_data = ""
-                split_data[i] = line.replace(target, new_val)
+                start_index = len(line) - len(edited_line)
+                end_index = edited_line.index(target_until) + start_index
+
+                split_data[i] = line[:start_index] + new_val + line[end_index:]
+
                 for new_line in split_data:
                     new_data += new_line + "\n"
-                else:
-                    if len(new_data) >= 2:
-                        new_data = new_data[:-1]
+                if len(new_data) >= 2:
+                    new_data = new_data[:-1]
 
                 with open(f"{path[:-3]}%__cache__%.py", "w") as file:
                     file.write(new_data)
-                
+
                 with open(path, "w") as file:
                     file.write(new_data)
 

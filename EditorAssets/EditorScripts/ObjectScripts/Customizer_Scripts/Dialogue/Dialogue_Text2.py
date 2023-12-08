@@ -57,7 +57,7 @@ class Main:
         self.position_origin = [0.5, 0.5]
 
         # Content of the text - TEXT ONLY
-        self.text = "[Project Name] loaded"
+        self.text = ""
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
@@ -70,7 +70,7 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        self.text = global_scripts.dialogue[1]
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
