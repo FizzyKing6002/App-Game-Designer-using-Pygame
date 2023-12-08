@@ -27,6 +27,9 @@ class globalScripts:
         self.refresh = False
         self.create_new = False
 
+        self.canvas_pos = [0, 0]
+        self.canvas_size = [0, 0]
+
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
     def early_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -52,6 +55,9 @@ class globalScripts:
         if self.create_new:
             self.create_new = False
 
+            self.generator_pos[0] = (self.generator_pos[0] + self.canvas_size[0] / 2 - self.canvas_pos[0]) / self.canvas_size[0]
+            self.generator_pos[1] = (self.generator_pos[1] + self.canvas_size[1] / 2 - self.canvas_pos[1]) / self.canvas_size[1]
+
             self.create_object_file()
 
     def create_object_file(self):
@@ -73,9 +79,9 @@ Commented_Object.py", path)
 
         self.generated_obj_num += 1
 
-#        self.change_file_str(path, "[[0, 0.5], [0, 0.5]]",
- #                               f"[[0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}]]",
-  #                              "self.position_modifiers")
+        self.change_file_str(path, "[[0, 0.5], [0, 0.5]]",
+                                f"[[0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}]]",
+                                "self.position_modifiers")
         self.change_file_str(path, "[[0, 1], [0, 1]]",
                                 "[[0, 0.15], [0, 0.15]]",
                                 "self.size_modifiers")

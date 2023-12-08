@@ -84,22 +84,16 @@ class Main:
         if self.hovered:
             self.hovered = False
 
-#        if self.next_time:
- #           self.generate_object(global_scripts, "Generator_Object",
-  #                                  [global_scripts.generator_colour,
-   #                                 global_scripts.generator_pos])
-#
- #           self.objects[-1].object_colour = global_scripts.generator_colour
-  #          self.objects[-1].position_modifiers[0][1] += (global_scripts.generator_pos[0] \
-   #                                                         + self.size[0] / 2 - self.pos[0]) \
-    #                                                        / self.size[0]
-     #       self.objects[-1].position_modifiers[1][1] += (global_scripts.generator_pos[1] \
-      #                                                      + self.size[1] / 2 - self.pos[1]) \
-       #                                                     / self.size[1]
-        #    self.next_time = False
-#
- #       if global_scripts.dropped:
-  #          self.next_time = True
+        if global_scripts.dragging:
+            global_scripts.canvas_size = self.size
+            global_scripts.canvas_pos = self.pos
+
+#            self.objects[-1].position_modifiers[0][1] += (global_scripts.generator_pos[0] \
+ #                                                           + self.size[0] / 2 - self.pos[0]) \
+  #                                                          / self.size[0]
+   #         self.objects[-1].position_modifiers[1][1] += (global_scripts.generator_pos[1] \
+    #                                                        + self.size[1] / 2 - self.pos[1]) \
+     #                                                       / self.size[1]
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
