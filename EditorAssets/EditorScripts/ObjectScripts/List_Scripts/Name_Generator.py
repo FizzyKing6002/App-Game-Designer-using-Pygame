@@ -41,7 +41,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # used for background colour of text box
-        self.object_colour = (255, 255, 255)
+        self.object_colour = (175, 179, 189)
         # Text box needs backspace key and return key
         self.activation_keys = {
             "BACKSPACE" : True,
@@ -68,15 +68,30 @@ class Main:
         self.hovered = False
         # Ensures multiple backspaces cannot be done in one click
         self.prev_backspace = False
+        self.selected = False
+
+        self.one_time = True
 
 
     def frame_update(self, global_scripts):
+        if self.one_time:
+            self.one_time = False
+            self.generate_object(global_scripts, "List_Text_Edit")
+
         # If the mouse has been released on the text box meaning it has been clicked
         if not self.clicked and self.prev_clicked and self.hovered:
             print("Selected")
+            self.selected = True
         # If the user clicks off of the text box
         elif global_scripts.mouse_state[0] and not self.hovered:
             self.activated = False
+
+        if self.hovered:
+            self.object_colour = (149, 152, 161)
+        elif self.selected:
+            self.object_colour = (160, 164, 174)
+        else:
+            self.object_colour = (175, 179, 189)
 
         # Reset variables
         if self.clicked:
@@ -85,8 +100,6 @@ class Main:
         else:
             self.prev_clicked = False
         self.hovered = False
-
-        print(self.objects[0].object_colour)
 
     def left_clicked(self, mouse_pos):
         self.clicked = True

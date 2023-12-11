@@ -530,6 +530,10 @@ class Text:
 
         draw_surface(self, window, temp_img)
 
+        # Moves position of object back so that the correct position is passed to child objects
+        self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
+        self.pos[0] += (self.position_origin[0] - 0.5) * temp_img.get_width()
+
 class Image:
     """
     Attributes:

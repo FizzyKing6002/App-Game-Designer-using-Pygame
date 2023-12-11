@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "Name_Generator"
+container_name = "None"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,7 +33,7 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.925], [0, 0.3]]
+        self.position_modifiers = [[0, 0.95], [0, 0.25]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.1], [0, 0.5]]
         # [degrees, percent of container's rotation]
@@ -59,7 +59,7 @@ class Main:
         self.objects_are_lame = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = "EditorAssets/Textures/List_Icons/viw.png"
+        self.img_dir = "EditorAssets/Textures/List_Icons/pencil.png"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)

@@ -7,7 +7,7 @@ Represents an object
 object_type = {
     "container" : True,
     "text" : False,
-    "image" : True,
+    "image" : False,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
