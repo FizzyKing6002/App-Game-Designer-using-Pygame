@@ -33,13 +33,13 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.3818359375], [0, 0.25356175159514033]]
+        self.position_modifiers = [[0, 0.5], [0, 0.1]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[100, 0.5], [100, 0.5]]
+        self.size_modifiers = [[0, 1], [0, 0.2]]
         # [degrees, percent of container's rotation]
-        self.rotation_modifiers = [10, 1.5]
+        self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [1, 1]
+        self.opacity_modifiers = [0, 1]
 
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
@@ -62,7 +62,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (114, 35, 224)
+        self.object_colour = (119, 194, 99)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method

@@ -5,7 +5,7 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
     "button" : False,
@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "List_Container"
+container_name = None
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,9 +33,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.475], [0, 0.5]]
+        self.position_modifiers = [[0, 0.6982421875], [0, 0.37687457917610334]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.9], [0, 0.075]]
+        self.size_modifiers = [[0, 0.15], [0, 0.15]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -62,7 +62,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (100, 100, 100)
+        self.object_colour = (35, 119, 244)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -81,16 +81,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.one_time = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.one_time:
-            self.one_time = False
-            self.generate_object(global_scripts, "View_Generator")
-            self.generate_object(global_scripts, "Bin_Generator")
-            self.generate_object(global_scripts, "Name_Generator")
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
