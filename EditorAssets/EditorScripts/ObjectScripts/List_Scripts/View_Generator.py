@@ -5,11 +5,11 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
-    "button" : False,
-    "hover_activated" : False,
+    "button" : True,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
@@ -33,9 +33,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.475], [0, 0.0375]]
+        self.position_modifiers = [[0, 0.075], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.9], [0, 0.075]]
+        self.size_modifiers = [[0, 0.1], [0, 0.75]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -48,7 +48,7 @@ class Main:
         # limits x and y size to a percentage of each other
         # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
         # e.g. [[None, 1], [None, 1]] ensures object is square
-        self.min_max_size = [[None, None], [None, None]]
+        self.min_max_size = [[None, 1], [None, 1]]
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
@@ -59,7 +59,7 @@ class Main:
         self.objects_are_lame = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorAssets/Textures/List_Icons/view.png"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)
@@ -81,25 +81,31 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.one_time = True
-        self.object_path = None
+        self.clicked = False
+        self.prev_clicked = False
+        self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.one_time:
-            self.one_time = False
+        if not self.clicked and self.prev_clicked and self.hovered:
+            print("Invisible")
 
-            self.object_path = self.generated_value[0]
-            self.position_modifiers[1][1] *= 2 * self.generated_value[1] + 1
+        if self.hovered:
+            self.opa = 0.5
+            self.hovered = False
+        else:
+            self.opa = 1
 
-            self.generate_object(global_scripts, "View_Generator")
-            self.generate_object(global_scripts, "Bin_Generator")
-            self.generate_object(global_scripts, "Name_Generator")
+        self.prev_clicked = False
+
+        if self.clicked:
+            self.prev_clicked = True
+            self.clicked = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -111,7 +117,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        self.hovered = True
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys
