@@ -64,11 +64,15 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.object_counter = 0
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if global_scripts.refresh:
+            self.object_counter = 0
+
+            self.create_objects_in_list(global_scripts, None)
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
@@ -91,9 +95,29 @@ class Main:
         pass
 
     # Additional methods:
+    def create_objects_in_list(self, global_scripts, target_container):
+        for container_type in global_scripts.container_list:
+            if container_type[0] == target_container:
+                for i, file in enumerate(container_type):
+                    if i == 0:
+                        continue
+
+                    self.generate_object(global_scripts, "List_Generator",
+                                         [file.__name__.replace(".", "/"), self.object_counter])
+                    self.object_counter += 1
+
+                    self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1])
 
 
 """
+To dynamically create an object (ONLY FOR CONTAINERS):
+Call self.generate_object(global_scripts, n[, m])
+    global_scripts -> this is already passed into the frame_update method,
+        therefore this method must be called from frame_update
+    n -> string -> name of the object that is to be created
+    m -> variable -> value that is passed to the generated object,
+        can be ignored (therefore shown in square braces)
+
 To create an animation:
 Call self.create_animation(x, y, z{, a})
     x -> float -> final value of the animation (initial value is always zero)

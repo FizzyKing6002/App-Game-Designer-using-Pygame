@@ -105,7 +105,8 @@ class Main:
 
         # Imports all the objects from the object scripts folders and composes a list of these files
         # Passes path from this file to the folders
-        editor_obj_files, _ = self.import_objects("EditorAssets/EditorScripts/ObjectScripts/", [], [])
+        editor_obj_files, _ = self.import_objects(
+            "EditorAssets/EditorScripts/ObjectScripts/", [], [])
 
         # Allows the object files to be accessible from other files
         self.global_scripts.object_files = editor_obj_files
@@ -146,7 +147,7 @@ class Main:
         for _ in self.project_obj_files:
             pointer_list.append(False)
 
-        # Invalidates cached imports so that when modules are reloaded,
+        # Invalidates cached imports so that when modules are reloaded
         # they are done so with the updated file
         importlib.invalidate_caches()
         # Imports all the objects from the object scripts folders and extends a list of these files
@@ -171,6 +172,9 @@ class Main:
 
             for container_name in container_names:
                 self.fill_container_list(objects_list, file, container_name)
+
+        # Makes container structure accessible to list window in interface
+        self.global_scripts.container_list = objects_list
 
         # Calls method to create objects using the ordered list just created
         # self.objects[0] goes into the background object
@@ -220,11 +224,11 @@ class Main:
                 objects_list.append([container_name, file])
                 break
 
-    def recursive_create_objects(self, file_list, val, path):
+    def recursive_create_objects(self, file_list, target_container, path):
         # Iterates through lists of files belonging to different containers
         for container_type in file_list:
             # If the container for the objects matches the target container name
-            if container_type[0] == val:
+            if container_type[0] == target_container:
                 # Gets the objects that should belong to this container
                 for i, file in enumerate(container_type):
                     # Ignore the container name as it is not an object

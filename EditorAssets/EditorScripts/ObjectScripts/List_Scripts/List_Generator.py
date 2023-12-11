@@ -5,10 +5,10 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : False,
+    "container" : True,
     "text" : False,
-    "image" : True,
-    "button" : False,
+    "image" : False,
+    "button" : True,
     "hover_activated" : False,
     "key_activated" : False
 }
@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = None
+container_name = "None"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,9 +33,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.3564453125], [0, 0.2273402674591382]]
+        self.position_modifiers = [[0, 0.475], [0, 0.0375]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.15], [0, 0.15]]
+        self.size_modifiers = [[0, 0.9], [0, 0.075]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
@@ -62,7 +62,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (175, 46, 113)
+        self.object_colour = (0, 0, 0)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -81,11 +81,17 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.one_time = True
+        self.object_path = None
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        if self.one_time:
+            self.one_time = False
+
+            self.object_path = self.generated_value[0]
+            self.position_modifiers[1][1] *= 2 * self.generated_value[1] + 1
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

@@ -1,8 +1,8 @@
 High prio:
-    Objects list bar
-    >>> Customizer input edits object attributes
+    >>> Objects list bar
     Change type of object based upon object type dragged
     Duplicate button
+    Investigate rotation percent
 Med prio:
     Add new boxes to customizer window depending on object type
 Med-Low prio:

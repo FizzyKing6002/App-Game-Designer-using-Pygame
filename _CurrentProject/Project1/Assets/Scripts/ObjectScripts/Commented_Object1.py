@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = None
+container_name = "Commented_Object0"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,7 +33,7 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.3564453125], [0, 0.2273402674591382]]
+        self.position_modifiers = [[0, 1.5390625], [0, 1.23608076217113894]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.15], [0, 0.15]]
         # [degrees, percent of container's rotation]
@@ -62,7 +62,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (175, 46, 113)
+        self.object_colour = (255, 162, 52)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
