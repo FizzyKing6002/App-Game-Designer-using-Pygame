@@ -71,16 +71,19 @@ class Main:
         self.selected = False
 
         self.one_time = True
+        self.object_path = None
 
 
     def frame_update(self, global_scripts):
         if self.one_time:
             self.one_time = False
+
+            self.object_path = self.generated_value
             self.generate_object(global_scripts, "List_Text_Edit")
 
         # If the mouse has been released on the text box meaning it has been clicked
         if not self.clicked and self.prev_clicked and self.hovered:
-            print("Selected")
+            global_scripts.current_path = self.object_path
             self.selected = True
         # If the user clicks off of the text box
         elif global_scripts.mouse_state[0] and not self.hovered:
@@ -88,7 +91,7 @@ class Main:
 
         if self.hovered:
             self.object_colour = (149, 152, 161)
-        elif self.selected:
+        elif global_scripts.current_path == self.object_path:
             self.object_colour = (160, 164, 174)
         else:
             self.object_colour = (175, 179, 189)

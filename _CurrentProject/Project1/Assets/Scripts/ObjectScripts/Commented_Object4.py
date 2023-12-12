@@ -35,7 +35,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, 0.6982421875], [0, 0.37687457917610334]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.15], [0, 0.15]]
+        self.size_modifiers = [[0, 0.15], [0, 0.5]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]

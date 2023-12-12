@@ -103,7 +103,7 @@ class Main:
                         continue
 
                     self.generate_object(global_scripts, "List_Generator",
-                                         [file.__name__.replace(".", "/"), self.object_counter])
+                                         [f"{file.__name__.replace('.', '/')}.py", self.object_counter])
                     self.object_counter += 1
 
                     self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1])
