@@ -106,33 +106,34 @@ Commented_Object.py", self.current_path)
             self.current_path, ")", f"{self.generator_colour}"[1:-1], "self.object_colour", "(")
 
     def change_file_str(self, path, target_until, new_val, *after_strings):
-        with open(path, "r") as file:
-            file_data = file.read()
+        if os.path.exists(self.current_path):
+            with open(path, "r") as file:
+                file_data = file.read()
 
-        split_data = file_data.split("\n")
-        for i, line in enumerate(split_data):
-            edited_line = line
-            for string in after_strings:
-                if string not in edited_line:
+            split_data = file_data.split("\n")
+            for i, line in enumerate(split_data):
+                edited_line = line
+                for string in after_strings:
+                    if string not in edited_line:
+                        break
+                    edited_line = edited_line[edited_line.index(string) + len(string):]
+                else:
+                    new_data = ""
+                    start_index = len(line) - len(edited_line)
+                    end_index = edited_line.index(target_until) + start_index
+
+                    split_data[i] = line[:start_index] + new_val + line[end_index:]
+
+                    for new_line in split_data:
+                        new_data += new_line + "\n"
+                    if len(new_data) >= 2:
+                        new_data = new_data[:-1]
+
+                    with open(f"{path[:-3]}%__cache__%.py", "w") as file:
+                        file.write(new_data)
+
+                    with open(path, "w") as file:
+                        file.write(new_data)
+
+                    os.remove(f"{path[:-3]}%__cache__%.py")
                     break
-                edited_line = edited_line[edited_line.index(string) + len(string):]
-            else:
-                new_data = ""
-                start_index = len(line) - len(edited_line)
-                end_index = edited_line.index(target_until) + start_index
-
-                split_data[i] = line[:start_index] + new_val + line[end_index:]
-
-                for new_line in split_data:
-                    new_data += new_line + "\n"
-                if len(new_data) >= 2:
-                    new_data = new_data[:-1]
-
-                with open(f"{path[:-3]}%__cache__%.py", "w") as file:
-                    file.write(new_data)
-
-                with open(path, "w") as file:
-                    file.write(new_data)
-
-                os.remove(f"{path[:-3]}%__cache__%.py")
-                break
