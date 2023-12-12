@@ -65,14 +65,21 @@ class Main:
 
         # Additional attributes:
         self.object_counter = 0
+        self.next_time = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.refresh:
-            self.object_counter = 0
+        if self.next_time:
+            self.next_time = False
 
+            self.objects = [self.objects[-1]]
+
+            self.object_counter = 0
             self.create_objects_in_list(global_scripts, None)
+
+        if global_scripts.refresh:
+            self.next_time = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
@@ -103,7 +110,8 @@ class Main:
                         continue
 
                     self.generate_object(global_scripts, "List_Generator",
-                                         [f"{file.__name__.replace('.', '/')}.py", self.object_counter])
+                                         [f"{file.__name__.replace('.', '/')}.py",
+                                          self.object_counter])
                     self.object_counter += 1
 
                     self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1])

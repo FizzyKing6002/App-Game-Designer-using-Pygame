@@ -106,7 +106,7 @@ Commented_Object.py", self.current_path)
             self.current_path, ")", f"{self.generator_colour}"[1:-1], "self.object_colour", "(")
 
     def change_file_str(self, path, target_until, new_val, *after_strings):
-        if os.path.exists(self.current_path):
+        if os.path.exists(path):
             with open(path, "r") as file:
                 file_data = file.read()
 
@@ -137,3 +137,20 @@ Commented_Object.py", self.current_path)
 
                     os.remove(f"{path[:-3]}%__cache__%.py")
                     break
+
+    def del_file(self, path):
+        if os.path.exists(path):
+            os.remove(path)
+
+    def rename_file(self, path, name):
+        new_path = ""
+        split_path = path.split("/")[:-1] + [f"{name}.py"]
+        for directory in split_path:
+            new_path += f"{directory}/"
+        new_path = new_path[:-1]
+
+        if os.path.exists(new_path):
+            self.add_dialogue("File already exists")
+        else:
+            os.rename(path, new_path)
+            self.refresh = True

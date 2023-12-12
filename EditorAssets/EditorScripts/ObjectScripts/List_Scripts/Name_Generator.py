@@ -52,7 +52,7 @@ class Main:
         self.is_scroll_bar = False
 
         # Content of the text
-        self.text = " New_Empty"
+        self.text = " "
         # Text box font
         self.text_font = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
@@ -73,13 +73,20 @@ class Main:
         self.one_time = True
         self.object_path = None
 
+        self.rename = False
+
 
     def frame_update(self, global_scripts):
         if self.one_time:
             self.one_time = False
 
             self.object_path = self.generated_value
+            self.text += self.object_path.split("/")[-1][:-3]
             self.generate_object(global_scripts, "List_Text_Edit")
+
+        if self.objects[0].activated:
+            self.activated = True
+            self.objects[0].activated = False
 
         # If the mouse has been released on the text box meaning it has been clicked
         if not self.clicked and self.prev_clicked and self.hovered:
@@ -88,6 +95,11 @@ class Main:
         # If the user clicks off of the text box
         elif global_scripts.mouse_state[0] and not self.hovered:
             self.activated = False
+            self.rename = True
+
+        if self.rename:
+            self.rename = False
+            global_scripts.rename_file(self.object_path, self.text[1:])
 
         if self.hovered:
             self.object_colour = (149, 152, 161)
@@ -121,15 +133,17 @@ class Main:
         if self.activated:
             if "BACKSPACE" in keys:
                 if not self.prev_backspace:
-                    # Removes one character
-                    self.text = self.text[:-1]
-                    self.prev_backspace = True
+                    if len(self.text) >= 2:
+                        # Removes one character
+                        self.text = self.text[:-1]
+                        self.prev_backspace = True
             else:
                 self.prev_backspace = False
 
                 if "RETURN" in keys:
                     # The text has been entered and so the text box should not be active anymore
                     self.activated = False
+                    self.rename = True
                 else:
                     # Add the text input from the user to the text
                     self.text += keys[0]

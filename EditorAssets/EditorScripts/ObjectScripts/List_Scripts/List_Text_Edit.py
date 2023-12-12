@@ -85,11 +85,13 @@ class Main:
         self.prev_clicked = False
         self.hovered = False
 
+        self.activated = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if not self.clicked and self.prev_clicked and self.hovered:
-            print("Activated")
+            self.activated = True
 
         if self.hovered:
             self.opa = 0.5

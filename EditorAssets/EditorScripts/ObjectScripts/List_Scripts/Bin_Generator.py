@@ -87,18 +87,25 @@ class Main:
 
         self.selected = False
 
+        self.one_time = True
+        self.object_path = None
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if self.one_time:
+            self.one_time = False
+            self.object_path = self.generated_value
+
         if not self.clicked and self.prev_clicked and self.hovered:
             if self.selected:
-                print("Deleted")
+                global_scripts.del_file(self.object_path)
                 self.img_dir = "EditorAssets/Textures/List_Icons/trash-bin.png"
             else:
                 self.img_dir = "EditorAssets/Textures/List_Icons/check.png"
 
             self.selected = not self.selected
-        
+
         if global_scripts.mouse_state[0] and not self.hovered and self.selected:
             self.selected = False
             self.img_dir = "EditorAssets/Textures/List_Icons/trash-bin.png"
