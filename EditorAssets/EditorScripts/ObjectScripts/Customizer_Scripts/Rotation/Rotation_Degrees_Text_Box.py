@@ -100,6 +100,7 @@ class Main:
             try:
                 float(self.text)
                 global_scripts.customizer_input(",", self.text, "self.rotation_modifiers", "[")
+                global_scripts.add_dialogue("Object Rotated")
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 

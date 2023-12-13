@@ -101,6 +101,7 @@ class Main:
                 float(self.text)
                 global_scripts.customizer_input(
                     "]", f" {self.text}", "self.opacity_modifiers", "[", ",")
+                global_scripts.add_dialogue("Object Opactity Changed")
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 

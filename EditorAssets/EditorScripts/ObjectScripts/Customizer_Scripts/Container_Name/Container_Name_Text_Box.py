@@ -101,6 +101,7 @@ class Main:
                 global_scripts.customizer_input("", f" {self.text}", "container_name", "=")
             else:
                 global_scripts.customizer_input("", f' "{self.text}"', "container_name", "=")
+            global_scripts.add_dialogue("Container Name Changed")
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

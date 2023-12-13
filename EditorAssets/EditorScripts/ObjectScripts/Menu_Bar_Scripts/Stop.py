@@ -80,6 +80,7 @@ class Main:
     def frame_update(self, global_scripts):
         if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.menu_state = 0
+            global_scripts.add_dialogue("Testing Stopped")
 
         if self.hovered:
             self.opa = 0.5

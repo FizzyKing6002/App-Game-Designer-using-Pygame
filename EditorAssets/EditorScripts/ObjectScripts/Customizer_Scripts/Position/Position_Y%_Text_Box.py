@@ -101,6 +101,7 @@ class Main:
                 float(self.text)
                 global_scripts.customizer_input(
                     "]", f" {self.text}", "self.position_modifiers", "[[", "[", ",")
+                global_scripts.add_dialogue("Object Moved")
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 
