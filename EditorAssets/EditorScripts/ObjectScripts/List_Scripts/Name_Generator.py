@@ -93,7 +93,7 @@ class Main:
             global_scripts.current_path = self.object_path
             self.selected = True
         # If the user clicks off of the text box
-        elif global_scripts.mouse_state[0] and not self.hovered:
+        elif global_scripts.mouse_state[0] and not self.hovered and self.activated:
             self.activated = False
             self.rename = True
 

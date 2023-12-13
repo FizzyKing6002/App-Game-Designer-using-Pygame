@@ -29,6 +29,7 @@ class globalScripts:
         self.canvas_size = [0, 0]
 
         self.refresh = False
+        self.delayed_refresh = False
         self.create_new = False
 
         self.current_path = ""
@@ -39,8 +40,12 @@ class globalScripts:
         self.mouse_pos = mouse_pos
         self.mouse_state = mouse_state
 
+        if self.delayed_refresh:
+            self.delayed_refresh = False
+
         if self.refresh:
             self.refresh = False
+            self.delayed_refresh = True
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -141,6 +146,7 @@ Commented_Object.py", self.current_path)
     def del_file(self, path):
         if os.path.exists(path):
             os.remove(path)
+            self.refresh = True
 
     def rename_file(self, path, name):
         new_path = ""

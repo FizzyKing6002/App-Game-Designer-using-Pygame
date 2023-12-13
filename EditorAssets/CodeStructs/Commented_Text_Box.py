@@ -75,7 +75,7 @@ class Main:
         if not self.clicked and self.prev_clicked and self.hovered:
             self.activated = True
         # If the user clicks off of the text box
-        elif global_scripts.mouse_state[0] and not self.hovered:
+        elif global_scripts.mouse_state[0] and not self.hovered and self.activated:
             self.activated = False
 
         # Reset variables

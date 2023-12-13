@@ -64,6 +64,7 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.one_time = True
         self.object_counter = 0
         self.next_time = False
 
@@ -78,7 +79,11 @@ class Main:
             self.object_counter = 0
             self.create_objects_in_list(global_scripts, None)
 
-        if global_scripts.refresh:
+        if self.one_time:
+            self.one_time = False
+            self.next_time = True
+
+        if global_scripts.delayed_refresh:
             self.next_time = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]

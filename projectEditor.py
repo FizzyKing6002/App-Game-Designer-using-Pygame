@@ -203,6 +203,7 @@ class Main:
                 pointer_list[index] = True
             else:
                 object_files.append(module)
+                pointer_list.append(True)
             del file
 
         return object_files, pointer_list
