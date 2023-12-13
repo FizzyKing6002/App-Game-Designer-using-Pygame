@@ -89,20 +89,27 @@ class globalScripts:
 
         if self.object_type is None:
             object_type_file_name = "New_Empty"
+            self.add_dialogue("Created Empty Object")
         elif self.object_type == "container":
             object_type_file_name = "New_Container"
+            self.add_dialogue("Created Container Object")
         elif self.object_type == "image":
             object_type_file_name = "New_Image"
+            self.add_dialogue("Created Image Object")
         elif self.object_type == "text":
             object_type_file_name = "New_Text"
+            self.add_dialogue("Created Text Object")
         elif self.object_type == "button":
             object_type_file_name = "New_Button"
+            self.add_dialogue("Created Button Object")
         elif self.object_type == "scroll":
             object_type_file_name = "New_Scroll_Bar"
+            self.add_dialogue("Created Scroll Bar")
 
         if self.object_type == "duplicate":
             if os.path.exists(self.current_path):
                 object_type_file_name = "New_Duplicate"
+                self.add_dialogue("Duplicated Object")
                 shutil.copy(self.current_path,
                             f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
 {object_type_file_name}%__create__%.py")

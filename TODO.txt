@@ -1,13 +1,10 @@
 High prio:
-    >>> Change type of object based upon object type dragged
-    Duplicate button
+    >>> Remove empty object, add text box object
     Playtesting feature
     Investigate rotation percent
     Add text box to objects bar
 Med prio:
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type
-Med-Low prio:
-    Add dialogue to actions
 Low prio:
     Error protection -> if hasattr()
