@@ -95,7 +95,8 @@ class Main:
 
             self.generate_object(global_scripts, "View_Generator")
             self.generate_object(global_scripts, "Bin_Generator", self.generated_value[0])
-            self.generate_object(global_scripts, "Name_Generator", self.generated_value[0])
+            self.generate_object(global_scripts, "Name_Generator",
+                                 [self.generated_value[0], self.generated_value[2]])
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):

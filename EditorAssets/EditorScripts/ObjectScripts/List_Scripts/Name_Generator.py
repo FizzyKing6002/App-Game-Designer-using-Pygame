@@ -80,7 +80,8 @@ class Main:
         if self.one_time:
             self.one_time = False
 
-            self.object_path = self.generated_value
+            self.object_path = self.generated_value[0]
+            self.text += "|" * self.generated_value[1]
             self.text += self.object_path.split("/")[-1][:-3]
             self.generate_object(global_scripts, "List_Text_Edit")
 

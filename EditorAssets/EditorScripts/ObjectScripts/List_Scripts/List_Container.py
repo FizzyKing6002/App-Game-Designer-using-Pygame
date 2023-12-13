@@ -77,7 +77,7 @@ class Main:
             self.objects = [self.objects[-1]]
 
             self.object_counter = 0
-            self.create_objects_in_list(global_scripts, None)
+            self.create_objects_in_list(global_scripts, None, 0)
 
         if self.one_time:
             self.one_time = False
@@ -107,7 +107,7 @@ class Main:
         pass
 
     # Additional methods:
-    def create_objects_in_list(self, global_scripts, target_container):
+    def create_objects_in_list(self, global_scripts, target_container, depth):
         for container_type in global_scripts.container_list:
             if container_type[0] == target_container:
                 for i, file in enumerate(container_type):
@@ -116,10 +116,10 @@ class Main:
 
                     self.generate_object(global_scripts, "List_Generator",
                                          [f"{file.__name__.replace('.', '/')}.py",
-                                          self.object_counter])
+                                          self.object_counter, depth])
                     self.object_counter += 1
 
-                    self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1])
+                    self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1], depth + 1)
 
 
 """

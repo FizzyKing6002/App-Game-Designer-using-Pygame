@@ -125,7 +125,10 @@ Commented_Object.py", self.current_path)
                 else:
                     new_data = ""
                     start_index = len(line) - len(edited_line)
-                    end_index = edited_line.index(target_until) + start_index
+                    if target_until == "":
+                        end_index = len(line)
+                    else:
+                        end_index = edited_line.index(target_until) + start_index
 
                     split_data[i] = line[:start_index] + new_val + line[end_index:]
 
