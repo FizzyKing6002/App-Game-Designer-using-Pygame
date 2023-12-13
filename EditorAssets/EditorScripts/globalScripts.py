@@ -21,6 +21,7 @@ class globalScripts:
         self.dragging = False
         self.key_dragging = False
         self.dropped = False
+        self.object_type = None
 
         self.generated_obj_num = 0
         self.generator_colour = (0, 0, 0)
@@ -85,15 +86,39 @@ class globalScripts:
 
     def create_object_file(self):
         project_name = os.listdir("_CurrentProject")[0]
-        shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-                    f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+
+        if self.object_type is None:
+            object_type_file_name = "New_Empty"
+        elif self.object_type == "container":
+            object_type_file_name = "New_Container"
+        elif self.object_type == "image":
+            object_type_file_name = "New_Image"
+        elif self.object_type == "text":
+            object_type_file_name = "New_Text"
+        elif self.object_type == "button":
+            object_type_file_name = "New_Button"
+        elif self.object_type == "scroll":
+            object_type_file_name = "New_Scroll_Bar"
+
+        if self.object_type == "duplicate":
+            if os.path.exists(self.current_path):
+                object_type_file_name = "New_Duplicate"
+                shutil.copy(self.current_path,
+                            f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+{object_type_file_name}%__create__%.py")
+            else:
+                return
+        else:
+            shutil.copy(f"EditorAssets/CodeStructs/{object_type_file_name}.py",
+                        f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+{object_type_file_name}%__create__%.py")
 
         while True:
             try:
                 self.current_path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-Commented_Object{self.generated_obj_num}.py"
+{object_type_file_name}{self.generated_obj_num}.py"
                 os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-Commented_Object.py", self.current_path)
+{object_type_file_name}%__create__%.py", self.current_path)
 
             except FileExistsError:
                 self.generated_obj_num += 1
@@ -102,13 +127,14 @@ Commented_Object.py", self.current_path)
 
         self.generated_obj_num += 1
 
-        self.change_file_str(self.current_path, "]]",
-                             f"0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}",
-                                "self.position_modifiers", "[[")
-        self.change_file_str(
-            self.current_path, "]]", "0, 0.15], [0, 0.15", "self.size_modifiers", "[[")
-        self.change_file_str(
-            self.current_path, ")", f"{self.generator_colour}"[1:-1], "self.object_colour", "(")
+        if self.object_type != "scroll":
+            self.change_file_str(self.current_path, "]]",
+                                f"0, {self.generator_pos[0]}], [0, {self.generator_pos[1]}",
+                                    "self.position_modifiers", "[[")
+
+        if self.object_type != "duplicate":
+            self.change_file_str(
+                self.current_path, ")", f"{self.generator_colour}"[1:-1], "self.object_colour", "(")
 
     def change_file_str(self, path, target_until, new_val, *after_strings):
         if os.path.exists(path):
@@ -150,6 +176,7 @@ Commented_Object.py", self.current_path)
         if os.path.exists(path):
             os.remove(path)
             self.refresh = True
+            self.add_dialogue("Object Deleted")
 
     def rename_file(self, path, name):
         new_path = ""
@@ -159,7 +186,8 @@ Commented_Object.py", self.current_path)
         new_path = new_path[:-1]
 
         if os.path.exists(new_path):
-            self.add_dialogue("File already exists")
+            self.add_dialogue("File Already Exists")
         else:
             os.rename(path, new_path)
             self.refresh = True
+            self.add_dialogue("Object Renamed")

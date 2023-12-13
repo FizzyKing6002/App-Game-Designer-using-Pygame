@@ -7,7 +7,7 @@ Represents an object
 object_type = {
     "container" : False,
     "text" : False,
-    "image" : True,
+    "image" : False,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -35,7 +35,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, 0.5], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, 0.15], [0, 0.15]]
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
