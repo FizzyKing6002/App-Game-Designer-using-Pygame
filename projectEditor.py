@@ -30,7 +30,6 @@ import pygame
 
 from EditorAssets.ImportCode import objects
 # Imports the package so that files within the folder can be accessed through the package
-#from EditorScripts import ObjectScripts
 from EditorAssets.EditorScripts import globalScripts
 
 # Initialises pygame, including pygame.font, allowing certain pygame methods to be used
