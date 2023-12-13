@@ -91,11 +91,9 @@ class Main:
         else:
             if self.key_clicked:
                 global_scripts.key_dragging = True
-                global_scripts.object_type = "duplicate"
 
             elif self.clicked:
                 global_scripts.dragging = True
-                global_scripts.object_type = "duplicate"
 
         self.clicked = False
         self.key_clicked = False

@@ -21,7 +21,6 @@ class globalScripts:
         self.dragging = False
         self.key_dragging = False
         self.dropped = False
-        self.object_type = None
 
         self.generated_obj_num = 0
         self.generator_colour = (0, 0, 0)
@@ -86,51 +85,20 @@ class globalScripts:
 
     def create_object_file(self):
         project_name = os.listdir("_CurrentProject")[0]
-        if self.object_type == None:
-            shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-                        "EditorAssets/CodeStructs/Commented_Object_copy.py")
-#        if self.object_type == None:
- #           shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-  #                      f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-   #     elif self.object_type == "container":
-    #        shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-     #                   f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-      #  elif self.object_type == "image":
-       #     shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-        #                f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-#        elif self.object_type == "text":
- #           shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-  #                      f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-   #     elif self.object_type == "button":
-    #        shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-     #                   f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-      #  elif self.object_type == "scroll":
-       #     shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-        #                f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-#        elif self.object_type == "duplicate":
- #           shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
-  #                      f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
-   #     else:
-    #        self.add_dialogue("ERROR: Object Type Not Found")
+        shutil.copy("EditorAssets/CodeStructs/Commented_Object.py",
+                    f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
 
-        len_dir = len(os.listdir("_CurrentProject/Assets/Scripts/ObjectScripts"))
         while True:
-            self.current_path = f"EditorAssets/CodeStructs/Commented_Object{self.generated_obj_num}.py"
-            os.rename("EditorAssets/CodeStructs/Commented_Object_copy.py", self.current_path)
-            self.generated_obj_num += 1
+            try:
+                self.current_path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+Commented_Object{self.generated_obj_num}.py"
+                os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
+Commented_Object.py", self.current_path)
 
-            if not len(os.listdir("_CurrentProject/Assets/Scripts/ObjectScripts")) == len_dir:
-                break
-
-#                self.current_path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-#Commented_Object{self.generated_obj_num}.py"
-#                os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-#Commented_Object.py", self.current_path)
-
-#            except FileExistsError:
- #               self.generated_obj_num += 1
-  #              continue
-   #         break
+            except FileExistsError:
+                self.generated_obj_num += 1
+                continue
+            break
 
         self.generated_obj_num += 1
 
@@ -182,7 +150,6 @@ class globalScripts:
         if os.path.exists(path):
             os.remove(path)
             self.refresh = True
-            self.add_dialogue("Object Deleted")
 
     def rename_file(self, path, name):
         new_path = ""
@@ -192,8 +159,7 @@ class globalScripts:
         new_path = new_path[:-1]
 
         if os.path.exists(new_path):
-            self.add_dialogue("File Already Exists")
+            self.add_dialogue("File already exists")
         else:
             os.rename(path, new_path)
             self.refresh = True
-            self.add_dialogue("File Renamed")

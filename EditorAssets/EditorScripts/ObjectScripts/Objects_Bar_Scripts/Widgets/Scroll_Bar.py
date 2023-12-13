@@ -84,7 +84,6 @@ class Main:
         else:
             if self.clicked:
                 global_scripts.dragging = True
-                global_scripts.object_type = "scroll"
 
         self.clicked = False
 

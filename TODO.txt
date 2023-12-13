@@ -1,11 +1,9 @@
 High prio:
-    >>> Change type of object based upon object type dragged
+    >>> Objects list bar
+    Change type of object based upon object type dragged
     Duplicate button
-    Playtesting feature
     Investigate rotation percent
-    Add text box to objects bar
 Med prio:
-    Add cursor to text boxes
     Add new boxes to customizer window depending on object type
 Med-Low prio:
     Add dialogue to actions
