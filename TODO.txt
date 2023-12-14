@@ -2,6 +2,7 @@ High prio:
     >>> Playtesting feature
     Investigate rotation percent
 Med prio:
+    View button in list window
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type
 Low prio:

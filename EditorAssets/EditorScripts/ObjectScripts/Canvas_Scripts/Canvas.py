@@ -73,6 +73,11 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if global_scripts.menu_state == 0:
+            self.objects_are_lame = True
+        else:
+            self.objects_are_lame = False
+
         if global_scripts.refresh:
             self.objects = []
 
