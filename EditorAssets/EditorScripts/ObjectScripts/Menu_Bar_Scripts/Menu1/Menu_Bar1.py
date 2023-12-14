@@ -71,9 +71,11 @@ class Main:
     def frame_update(self, global_scripts):
         if global_scripts.menu_state == 0 and not self.active and global_scripts.change_state:
             self.active = True
+            self.update_priority = 0
             global_scripts.change_state = False
         elif global_scripts.menu_state != 0 and self.active:
             self.active = False
+            self.update_priority = 1
             global_scripts.change_state = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]

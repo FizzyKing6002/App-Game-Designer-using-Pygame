@@ -26,7 +26,7 @@ class Main:
         self.active = False
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
@@ -70,9 +70,11 @@ class Main:
     def frame_update(self, global_scripts):
         if global_scripts.menu_state == 1 and not self.active and global_scripts.change_state:
             self.active = True
+            self.update_priority = 0
             global_scripts.change_state = False
         elif global_scripts.menu_state != 1 and self.active:
             self.active = False
+            self.update_priority = 1
             global_scripts.change_state = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
