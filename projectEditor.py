@@ -87,7 +87,22 @@ class Main:
         self.objects = []
 
         # Creates an instance of the class located within globalScripts.py
-        self.global_scripts = globalScripts.globalScripts()
+        self.editor_global_scripts = globalScripts.globalScripts()
+
+        # Ensures the directories exist before importing user objects
+        if not os.path.isdir("_CurrentProject"):
+            os.mkdir("_CurrentProject")
+        current_projects = os.listdir("_CurrentProject")
+        if len(current_projects) == 0:
+            shutil.copytree("EditorAssets/CodeStructs/NewProject", "_CurrentProject/NewProject")
+            project_name = "NewProject"
+        else:
+            project_name = current_projects[0]
+        if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
+            os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+        # Creates an instance of the class located within the user's globalScripts.py
+        global_scripts = importlib.import_module(f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
+        self.project_global_scripts = global_scripts.globalScripts()
 
         # Ensures project object modules are saved so they can be reloaded later
         self.project_obj_files = []
@@ -108,7 +123,7 @@ class Main:
             "EditorAssets/EditorScripts/ObjectScripts/", [], [])
 
         # Allows the object files to be accessible from other files
-        self.global_scripts.object_files = editor_obj_files
+        self.editor_global_scripts.object_files = editor_obj_files
 
         for file in editor_obj_files:
             # Gets the container name attribute from the current file
@@ -140,6 +155,10 @@ class Main:
             project_name = current_projects[0]
         if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+
+        # Reloads global scripts as they may have been altered
+        global_scripts = importlib.reload(importlib.import_module(f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts"))
+        self.project_global_scripts = global_scripts.globalScripts()
 
         # Create a pointer list to show whether modules are still being used
         pointer_list = []
@@ -173,7 +192,7 @@ class Main:
                 self.fill_container_list(objects_list, file, container_name)
 
         # Makes container structure accessible to list window in interface
-        self.global_scripts.container_list = objects_list
+        self.editor_global_scripts.container_list = objects_list
 
         # Calls method to create objects using the ordered list just created
         # self.objects[0] goes into the background object
@@ -272,7 +291,7 @@ class Main:
         mouse_state[1] = [mouse_state[1], mouse_wheel_movement]
 
         # Calls global update function before objects
-        self.global_scripts.early_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.editor_global_scripts.early_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
 
         for obj in self.objects:
             # Calls the object's __call__ method
@@ -282,10 +301,10 @@ class Main:
                 mouse_pos, mouse_state, key_state, text_input,
                 # The objects should not be lame by default
                 False,
-                self.global_scripts)
+                self.editor_global_scripts)
 
         # Calls global update function after objects
-        self.global_scripts.late_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.editor_global_scripts.late_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
 
     def main_loop(self):
         # Objects are called once before the program begins so that everything is initialised
@@ -322,7 +341,7 @@ class Main:
                         # Turns the text related event into unicode
                         text_input = event.unicode
 
-            if self.global_scripts.refresh:
+            if self.editor_global_scripts.refresh:
                 # Refreshing objects involved reloading all project objects
                 self.load_project_objects()
 
