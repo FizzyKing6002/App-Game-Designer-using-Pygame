@@ -10,6 +10,8 @@ import shutil
 class globalScripts:
     def __init__(self):
         # Globals go here
+        self.project_global_scripts = None
+
         self.mouse_pos = [0, 0]
         self.mouse_state = [False, [False, 0], False]
 

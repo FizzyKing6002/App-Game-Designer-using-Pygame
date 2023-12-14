@@ -79,6 +79,7 @@ class Main:
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
         if not self.clicked and self.prev_clicked and self.hovered:
+            global_scripts.refresh = True
             global_scripts.menu_state = 0
             global_scripts.add_dialogue("Testing Stopped")
 

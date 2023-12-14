@@ -355,6 +355,10 @@ class Container:
 
     def container_update(self, window, time, mouse_pos, mouse_state,
                          key_state, text_input, is_lame, global_scripts):
+        # In the canvas user objects are stored therefore the project global scripts should be used
+        if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
+            global_scripts = global_scripts.project_global_scripts
+
         # Objects are sorted by their update_priority attribute
         self.objects.sort(key=lambda x: x.update_priority, reverse=False)
 
@@ -411,8 +415,16 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
+            # Update project global scripts before objects
+            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
+                global_scripts.early_frame_update(time, mouse_pos, mouse_state, key_state)
+
             self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
                               is_lame, global_scripts, container_has_scroll_bar, scroll_offset)
+
+            # Update project global scripts after objects
+            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
+                global_scripts.late_frame_update(time, mouse_pos, mouse_state, key_state)
 
             # Draws surface to screen
             surface = pygame.transform.rotate(surface, self.rot)

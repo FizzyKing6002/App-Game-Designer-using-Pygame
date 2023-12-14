@@ -101,8 +101,9 @@ class Main:
         if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
         # Creates an instance of the class located within the user's globalScripts.py
-        global_scripts = importlib.import_module(f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
-        self.project_global_scripts = global_scripts.globalScripts()
+        global_scripts = importlib.import_module(
+            f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
+        self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
 
         # Ensures project object modules are saved so they can be reloaded later
         self.project_obj_files = []
@@ -157,8 +158,9 @@ class Main:
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
 
         # Reloads global scripts as they may have been altered
-        global_scripts = importlib.reload(importlib.import_module(f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts"))
-        self.project_global_scripts = global_scripts.globalScripts()
+        global_scripts = importlib.reload(importlib.import_module(
+            f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts"))
+        self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
 
         # Create a pointer list to show whether modules are still being used
         pointer_list = []
@@ -291,7 +293,8 @@ class Main:
         mouse_state[1] = [mouse_state[1], mouse_wheel_movement]
 
         # Calls global update function before objects
-        self.editor_global_scripts.early_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.editor_global_scripts.early_frame_update(
+            elapsed_time, mouse_pos, mouse_state, key_state)
 
         for obj in self.objects:
             # Calls the object's __call__ method
@@ -304,7 +307,8 @@ class Main:
                 self.editor_global_scripts)
 
         # Calls global update function after objects
-        self.editor_global_scripts.late_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.editor_global_scripts.late_frame_update(
+            elapsed_time, mouse_pos, mouse_state, key_state)
 
     def main_loop(self):
         # Objects are called once before the program begins so that everything is initialised

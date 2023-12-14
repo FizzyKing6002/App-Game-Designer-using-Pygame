@@ -70,13 +70,14 @@ class Main:
 
         self.hovered = False
 
+        self.__is_editor_canvas__ = True
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.menu_state == 0:
-            self.objects_are_lame = True
-        else:
+        if global_scripts.menu_state == 1:
             self.objects_are_lame = False
+        else:
+            self.objects_are_lame = True
 
         if global_scripts.refresh:
             self.objects = []
