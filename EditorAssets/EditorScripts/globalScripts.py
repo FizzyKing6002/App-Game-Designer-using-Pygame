@@ -23,7 +23,7 @@ class globalScripts:
         self.dropped = False
         self.object_type = None
 
-        self.generated_obj_num = 0
+        self.generated_obj_nums = [0, 0, 0, 0, 0, 0, 0]
         self.generator_colour = (0, 0, 0)
         self.generator_pos = [0, 0]
         self.canvas_pos = [0, 0]
@@ -87,35 +87,54 @@ class globalScripts:
     def create_object_file(self):
         project_name = os.listdir("_CurrentProject")[0]
 
-        if self.object_type is None:
-            object_type_file_name = "New_Empty"
-            self.add_dialogue("Created Empty Object")
-        elif self.object_type == "container":
-            object_type_file_name = "New_Container"
-            self.add_dialogue("Created Container Object")
-        elif self.object_type == "image":
-            object_type_file_name = "New_Image"
-            self.add_dialogue("Created Image Object")
-        elif self.object_type == "text":
-            object_type_file_name = "New_Text"
-            self.add_dialogue("Created Text Object")
-        elif self.object_type == "button":
-            object_type_file_name = "New_Button"
-            self.add_dialogue("Created Button Object")
-        elif self.object_type == "scroll":
-            object_type_file_name = "New_Scroll_Bar"
-            self.add_dialogue("Created Scroll Bar")
-
         if self.object_type == "duplicate":
             if os.path.exists(self.current_path):
                 object_type_file_name = "New_Duplicate"
+                index = 6
                 self.add_dialogue("Duplicated Object")
+
                 shutil.copy(self.current_path,
                             f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
 {object_type_file_name}%__create__%.py")
+
             else:
                 return
+
         else:
+            if self.object_type == "image":
+                object_type_file_name = "New_Image"
+                index = 0
+                self.add_dialogue("Created Image Object")
+
+            elif self.object_type == "container":
+                object_type_file_name = "New_Container"
+                index = 1
+                self.add_dialogue("Created Container Object")
+
+            elif self.object_type == "button":
+                object_type_file_name = "New_Button"
+                index = 2
+                self.add_dialogue("Created Button Object")
+
+            elif self.object_type == "text":
+                object_type_file_name = "New_Text"
+                index = 3
+                self.add_dialogue("Created Text Object")
+
+            elif self.object_type == "scroll":
+                object_type_file_name = "New_Scroll_Bar"
+                index = 4
+                self.add_dialogue("Created Scroll Bar")
+
+            elif self.object_type == "text_box":
+                object_type_file_name = "New_Text_Box"
+                index = 5
+                self.add_dialogue("Created Text Box")
+
+            else:
+                self.add_dialogue("Object Type Not Found")
+                return
+
             shutil.copy(f"EditorAssets/CodeStructs/{object_type_file_name}.py",
                         f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
 {object_type_file_name}%__create__%.py")
@@ -123,16 +142,16 @@ class globalScripts:
         while True:
             try:
                 self.current_path = f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
-{object_type_file_name}{self.generated_obj_num}.py"
+{object_type_file_name}{self.generated_obj_nums[index]}.py"
                 os.rename(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/\
 {object_type_file_name}%__create__%.py", self.current_path)
 
             except FileExistsError:
-                self.generated_obj_num += 1
+                self.generated_obj_nums[index] += 1
                 continue
             break
 
-        self.generated_obj_num += 1
+        self.generated_obj_nums[index] += 1
 
         if self.object_type != "scroll":
             self.change_file_str(self.current_path, "]]",

@@ -47,7 +47,7 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.15 + 9*0.76/14], [0, 0.4]]
+        self.position_modifiers = [[0, 0.09 + 5*0.76/14], [0, 0.4]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.76/7], [0, 0.6]]
         # [degrees, percent of container's rotation]

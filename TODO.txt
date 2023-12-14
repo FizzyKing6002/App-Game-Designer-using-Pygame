@@ -1,8 +1,6 @@
 High prio:
-    >>> Remove empty object, add text box object
-    Playtesting feature
+    >>> Playtesting feature
     Investigate rotation percent
-    Add text box to objects bar
 Med prio:
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type

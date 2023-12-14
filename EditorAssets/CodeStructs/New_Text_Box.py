@@ -52,7 +52,7 @@ class Main:
         self.is_scroll_bar = False
 
         # Content of the text
-        self.text = ""
+        self.text = "Text"
         # Text box font
         self.text_font = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)

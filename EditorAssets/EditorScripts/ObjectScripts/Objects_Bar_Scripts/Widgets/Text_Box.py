@@ -14,7 +14,7 @@ object_type = {
     "image" : True,
     "button" : True,
     "hover_activated" : True,
-    "key_activated" : True
+    "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
@@ -38,19 +38,13 @@ class Main:
         # If image does not exist, defaults to black rectangle
         self.img_dir = "EditorAssets/Textures/Objects_Icons/plus.png"
         # Dictionary of keys that activate object ("[key_name]" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {
-            "LCTRL" : True,
-            "RCTRL" : True,
-            "LSHIFT" : True,
-            "RSHIFT" : True,
-            "e" : True
-        }
+        self.activation_keys = {}
         # Determines whether object is a scroll bar
         self.is_scroll_bar = False
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.03 + 0.76/14], [0, 0.4]]
+        self.position_modifiers = [[0, 0.18 + 11*0.76/14], [0, 0.4]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.76/7], [0, 0.6]]
         # [degrees, percent of container's rotation]
@@ -94,11 +88,11 @@ class Main:
         else:
             if self.key_clicked:
                 global_scripts.key_dragging = True
-                global_scripts.object_type = None
+                global_scripts.object_type = "text_box"
 
             elif self.clicked:
                 global_scripts.dragging = True
-                global_scripts.object_type = None
+                global_scripts.object_type = "text_box"
 
         self.clicked = False
         self.key_clicked = False
@@ -122,10 +116,7 @@ class Main:
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys
     def key_input(self, keys):
-        if "e" in keys \
-            and ("LCTRL" in keys or "RCTRL" in keys) \
-                and ("LSHIFT" in keys or "RSHIFT" in keys):
-            self.key_clicked = True
+        pass
 
     # Additional methods:
 
