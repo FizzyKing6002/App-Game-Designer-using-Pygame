@@ -121,8 +121,8 @@ def Object(*args):
                 Image.__init__(self)
 
         def __call__(self, window, time,
-                     con_pos, con_size, con_rot, con_opa,
-                     mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts):
+                     con_pos, con_size, con_rot, con_opa, mouse_pos, mouse_state, key_state,
+                     text_input, is_lame, is_storing_inputs, global_scripts):
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
@@ -146,12 +146,32 @@ def Object(*args):
 
                 if hasattr(self, "container_update") and callable(self.container_update):
                     self.container_update(window, time, mouse_pos, mouse_state,
-                                        key_state, text_input, True, global_scripts)
+                                          key_state, text_input, True, False, global_scripts)
                 return
-
             # If this object makes contained objects lame
             if hasattr(self, "objects_are_lame") and self.objects_are_lame:
                 is_lame = True
+
+            if is_storing_inputs:
+                if hasattr(self, "call_clicked") and callable(self.call_clicked):
+                    self.call_clicked(mouse_pos, mouse_state)
+                elif hasattr(self, "call_hovered") and callable(self.call_hovered):
+                    self.call_hovered(mouse_pos)
+                if hasattr(self, "call_activated") and callable(self.call_activated):
+                    self.call_activated(key_state, text_input)
+
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(window)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(window)
+
+                if hasattr(self, "container_update") and callable(self.container_update):
+                    self.container_update(window, time, mouse_pos, mouse_state,
+                                          key_state, text_input, is_lame, True, global_scripts)
+                return
+            # If this object makes contained objects store inputs
+            if hasattr(self, "objects_are_storing_inputs") and self.objects_are_storing_inputs:
+                is_storing_inputs = True
 
             if hasattr(self, "call_clicked") and callable(self.call_clicked):
                 self.call_clicked(mouse_pos, mouse_state)
@@ -169,8 +189,8 @@ def Object(*args):
                 self.draw_text(window)
 
             if hasattr(self, "container_update") and callable(self.container_update):
-                self.container_update(window, time, mouse_pos, mouse_state,
-                                      key_state, text_input, is_lame, global_scripts)
+                self.container_update(window, time, mouse_pos, mouse_state, key_state, text_input,
+                                      is_lame, is_storing_inputs, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
@@ -354,7 +374,7 @@ class Container:
         self.prev_scroll_offset = 0
 
     def container_update(self, window, time, mouse_pos, mouse_state,
-                         key_state, text_input, is_lame, global_scripts):
+                         key_state, text_input, is_lame, is_storing_inputs, global_scripts):
         # In the canvas user objects are stored therefore the project global scripts should be used
         if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
             global_scripts = global_scripts.project_global_scripts
@@ -386,7 +406,7 @@ class Container:
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
             self.call_objects(window, time, mouse_pos, mouse_state, key_state, text_input,
-                              is_lame, global_scripts, False, 0)
+                              is_lame, is_storing_inputs, global_scripts, False, 0)
 
         else:
             # Create surface matching container's size
@@ -420,7 +440,8 @@ class Container:
                 global_scripts.early_frame_update(time, mouse_pos, mouse_state, key_state)
 
             self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
-                              is_lame, global_scripts, container_has_scroll_bar, scroll_offset)
+                              is_lame, is_storing_inputs,
+                              global_scripts, container_has_scroll_bar, scroll_offset)
 
             # Update project global scripts after objects
             if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
@@ -431,7 +452,8 @@ class Container:
             draw_surface(self, window, surface)
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
-                     is_lame, global_scripts, container_has_scroll_bar, scroll_offset):
+                     is_lame, is_storing_inputs,
+                     global_scripts, container_has_scroll_bar, scroll_offset):
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
             # Object offset difference from last frame is added to total object offset
@@ -461,8 +483,8 @@ class Container:
 
                 # Calls the object
                 obj(surface, time,
-                    pos, size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts)
+                    pos, size, 0, self.opa, mouse_pos, mouse_state, key_state, text_input,
+                    is_lame, is_storing_inputs, global_scripts)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -474,8 +496,8 @@ class Container:
             for obj in self.objects:
                 # Calls the object
                 obj(surface, time,
-                    pos, self.size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, is_lame, global_scripts)
+                    pos, self.size, 0, self.opa, mouse_pos, mouse_state, key_state, text_input,
+                    is_lame, is_storing_inputs, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container

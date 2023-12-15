@@ -37,6 +37,8 @@ class globalScripts:
 
         self.current_path = ""
 
+        self.pause_storing_inputs = False
+
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
     def early_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -49,6 +51,9 @@ class globalScripts:
         if self.refresh:
             self.refresh = False
             self.delayed_refresh = True
+
+        if self.pause_storing_inputs:
+            self.pause_storing_inputs = False
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):

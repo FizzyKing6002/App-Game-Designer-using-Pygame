@@ -32,6 +32,7 @@ class Main:
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = False
         self.objects_are_lame = True
+        self.objects_are_storing_inputs = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
@@ -76,8 +77,15 @@ class Main:
     def frame_update(self, global_scripts):
         if global_scripts.menu_state == 1:
             self.objects_are_lame = False
+            self.objects_are_storing_inputs = False
+        elif global_scripts.menu_state == 2:
+            if global_scripts.pause_storing_inputs:
+                self.objects_are_storing_inputs = False
+            else:
+                self.objects_are_storing_inputs = True
         else:
             self.objects_are_lame = True
+            self.objects_are_storing_inputs = False
 
         if global_scripts.refresh:
             self.objects = []

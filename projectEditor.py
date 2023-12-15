@@ -303,7 +303,7 @@ class Main:
                 0, 1,
                 mouse_pos, mouse_state, key_state, text_input,
                 # The objects should not be lame by default
-                False,
+                False, False,
                 self.editor_global_scripts)
 
         # Calls global update function after objects

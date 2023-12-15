@@ -72,20 +72,32 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.clicked = False
+        self.prev_clicked = False
         self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if not self.clicked and self.prev_clicked and self.hovered:
+            global_scripts.pause_storing_inputs = True
+            global_scripts.add_dialogue("Progressed 1 Frame")
+
         if self.hovered:
             self.opa = 0.5
             self.hovered = False
         else:
             self.opa = 1
 
+        self.prev_clicked = False
+
+        if self.clicked:
+            self.prev_clicked = True
+            self.clicked = False
+
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
