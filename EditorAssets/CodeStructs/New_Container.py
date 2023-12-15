@@ -160,6 +160,12 @@ To delete an animation (moves the object back to where it was before):
 Call self.delete_animation(b)
     b -> string -> name of animation used to locate the correct animation
 
+To pause an animation (prevents the animation from continuing until unpaused):
+Call self.pause_animation(b[, c])
+    b -> string -> name of animation used to locate the correct animation
+    c -> this parameter can be ignored if the state of reversal wants to be switched ->
+        specifies either paused or resumed -> boolean -> True = pause, False = resume
+
 To progress an animation (moves the animation forwards by an amount of time):
 Call self.progress_animation(b, c)
     b -> string -> name of animation used to locate the correct animation

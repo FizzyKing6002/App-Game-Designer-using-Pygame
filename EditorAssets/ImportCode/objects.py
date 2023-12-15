@@ -209,7 +209,7 @@ def Object(*args):
         def animate(self, time):
             for anim in self.animations:
                 # If the animation already completed
-                if (anim[0] == 2 and not anim[8]) or (anim[0] == 0 and anim[8]):
+                if (anim[0] == 2 and not anim[8]) or (anim[0] == 0 and anim[8]) or anim[0] == 3:
                     continue
 
                 # Update animation
@@ -248,6 +248,23 @@ def Object(*args):
                 if anim[7] == name:
                     # Delete the animation
                     self.animations.remove(anim)
+
+        def pause_resume_animation(self, name, *args):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    if len(args) > 0:
+                        if args[0]:
+                            # Flag the animation as paused
+                            anim[0] = 3
+                        else:
+                            # Flag the animation as ongoing
+                            anim[0] = 1
+                    else:
+                        if anim[0] == 3:
+                            anim[0] = 1
+                        else:
+                            anim[0] = 3
 
         def progress_animation(self, name, time):
             for anim in self.animations:
