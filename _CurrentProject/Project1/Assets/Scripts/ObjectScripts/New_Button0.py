@@ -5,11 +5,11 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
-    "button" : False,
-    "hover_activated" : False,
+    "button" : True,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
@@ -33,7 +33,7 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[0, 0.5078125], [0, 0.4476007342015559]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.size_modifiers = [[0, 0.15], [0, 0.15]]
         # [degrees, percent of container's rotation]
@@ -57,18 +57,12 @@ class Main:
         # Lame objects cannot be clicked or hovered over, do not react to key input,
         # and do not get their frame_update method called
         self.objects_are_lame = False
-        # Determines whether objects belonging to this container store inputs - CONTAINER ONLY
-        # Storing objects will not execute any code in this file until they stop storing inputs
-        # When an object stops storing, the methods in this file run with all the information that
-        # the object would have gathered while it was storing
-        self.objects_are_storing_inputs = False
-
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (18, 47, 160)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -91,11 +85,11 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        pass
+        print("ahoy")
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self, mouse_pos):
-        pass
+        print("goofy goober")
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self, mouse_pos):
@@ -107,7 +101,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self, mouse_pos):
-        pass
+        print("sugma")
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys

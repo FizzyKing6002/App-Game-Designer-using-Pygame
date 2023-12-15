@@ -57,6 +57,12 @@ class Main:
         # Lame objects cannot be clicked or hovered over, do not react to key input,
         # and do not get their frame_update method called
         self.objects_are_lame = False
+        # Determines whether objects belonging to this container store inputs - CONTAINER ONLY
+        # Storing objects will not execute any code in this file until they stop storing inputs
+        # When an object stops storing, the methods in this file run with all the information that
+        # the object would have gathered while it was storing
+        self.objects_are_storing_inputs = False
+
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
         self.img_dir = ""

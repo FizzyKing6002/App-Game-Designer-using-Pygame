@@ -37,6 +37,8 @@ class Main:
 
         self.objects_visible_outside_container = True
         self.objects_are_lame = False
+        self.objects_are_storing_inputs = False
+
         # Background image for text box - most use a colour rather than image
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),

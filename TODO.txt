@@ -1,6 +1,8 @@
 High prio:
     >>> Playtesting feature
     Investigate rotation percent
+    Pause animations
+    Make scroll bar rely on global scripts
 Med prio:
     View button in list window
     Add cursor to text boxes
