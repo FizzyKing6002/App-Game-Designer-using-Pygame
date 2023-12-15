@@ -643,23 +643,44 @@ class Button:
             Handles hovering over object logic if the object is both a button and hover_activated
     """
 
-    def call_clicked(self, mouse_pos, mouse_state):
+    def __init__(self):
+        self.stored_click = [False, False, False]
+        self.stored_hover = False
+
+    def call_clicked(self, mouse_pos, mouse_state, is_storing_inputs):
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
+
         # Scroll bars need to know position of mouse if they are being dragged around
         if collided or (self.is_scroll_bar and self.init_mouse_pos is not None):
             # Call the hoverered_over method from here rather than Hover Activated class
             # to save collision processing
             if hasattr(self, "call_hovered") and callable(self.call_hovered):
-                self.hovered_over(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_hover = True
+                else:
+                    self.hovered_over(mouse_pos)
 
             # 0 = left mouse button, 1 = middle mouse button, 2 = right mouse button
             if mouse_state[0]:
-                self.left_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[0] = True
+                else:
+                    self.left_clicked(mouse_pos)
             if mouse_state[1][0]:
-                self.middle_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[1] = True
+                else:
+                    self.middle_clicked(mouse_pos)
             if mouse_state[2]:
-                self.right_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[2] = True
+                else:
+                    self.right_clicked(mouse_pos)
 
 class Hover_Activated:
     """
@@ -668,11 +689,18 @@ class Hover_Activated:
             Calls the object's hovered_over method if the object was hovered over this frame
     """
 
-    def call_hovered(self, mouse_pos):
+    def __init__(self):
+        self.stored_hover = False
+
+    def call_hovered(self, mouse_pos, is_storing_inputs):
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
         if collided:
-            self.hovered_over(mouse_pos)
+            # If the object is storing inputs, save the input
+            if is_storing_inputs:
+                self.stored_hover = True
+            else:
+                self.hovered_over(mouse_pos)
 
 def hitbox_collision(self, mouse_pos):
     # If the mouse position is within the bounds of the object's hitbox
@@ -691,7 +719,10 @@ class Key_Activated:
             and that should activate the object
     """
 
-    def call_activated(self, key_state, text_input):
+    def __init__(self):
+        self.stored_keys = []
+
+    def call_activated(self, key_state, text_input, is_storing_inputs):
         # List of keys that activate the object that have been pressed since the last frame
         if hasattr(self, "uses_text_input") and self.uses_text_input:
             activated_keys = [text_input]
@@ -716,7 +747,11 @@ class Key_Activated:
 
         # Call the key input function with each key that has been pressed
         # and should be reacted to, passing the name of the key
-        self.key_input(activated_keys)
+        if len(activated_keys) > 0:
+            if is_storing_inputs:
+                self.stored_keys.extend(activated_keys)
+            else:
+                self.key_input(activated_keys)
 
 # None classes are throwaways for conditional inheritance
 class None1:
