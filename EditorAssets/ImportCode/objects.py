@@ -136,7 +136,8 @@ def Object(*args):
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
-                self.frame_update(global_scripts)
+                if not is_lame and not is_storing_inputs:
+                    self.frame_update(global_scripts)
                 return
 
             # Animations are not carried out on lame and input storing objects
