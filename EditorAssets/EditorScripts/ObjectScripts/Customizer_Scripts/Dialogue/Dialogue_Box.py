@@ -16,7 +16,7 @@ object_type = {
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Customizer_Window"
+container_name = "Customizer_Frame"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -26,7 +26,7 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
@@ -47,7 +47,7 @@ class Main:
         # [degrees, percent of container's rotation]
         self.rotation_modifiers = [0, 1]
         # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [0, 1]
+        self.opacity_modifiers = [1, 0]
 
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used for text and if the object's image does not exist

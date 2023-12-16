@@ -81,9 +81,12 @@ class Main:
             self.one_time = False
 
             self.object_path = self.generated_value[0]
-            self.text += "|" * self.generated_value[1]
+            self.text += "| " * self.generated_value[1]
             self.text += self.object_path.split("/")[-1][:-3]
             self.generate_object(global_scripts, "List_Text_Edit")
+
+        if global_scripts.menu_state != 0:
+            self.activated = False
 
         if self.objects[0].activated:
             self.activated = True

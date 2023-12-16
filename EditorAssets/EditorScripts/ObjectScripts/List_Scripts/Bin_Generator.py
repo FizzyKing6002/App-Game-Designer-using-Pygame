@@ -97,6 +97,15 @@ class Main:
             self.one_time = False
             self.object_path = self.generated_value
 
+        if global_scripts.menu_state != 0:
+            self.opa = 0.3
+            self.img_dir = "EditorAssets/Textures/List_Icons/trash-bin.png"
+            self.selected = False
+            self.prev_clicked = False
+            self.clicked = False
+            self.hovered = False
+            return
+
         if not self.clicked and self.prev_clicked and self.hovered:
             if self.selected:
                 global_scripts.del_file(self.object_path)

@@ -795,9 +795,7 @@ class Key_Activated:
                 # Store the text input into the stored keys list
                 if text_input != "" or len(self.stored_keys) == 0:
                     if self.stored_keys_has_text_input:
-                        print(self.stored_keys, text_input)
                         self.stored_keys[0] = text_input
-                        print(self.stored_keys)
                     else:
                         self.stored_keys.insert(0, text_input)
                         self.stored_keys_has_text_input = True
@@ -837,15 +835,11 @@ class Key_Activated:
         if not is_storing_inputs:
             if len(self.stored_keys) > 0:
                 self.key_input(self.stored_keys)
-                if hasattr(self, "jizz"):
-                    print("released", self.stored_keys)
                 self.stored_keys = []
                 self.stored_keys_has_text_input = False
 
-            elif (len(activated_keys) > 0 and activated_keys[0] != "") or len(activated_keys) > 1:
+            elif len(activated_keys) > 0:
                 self.key_input(activated_keys)
-                if hasattr(self, "jizz"):
-                    print("oopsie", self.stored_keys, activated_keys)
 
 # None classes are throwaways for conditional inheritance
 class None1:

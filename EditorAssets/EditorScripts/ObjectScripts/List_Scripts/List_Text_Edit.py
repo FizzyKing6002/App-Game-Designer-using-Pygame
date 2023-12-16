@@ -90,6 +90,14 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if global_scripts.menu_state != 0:
+            self.opa = 0
+            self.clicked = False
+            self.prev_clicked = False
+            self.hovered = False
+            self.activated = False
+            return
+
         if not self.clicked and self.prev_clicked and self.hovered:
             self.activated = True
 

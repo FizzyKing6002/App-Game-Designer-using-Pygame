@@ -1,9 +1,11 @@
 High prio:
+    Add outline to selected object
     View button in list window
     >>> Prevent access to customizer and list window while testplaying
     Investigate rotation percent
     Make scroll bar rely on global scripts
 Med prio:
+    Lost object show in object list
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type
 Low prio:
