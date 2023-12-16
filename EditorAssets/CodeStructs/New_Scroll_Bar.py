@@ -29,7 +29,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         # Sizes scroll bar correctly (scroll bar takes up 5% of the container's width)
         self.size_modifiers = [[0, 0.05], [0, 1]]
-        self.rotation_modifiers = [0, 1]
+        self.rotation_modifiers = [0, 0]
         self.opacity_modifiers = [0, 1]
 
         self.position_origin = [0.5, 0.5]

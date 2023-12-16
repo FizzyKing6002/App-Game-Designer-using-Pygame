@@ -515,7 +515,7 @@ class Container:
 
                 # Calls the object
                 obj(surface, time,
-                    pos, size, 0, self.opa, mouse_pos, mouse_state, key_state, text_input,
+                    pos, size, self.rot, self.opa, mouse_pos, mouse_state, key_state, text_input,
                     is_lame, is_storing_inputs, global_scripts)
 
         else:
@@ -528,8 +528,8 @@ class Container:
             for obj in self.objects:
                 # Calls the object
                 obj(surface, time,
-                    pos, self.size, 0, self.opa, mouse_pos, mouse_state, key_state, text_input,
-                    is_lame, is_storing_inputs, global_scripts)
+                    pos, self.size, self.rot, self.opa, mouse_pos, mouse_state,
+                    key_state, text_input, is_lame, is_storing_inputs, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
