@@ -466,15 +466,19 @@ class Container:
                     vector[0] + self.size[0] / 2 - rotated_window.get_width() / 2,
                     vector[1] + self.size[1] / 2 - rotated_window.get_height() / 2))
 
-                # Draw the image of the container onto the surface
+                # Save variables for reassignment
                 temp_pos = self.pos
                 temp_rot = self.rot
                 self.pos = [self.size[0] / 2, self.size[1] / 2]
                 self.rot = 0
+
+                # Draw the image of the container onto the surface
                 if hasattr(self, "draw_image") and callable(self.draw_image):
                     self.draw_image(surface)
                 if hasattr(self, "draw_text") and callable(self.draw_text):
                     self.draw_text(surface)
+
+                # Reassign variables
                 self.pos = temp_pos
                 self.rot = temp_rot
 
@@ -715,7 +719,7 @@ class Button:
                 if is_storing_inputs:
                     self.stored_hover = True
                 else:
-                    self.hovered_over(mouse_pos)
+                    self.hovered_over()
                     hovered_called = True
 
             # 0 = left mouse button, 1 = middle mouse button, 2 = right mouse button
@@ -724,34 +728,34 @@ class Button:
                 if is_storing_inputs:
                     self.stored_click[0] = True
                 else:
-                    self.left_clicked(mouse_pos)
+                    self.left_clicked()
                     left_click_called = True
             if mouse_state[1][0]:
                 # If the object is storing inputs, save the input
                 if is_storing_inputs:
                     self.stored_click[1] = True
                 else:
-                    self.middle_clicked(mouse_pos)
+                    self.middle_clicked()
                     middle_click_called = True
             if mouse_state[2]:
                 # If the object is storing inputs, save the input
                 if is_storing_inputs:
                     self.stored_click[2] = True
                 else:
-                    self.right_clicked(mouse_pos)
+                    self.right_clicked()
                     right_click_called = True
 
         if (max(self.stored_click) or self.stored_hover) and not is_storing_inputs:
             if hasattr(self, "call_hovered") and callable(self.call_hovered) \
                 and self.stored_hover and not hovered_called:
-                self.hovered_over(mouse_pos)
+                self.hovered_over()
 
             if self.stored_click[0] and not left_click_called:
-                self.left_clicked(mouse_pos)
+                self.left_clicked()
             if self.stored_click[1] and not middle_click_called:
-                self.middle_clicked(mouse_pos)
+                self.middle_clicked()
             if self.stored_click[2] and not right_click_called:
-                self.right_clicked(mouse_pos)
+                self.right_clicked()
 
             self.stored_hover = False
             self.stored_click = [False, False, False]
@@ -777,12 +781,12 @@ class Hover_Activated:
             if is_storing_inputs:
                 self.stored_hover = True
             else:
-                self.hovered_over(mouse_pos)
+                self.hovered_over()
                 hovered_called = True
 
         if self.stored_hover and not is_storing_inputs:
             if not hovered_called:
-                self.hovered_over(mouse_pos)
+                self.hovered_over()
             self.stored_hover = False
 
 def hitbox_collision(self, mouse_pos):

@@ -56,6 +56,26 @@ class Main:
         self.scroll_factor = 0.15
 
     def frame_update(self, global_scripts):
+        if self.clicked:
+            # If the scroll bar was not being clicked last frame
+            if self.init_mouse_pos is None:
+                # Set the initial mouse position that the scroll bar was clicked on at
+                self.init_mouse_pos = global_scripts.mouse_pos[1]
+            # Find the distance that the mouse has moved since the scroll bar was clicked (y axis)
+            self.mouse_pos_diff = global_scripts.mouse_pos[1] - self.init_mouse_pos
+
+            # Calculates total movement of scroll bar since it was created
+            total_diff = self.mouse_pos_diff + self.position_modifiers[1][0]
+
+            # If the total movement exceeds the maximum allowed position
+            if total_diff > self.scroll_bar_limit:
+                # Move scroll bar to maximum allowed position
+                self.mouse_pos_diff = self.scroll_bar_limit - self.position_modifiers[1][0]
+            # If the total movement exceeds the minimum allowed position
+            elif total_diff < 0:
+                # Move scroll bar to minimum allowed position
+                self.mouse_pos_diff = 0 - self.position_modifiers[1][0]
+
         # While scroll bar is being dragged, it must be moved to the correct position every frame
         self.pos[1] += self.mouse_pos_diff
 
@@ -98,34 +118,16 @@ class Main:
         # clicked must be set to false every frame
         self.clicked = False
 
-    def left_clicked(self, mouse_pos):
+    def left_clicked(self):
         self.clicked = True
-        # If the scroll bar was not being clicked last frame
-        if self.init_mouse_pos is None:
-            # Set the initial mouse position that the scroll bar was clicked on at
-            self.init_mouse_pos = mouse_pos[1]
-        # Find the distance that the mouse has moved since the scroll bar was clicked (y axis)
-        self.mouse_pos_diff = mouse_pos[1] - self.init_mouse_pos
 
-        # Calculates total movement of scroll bar since it was created
-        total_diff = self.mouse_pos_diff + self.position_modifiers[1][0]
-
-        # If the total movement exceeds the maximum allowed position
-        if total_diff > self.scroll_bar_limit:
-            # Move scroll bar to maximum allowed position
-            self.mouse_pos_diff = self.scroll_bar_limit - self.position_modifiers[1][0]
-        # If the total movement exceeds the minimum allowed position
-        elif total_diff < 0:
-            # Move scroll bar to minimum allowed position
-            self.mouse_pos_diff = 0 - self.position_modifiers[1][0]
-
-    def middle_clicked(self, mouse_pos):
+    def middle_clicked(self):
         pass
 
-    def right_clicked(self, mouse_pos):
+    def right_clicked(self):
         pass
 
-    def hovered_over(self, mouse_pos):
+    def hovered_over(self):
         pass
 
     def key_input(self, key):

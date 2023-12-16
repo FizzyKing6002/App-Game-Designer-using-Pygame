@@ -120,16 +120,16 @@ class Main:
             self.prev_clicked = False
         self.hovered = False
 
-    def left_clicked(self, mouse_pos):
+    def left_clicked(self):
         self.clicked = True
 
-    def middle_clicked(self, mouse_pos):
+    def middle_clicked(self):
         pass
 
-    def right_clicked(self, mouse_pos):
+    def right_clicked(self):
         pass
 
-    def hovered_over(self, mouse_pos):
+    def hovered_over(self):
         self.hovered = True
 
     def key_input(self, keys):

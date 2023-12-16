@@ -1,8 +1,7 @@
 High prio:
     Add outline to selected object
     View button in list window
-    >>> Draw image of containers onto their surface
-    Make scroll bar rely on global scripts
+    >>> Make scroll bar rely on global scripts
     Copy objects python file to code structs
 Med prio:
     Lost object show in object list

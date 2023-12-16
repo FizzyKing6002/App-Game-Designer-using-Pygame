@@ -87,19 +87,19 @@ class Main:
             self.next_time = True
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
-    def left_clicked(self, mouse_pos):
+    def left_clicked(self):
         pass
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
-    def middle_clicked(self, mouse_pos):
+    def middle_clicked(self):
         pass
 
     # Called if the object was right-clicked this frame, passes mouse position -> [x, y]
-    def right_clicked(self, mouse_pos):
+    def right_clicked(self):
         pass
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
-    def hovered_over(self, mouse_pos):
+    def hovered_over(self):
         pass
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
