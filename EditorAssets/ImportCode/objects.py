@@ -153,10 +153,12 @@ def Object(*args):
 
             # If the object is lame, only call the methods that are necessary
             if is_lame:
-                if hasattr(self, "draw_image") and callable(self.draw_image):
-                    self.draw_image(window)
-                if hasattr(self, "draw_text") and callable(self.draw_text):
-                    self.draw_text(window)
+                if self.rot == 0 or not (hasattr(self, "container_update") \
+                                         and callable(self.container_update)):
+                    if hasattr(self, "draw_image") and callable(self.draw_image):
+                        self.draw_image(window)
+                    if hasattr(self, "draw_text") and callable(self.draw_text):
+                        self.draw_text(window)
 
                 if hasattr(self, "container_update") and callable(self.container_update):
                     self.container_update(window, time, mouse_pos, mouse_state,
@@ -175,10 +177,12 @@ def Object(*args):
                 if hasattr(self, "call_activated") and callable(self.call_activated):
                     self.call_activated(key_state, text_input, True)
 
-                if hasattr(self, "draw_image") and callable(self.draw_image):
-                    self.draw_image(window)
-                if hasattr(self, "draw_text") and callable(self.draw_text):
-                    self.draw_text(window)
+                if self.rot == 0 or not (hasattr(self, "container_update") \
+                                         and callable(self.container_update)):
+                    if hasattr(self, "draw_image") and callable(self.draw_image):
+                        self.draw_image(window)
+                    if hasattr(self, "draw_text") and callable(self.draw_text):
+                        self.draw_text(window)
 
                 if hasattr(self, "container_update") and callable(self.container_update):
                     self.container_update(window, time, mouse_pos, mouse_state,
@@ -198,10 +202,12 @@ def Object(*args):
 
             self.frame_update(global_scripts)
 
-            if hasattr(self, "draw_image") and callable(self.draw_image):
-                self.draw_image(window)
-            if hasattr(self, "draw_text") and callable(self.draw_text):
-                self.draw_text(window)
+            if self.rot == 0 or not (hasattr(self, "container_update") \
+                                     and callable(self.container_update)):
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(window)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(window)
 
             if hasattr(self, "container_update") and callable(self.container_update):
                 self.container_update(window, time, mouse_pos, mouse_state, key_state, text_input,
@@ -459,6 +465,18 @@ class Container:
                 surface.blit(rotated_window, (
                     vector[0] + self.size[0] / 2 - rotated_window.get_width() / 2,
                     vector[1] + self.size[1] / 2 - rotated_window.get_height() / 2))
+
+                # Draw the image of the container onto the surface
+                temp_pos = self.pos
+                temp_rot = self.rot
+                self.pos = [self.size[0] / 2, self.size[1] / 2]
+                self.rot = 0
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(surface)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(surface)
+                self.pos = temp_pos
+                self.rot = temp_rot
 
             # Recalculate mouse position for surface as
             # object positions are changed to be relative to the surface
