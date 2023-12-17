@@ -8,15 +8,15 @@ Represents an object
 object_type = {
     "container" : True,
     "text" : False,
-    "image" : True,
+    "image" : False,
     "button" : False,
-    "hover_activated" : True,
+    "hover_activated" : False,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file/class name (without .py)
 # If the object is not contained within any others, choose None
-container_name = "Canvas_Frame"
+container_name = "Background"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -26,12 +26,12 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 5
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
         self.objects_visible_outside_container = False
-        self.objects_are_lame = True
+        self.objects_are_lame = False
         self.objects_are_storing_inputs = False
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
@@ -43,11 +43,11 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.5], [0, 0.5]]
+        self.position_modifiers = [[0, 0.4], [0, 0.575]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, 0.8], [0, 0.85]]
         # [degrees, percent of container's rotation]
-        self.rotation_modifiers = [0, 1]
+        self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
         self.opacity_modifiers = [0, 1]
 
@@ -66,35 +66,13 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.prev_dragging = False
-        self.next_time = False
 
-        self.hovered = False
-
-        self.__is_editor_canvas__ = True
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.menu_state == 1:
-            self.objects_are_lame = False
-            self.objects_are_storing_inputs = False
-        elif global_scripts.menu_state == 2:
-            if global_scripts.pause_storing_inputs:
-                self.objects_are_storing_inputs = False
-            else:
-                self.objects_are_storing_inputs = True
-        else:
-            self.objects_are_lame = True
-            self.objects_are_storing_inputs = False
-
-        if global_scripts.dropped and self.hovered:
-            global_scripts.refresh = True
-            global_scripts.create_new = True
-
-        if global_scripts.refresh:
-            self.objects = []
-
-        self.hovered = False
+        if global_scripts.dragging:
+            global_scripts.canvas_size = self.size
+            global_scripts.canvas_pos = self.pos
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
@@ -110,7 +88,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self):
-        self.hovered = True
+        pass
 
     # Called for each key in self.activation_keys that was pressed this frame, passes key name
     def key_input(self, key):

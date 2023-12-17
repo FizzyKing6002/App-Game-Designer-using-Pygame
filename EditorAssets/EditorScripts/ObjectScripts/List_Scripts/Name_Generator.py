@@ -72,6 +72,7 @@ class Main:
 
         self.one_time = True
         self.object_path = None
+        self.object_index = 0
 
         self.rename = False
 
@@ -81,7 +82,8 @@ class Main:
             self.one_time = False
 
             self.object_path = self.generated_value[0]
-            self.text += "| " * self.generated_value[1]
+            self.object_index = self.generated_value[1]
+            self.text += "| " * self.generated_value[2]
             self.text += self.object_path.split("/")[-1][:-3]
             self.generate_object(global_scripts, "List_Text_Edit")
 
@@ -95,6 +97,7 @@ class Main:
         # If the mouse has been released on the text box meaning it has been clicked
         if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.current_path = self.object_path
+            global_scripts.current_index = self.object_index
             self.selected = True
         # If the user clicks off of the text box
         elif global_scripts.mouse_state[0] and not self.hovered and self.activated:
@@ -108,6 +111,7 @@ class Main:
         if self.hovered:
             self.object_colour = (149, 152, 161)
         elif global_scripts.current_path == self.object_path:
+            global_scripts.current_index = self.object_index
             self.object_colour = (160, 164, 174)
         else:
             self.object_colour = (175, 179, 189)

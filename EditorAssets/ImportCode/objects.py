@@ -490,7 +490,8 @@ class Container:
             ]
 
             # Update project global scripts before objects
-            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
+            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
+                and not self.objects_are_lame and not self.objects_are_storing_inputs:
                 global_scripts.early_frame_update(time, mouse_pos, mouse_state, key_state)
 
             self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
@@ -498,12 +499,18 @@ class Container:
                               global_scripts, container_has_scroll_bar, scroll_offset)
 
             # Update project global scripts after objects
-            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
+            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
+                and not self.objects_are_lame and not self.objects_are_storing_inputs:
                 global_scripts.late_frame_update(time, mouse_pos, mouse_state, key_state)
 
             # Draws surface to screen
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
+
+            if hasattr(self, "__editor_attr__file_name__") \
+                and hasattr(global_scripts, "__editor_attr__selected_pos__"):
+                global_scripts.__editor_attr__selected_pos__[0] += self.pos[0] - self.size[0] / 2
+                global_scripts.__editor_attr__selected_pos__[1] += self.pos[1] - self.size[1] / 2
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
                      is_lame, is_storing_inputs,
@@ -540,6 +547,15 @@ class Container:
                     pos, size, self.rot, self.opa, mouse_pos, mouse_state, key_state, text_input,
                     is_lame, is_storing_inputs, global_scripts)
 
+                # To display the outline of the selected object, get its attributes
+                if hasattr(obj, "__editor_attr__file_name__") \
+                    and hasattr(global_scripts, "__editor_attr__current_path__") \
+                        and obj.__editor_attr__file_name__ \
+                            == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
+                    global_scripts.__editor_attr__selected_pos__ = obj.pos
+                    global_scripts.__editor_attr__selected_size__ = obj.size
+                    global_scripts.__editor_attr__selected_rot__ = obj.rot
+
         else:
             # Calculates the position of the object depending on whether a surface was used
             if self.objects_visible_outside_container and self.rot == 0:
@@ -552,6 +568,14 @@ class Container:
                 obj(surface, time,
                     pos, self.size, self.rot, self.opa, mouse_pos, mouse_state,
                     key_state, text_input, is_lame, is_storing_inputs, global_scripts)
+
+                if hasattr(obj, "__editor_attr__file_name__") \
+                    and hasattr(global_scripts, "__editor_attr__current_path__") \
+                        and obj.__editor_attr__file_name__ \
+                            == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
+                    global_scripts.__editor_attr__selected_pos__ = obj.pos
+                    global_scripts.__editor_attr__selected_size__ = obj.size
+                    global_scripts.__editor_attr__selected_rot__ = obj.rot
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container

@@ -104,6 +104,7 @@ class Main:
         global_scripts = importlib.import_module(
             f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
         self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
+        self.editor_global_scripts.project_global_scripts.__editor_attr__current_path__ = ""
 
         # Ensures project object modules are saved so they can be reloaded later
         self.project_obj_files = []
@@ -161,6 +162,8 @@ class Main:
         global_scripts = importlib.reload(importlib.import_module(
             f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts"))
         self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
+        self.editor_global_scripts.project_global_scripts.__editor_attr__current_path__ \
+            = self.editor_global_scripts.current_path
 
         # Create a pointer list to show whether modules are still being used
         pointer_list = []
@@ -199,7 +202,8 @@ class Main:
         # Calls method to create objects using the ordered list just created
         # self.objects[0] goes into the background object
         # .objects[0] goes into the canvas object (AS OBJECTS HAVE NOT BEEN SORTED YET)
-        self.recursive_create_objects(objects_list, None, "self.objects[0].objects[-2].objects")
+        self.recursive_create_objects(objects_list, None,
+                                      "self.objects[0].objects[-2].objects[0].objects")
 
     def import_objects(self, path, object_files, pointer_list):
         # Iterates through every file in the folder
@@ -270,6 +274,8 @@ class Main:
                                                           object_type['key_activated'],
                                                           object_class
                                                           ))""", locals(), globals())
+                    if path[:46] == "self.objects[0].objects[-2].objects[0].objects":
+                        exec(f"{path}[{i-1}].__editor_attr__file_name__ = file_name")
 
                     # If the object is a container
                     if object_type['container']:

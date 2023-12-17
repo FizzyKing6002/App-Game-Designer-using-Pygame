@@ -65,7 +65,7 @@ class Main:
 
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorAssets/Textures/Rick-Astley-Never-Gonna-Give-You-Up.webp"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)

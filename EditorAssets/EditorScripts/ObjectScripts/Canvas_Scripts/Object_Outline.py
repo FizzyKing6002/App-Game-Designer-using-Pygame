@@ -5,18 +5,18 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
-    "hover_activated" : False,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "None"
+container_name = "Canvas_Frame"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -26,20 +26,20 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
         # If this object has been generated using the generate_object method,
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0.475], [0, 0.0375]]
+        self.position_modifiers = [[0, 0], [0, 0]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0.9], [0, 0.075]]
-        # [degrees, percent of container's rotation]
-        self.rotation_modifiers = [0, 1]
+        self.size_modifiers = [[0, 0], [0, 0]]
+        # [degrees, percent of container's rotation] containers automatically rotate objects inside
+        self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [0, 1]
+        self.opacity_modifiers = [0, 0.5]
 
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
@@ -57,9 +57,15 @@ class Main:
         # Lame objects cannot be clicked or hovered over, do not react to key input,
         # and do not get their frame_update method called
         self.objects_are_lame = False
+        # Determines whether objects belonging to this container store inputs - CONTAINER ONLY
+        # Storing objects will not execute any code in this file until they stop storing inputs
+        # When an object stops storing, the methods in this file run with all the information that
+        # the object would have gathered while it was storing
+        self.objects_are_storing_inputs = False
+
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorAssets/Textures/Canvas/Object_Outline.png"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)
@@ -81,21 +87,31 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.one_time = True
-        self.object_path = None
+        self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.one_time:
-            self.one_time = False
+        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_pos__"):
+            self.position_modifiers[0][0] \
+                = global_scripts.project_global_scripts.__editor_attr__selected_pos__[0]
+            self.position_modifiers[1][0] \
+                = global_scripts.project_global_scripts.__editor_attr__selected_pos__[1]
 
-            self.object_path = self.generated_value[0]
-            self.position_modifiers[1][1] *= 2 * self.generated_value[1] + 1
+        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_size__"):
+            self.size_modifiers[0][0] \
+                = global_scripts.project_global_scripts.__editor_attr__selected_size__[0]
+            self.size_modifiers[1][0] \
+                = global_scripts.project_global_scripts.__editor_attr__selected_size__[1]
 
-            self.generate_object(global_scripts, "Name_Generator", self.generated_value)
-            self.generate_object(global_scripts, "View_Generator")
-            self.generate_object(global_scripts, "Bin_Generator", self.generated_value[0])
+        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_rot__"):
+            self.rotation_modifiers[0] \
+                = global_scripts.project_global_scripts.__editor_attr__selected_rot__
+
+        if self.hovered:
+            self.opa = 0.1
+
+        self.hovered = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
@@ -111,7 +127,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self):
-        pass
+        self.hovered = True
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys
@@ -163,6 +179,12 @@ Call self.complete_animation(b)
 To delete an animation (moves the object back to where it was before):
 Call self.delete_animation(b)
     b -> string -> name of animation used to locate the correct animation
+
+To pause an animation (prevents the animation from continuing until unpaused):
+Call self.pause_animation(b[, c])
+    b -> string -> name of animation used to locate the correct animation
+    c -> this parameter can be ignored if the state of reversal wants to be switched ->
+        specifies either paused or resumed -> boolean -> True = pause, False = resume
 
 To progress an animation (moves the animation forwards by an amount of time):
 Call self.progress_animation(b, c)

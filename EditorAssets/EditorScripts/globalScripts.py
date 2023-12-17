@@ -5,6 +5,7 @@ The file containing global variables and methods, used in object scripts
 
 import os
 import shutil
+from typing import Any
 
 
 class globalScripts:
@@ -36,6 +37,7 @@ class globalScripts:
         self.create_new = False
 
         self.current_path = ""
+        self.current_index = None
 
         self.pause_storing_inputs = False
 
@@ -211,6 +213,13 @@ class globalScripts:
             self.refresh = True
             self.add_dialogue("Object Deleted")
 
+            if path == self.current_path:
+                self.current_path = ""
+                self.current_index = None
+                self.project_global_scripts.__editor_attr__selected_pos__ = [0, 0]
+                self.project_global_scripts.__editor_attr__selected_size__ = [0, 0]
+                self.project_global_scripts.__editor_attr__selected_rot__ = 0
+
     def rename_file(self, path, name):
         new_path = ""
         split_path = path.split("/")[:-1] + [f"{name}.py"]
@@ -224,3 +233,13 @@ class globalScripts:
             os.rename(path, new_path)
             self.refresh = True
             self.add_dialogue("Object Renamed")
+
+    @property
+    def current_path(self):
+        return self._current_path
+
+    @current_path.setter
+    def current_path(self, val):
+        self._current_path = val
+        if hasattr(self.project_global_scripts, "__editor_attr__current_path__"):
+            self.project_global_scripts.__editor_attr__current_path__ = val
