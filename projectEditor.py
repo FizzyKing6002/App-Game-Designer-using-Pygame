@@ -80,10 +80,20 @@ class Main:
     """
 
     def __init__(self):
+        self.window_title = "Project Editor"
+        self.window_icon_path = "EditorAssets/Textures/maintenance.png"
+
+        # Change the title of the window
+        pygame.display.set_caption(self.window_title)
+        # Change the icon of the window
+        if os.path.exists(self.window_icon_path):
+            pygame.display.set_icon(pygame.image.load(self.window_icon_path))
+
         self.fps = 120
         self.clock = pygame.time.Clock()
 
         self.window = pygame.display.set_mode(window_size, pygame.RESIZABLE)
+
         self.objects = []
 
         # Creates an instance of the class located within globalScripts.py
