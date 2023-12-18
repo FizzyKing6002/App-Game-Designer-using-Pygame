@@ -43,11 +43,16 @@ class globalScripts:
 
         self.pause_storing_inputs = False
 
-        self.populate_obj_nums()
+        self.one_time = True
+
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
     def early_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
+        if self.one_time:
+            self.one_time = False
+            self.populate_obj_nums()
+
         self.mouse_pos = mouse_pos
         self.mouse_state = mouse_state
 

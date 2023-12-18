@@ -68,6 +68,8 @@ class Main:
         self.object_counter = 0
         self.next_time = False
 
+        self.blah = None
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):

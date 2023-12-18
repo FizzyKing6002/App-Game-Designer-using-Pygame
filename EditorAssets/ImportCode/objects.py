@@ -489,6 +489,11 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
+            # Do not allow interactions with objects when mouse is outside container
+            if mouse_pos[0] < 0 or mouse_pos[1] < 0 \
+                or mouse_pos[0] > self.size[0] or mouse_pos[1] > self.size[1]:
+                mouse_pos.append(None)
+
             # Update project global scripts before objects
             if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
                 and not self.objects_are_lame and not self.objects_are_storing_inputs:
@@ -588,7 +593,7 @@ class Container:
         # Returns size the scroll bar should be and object_offset
         return (self.size[1] ** 2) / (max(max_y - self.object_offset, cont_max) \
                - min(min_y - self.object_offset, cont_min)), object_offset
-    
+
     def set_global_attributes(self, obj, global_scripts):
         if hasattr(obj, "__editor_attr__file_name__") \
             and hasattr(global_scripts, "__editor_attr__current_path__") \
@@ -742,7 +747,8 @@ class Button:
         hovered_called = False
 
         # Scroll bars need to know position of mouse if they are being dragged around
-        if collided or (self.is_scroll_bar and self.init_mouse_pos is not None):
+        if (collided and len(mouse_pos) != 3) \
+            or (self.is_scroll_bar and self.init_mouse_pos is not None):
             # Call the hoverered_over method from here rather than Hover Activated class
             # to save collision processing
             if hasattr(self, "call_hovered") and callable(self.call_hovered):
@@ -802,6 +808,10 @@ class Hover_Activated:
         self.stored_hover = False
 
     def call_hovered(self, mouse_pos, is_storing_inputs):
+        # If the object shouldn't be able to be hovered over
+        if len(mouse_pos) == 3:
+            return
+
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
 
