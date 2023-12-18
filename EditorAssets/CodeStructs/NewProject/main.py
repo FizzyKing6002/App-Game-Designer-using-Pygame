@@ -79,14 +79,16 @@ class Main:
     """
 
     def __init__(self):
-        self.window_title = "New Window"
-        self.window_icon_path = ""
+        window_title = "New Window"
+        window_icon_path = ""
 
         # Change the title of the window
-        pygame.display.set_caption(self.window_title)
+        pygame.display.set_caption(window_title)
         # Change the icon of the window
-        if os.path.exists(self.window_icon_path):
-            pygame.display.set_icon(pygame.image.load(self.window_icon_path))
+        if os.path.exists(window_icon_path):
+            pygame.display.set_icon(pygame.image.load(window_icon_path))
+        # Change the icon in the taskbar
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(window_icon_path)
 
         self.fps = 120
         self.clock = pygame.time.Clock()
