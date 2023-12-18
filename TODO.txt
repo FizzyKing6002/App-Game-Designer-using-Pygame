@@ -1,7 +1,8 @@
 High prio:
     Change title and logo
     Textures path is incorrect for project files
-    Customizer loads selected object's properties
+    >>> Customizer loads selected object's properties
+        >>> When created aswell
     View button in list window
     Copy objects python file to code structs
 Med prio:
@@ -14,5 +15,3 @@ Low prio:
 bugs
 Multiple containers lead to object outline moved into wrong position
 Rotation of containers leads to object outline moved into wrong position
->>> Objects can be clicked outside of restrictive container
->>> Object scripts folder is required on startup

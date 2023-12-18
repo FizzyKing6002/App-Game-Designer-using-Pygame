@@ -40,6 +40,7 @@ class globalScripts:
         self.current_index = None
         self.changed_current_path = False
         self.delayed_changed_current_path = False
+        self.super_delayed_changed_current_path = False
 
         self.pause_storing_inputs = False
 
@@ -65,8 +66,12 @@ class globalScripts:
 
             self.populate_obj_nums()
 
+        if self.super_delayed_changed_current_path:
+            self.super_delayed_changed_current_path = False
+
         if self.delayed_changed_current_path:
             self.delayed_changed_current_path = False
+            self.super_delayed_changed_current_path = True
 
         if self.changed_current_path:
             self.changed_current_path = False

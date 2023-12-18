@@ -104,7 +104,7 @@ class Main:
                 global_scripts.customizer_input("", f' "{self.text}"', "container_name", "=")
             global_scripts.add_dialogue("Container Name Changed")
 
-        if global_scripts.delayed_changed_current_path:
+        if global_scripts.super_delayed_changed_current_path:
             if hasattr(global_scripts.project_global_scripts, "__editor_attr__container_name__"):
                 self.text = global_scripts.project_global_scripts.__editor_attr__container_name__
             else:

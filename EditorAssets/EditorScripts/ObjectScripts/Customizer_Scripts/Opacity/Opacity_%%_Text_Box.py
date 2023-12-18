@@ -106,7 +106,7 @@ class Main:
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 
-        if global_scripts.delayed_changed_current_path:
+        if global_scripts.super_delayed_changed_current_path:
             if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_opa_mod__"):
                 self.text = str(
                     global_scripts.project_global_scripts.__editor_attr__selected_opa_mod__[1])[:5]

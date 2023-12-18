@@ -105,10 +105,11 @@ class Main:
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 
-        if global_scripts.delayed_changed_current_path:
+        if global_scripts.super_delayed_changed_current_path:
             if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_size_mod__"):
                 self.text = str(
-                    global_scripts.project_global_scripts.__editor_attr__selected_size_mod__[1][0])[:5]
+                    global_scripts.project_global_scripts.__editor_attr__selected_size_mod__[1][0])\
+                        [:5]
             else:
                 self.text = ""
 
