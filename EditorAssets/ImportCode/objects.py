@@ -53,6 +53,7 @@ Classes:
 """
 
 
+import os
 import copy
 import pygame
 # Import is relative to the Project Editor file
@@ -62,7 +63,7 @@ from EditorAssets.ImportCode import animation
 # Factory function is used that returns a class object,
 # neccessary as variables must be defined before class is initialised
 def Object(*args):
-    container, text, image, button, hover_activated, key_activated, object_class = args
+    container, text, image, button, hover_activated, key_activated, object_class, *args = args
 
     class Object(Container if container else None1,
                  Text if text else None2,
@@ -101,7 +102,10 @@ def Object(*args):
                 Returns new mouse position relative to the rotation of the object
         """
 
-        def __init__(self):
+        def __init__(self, args):
+            if len(args) > 0:
+                self.__editor_attr__file_name__ = args[0]
+
             self.pos = [0, 0]
             self.size = [0, 0]
             self.rot = 0
@@ -376,7 +380,7 @@ def Object(*args):
             return mouse_pos
 
     # Returns instance of Object class
-    return Object()
+    return Object(args)
 
 class Container:
     """
@@ -672,7 +676,11 @@ class Image:
     def __init__(self):
         try:
             # convert_alpha allows images without background to remain this way
-            self.img = pygame.image.load(self.img_dir).convert_alpha()
+            if hasattr(self, "__editor_attr__file_name__"):
+                self.img = pygame.image.load(f'_CurrentProject/{os.listdir("_CurrentProject")[0]}\
+/{self.img_dir}').convert_alpha()
+            else:
+                self.img = pygame.image.load(self.img_dir).convert_alpha()
         # If the image directory provided does not lead to an image
         except (FileNotFoundError, pygame.error):
             # Create a surface representing the object's image
@@ -688,7 +696,11 @@ class Image:
         if self.prev_img_dir != self.img_dir or self.prev_obj_col != self.object_colour:
             # Recreate the pygame image
             try:
-                self.img = pygame.image.load(self.img_dir).convert_alpha()
+                if hasattr(self, "__editor_attr__file_name__"):
+                    self.img = pygame.image.load(f'_CurrentProject/\
+{os.listdir("_CurrentProject")[0]}/{self.img_dir}').convert_alpha()
+                else:
+                    self.img = pygame.image.load(self.img_dir).convert_alpha()
             except (FileNotFoundError, pygame.error):
                 self.img = pygame.Surface((1, 1)).convert_alpha()
                 pygame.draw.rect(self.img, self.object_colour, pygame.Rect(0, 0, 1, 1))

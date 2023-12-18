@@ -278,16 +278,24 @@ class Main:
                     object_class = file.Main
 
                     # Creates the object inside the correct container given by the path
-                    exec(f"""{path}.append(objects.Object(object_type['container'],
-                                                          object_type['text'],
-                                                          object_type['image'],
-                                                          object_type['button'],
-                                                          object_type['hover_activated'],
-                                                          object_type['key_activated'],
-                                                          object_class
-                                                          ))""", locals(), globals())
                     if path[:46] == "self.objects[0].objects[-2].objects[0].objects":
-                        exec(f"{path}[{i-1}].__editor_attr__file_name__ = file_name")
+                        exec(f"""{path}.append(objects.Object(object_type['container'],
+                                                            object_type['text'],
+                                                            object_type['image'],
+                                                            object_type['button'],
+                                                            object_type['hover_activated'],
+                                                            object_type['key_activated'],
+                                                            object_class, file_name
+                                                            ))""", locals(), globals())
+                    else:
+                        exec(f"""{path}.append(objects.Object(object_type['container'],
+                                                            object_type['text'],
+                                                            object_type['image'],
+                                                            object_type['button'],
+                                                            object_type['hover_activated'],
+                                                            object_type['key_activated'],
+                                                            object_class
+                                                            ))""", locals(), globals())
 
                     # If the object is a container
                     if object_type['container']:

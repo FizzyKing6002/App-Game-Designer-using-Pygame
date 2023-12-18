@@ -1,6 +1,5 @@
 High prio:
-    >>> Change logo of app in taskbar
-    Textures path is incorrect for project files
+    >>> Textures path is incorrect for project files
     View button in list window
     Copy objects python file to code structs
 Med prio:
