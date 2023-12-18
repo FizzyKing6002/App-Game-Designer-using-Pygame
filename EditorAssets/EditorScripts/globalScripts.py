@@ -41,6 +41,8 @@ class globalScripts:
 
         self.pause_storing_inputs = False
 
+        self.populate_obj_nums()
+
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
     def early_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
@@ -54,12 +56,36 @@ class globalScripts:
             self.refresh = False
             self.delayed_refresh = True
 
+            self.populate_obj_nums()
+
         if self.pause_storing_inputs:
             self.pause_storing_inputs = False
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
         self.check_dragging_objects()
+
+    def populate_obj_nums(self):
+        project_name = os.listdir("_CurrentProject")[0]
+        project_files = os.listdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+
+        for file in project_files:
+            if os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts/{file}"):
+                continue
+
+            file_name = file[:-3]
+            while True:
+                if file_name[-1].isdigit():
+                    file_name = file_name[:-1]
+                    continue
+                break
+
+            file_type_list = ["New_Image", "New_Container", "New_Button", "New_Text",
+                             "New_Scroll_Bar", "New_Text_Box", "New_Duplicate"]
+            if file_name in file_type_list:
+                index = file_type_list.index(file_name)
+                self.generated_obj_nums[index] = max(self.generated_obj_nums[index],
+                                                     int(file[len(file_name):-3]) + 1)
 
     def add_dialogue(self, val):
         self.dialogue.pop(0)

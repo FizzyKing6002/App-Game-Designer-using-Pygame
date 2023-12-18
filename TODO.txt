@@ -1,6 +1,4 @@
 High prio:
-    >>> Add outline to selected object
-        >>> Link objects in list window to canvas
     Textures path is incorrect for project files
     Customizer loads selected object's properties
     View button in list window
@@ -13,5 +11,4 @@ Low prio:
     Error protection -> if hasattr()
 
 bugs
-deleting then creating object with same name moves into previous position
-deleting last object, obj outline still present
+>>> deleting then creating object with same name moves into previous position
