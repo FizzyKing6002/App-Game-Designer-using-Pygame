@@ -83,8 +83,9 @@ class Main:
     def frame_update(self, global_scripts):
         if not self.clicked and self.prev_clicked and self.hovered:
             self.activated = True
-        elif global_scripts.mouse_state[0] and not self.hovered:
+        elif global_scripts.mouse_state[0] and self.activated and not self.hovered:
             self.activated = False
+            self.broadcast_value = True
 
         if self.clicked:
             self.prev_clicked = True
@@ -103,6 +104,13 @@ class Main:
                 global_scripts.add_dialogue("Object Opactity Changed")
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
+
+        if global_scripts.delayed_changed_current_path:
+            if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_opa_mod__"):
+                self.text = str(
+                    global_scripts.project_global_scripts.__editor_attr__selected_opa_mod__[0])[:5]
+            else:
+                self.text = ""
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):

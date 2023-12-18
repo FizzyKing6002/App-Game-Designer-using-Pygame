@@ -547,14 +547,7 @@ class Container:
                     pos, size, self.rot, self.opa, mouse_pos, mouse_state, key_state, text_input,
                     is_lame, is_storing_inputs, global_scripts)
 
-                # To display the outline of the selected object, get its attributes
-                if hasattr(obj, "__editor_attr__file_name__") \
-                    and hasattr(global_scripts, "__editor_attr__current_path__") \
-                        and obj.__editor_attr__file_name__ \
-                            == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
-                    global_scripts.__editor_attr__selected_pos__ = obj.pos
-                    global_scripts.__editor_attr__selected_size__ = obj.size
-                    global_scripts.__editor_attr__selected_rot__ = obj.rot
+                self.set_global_attributes(obj, global_scripts)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -569,13 +562,7 @@ class Container:
                     pos, self.size, self.rot, self.opa, mouse_pos, mouse_state,
                     key_state, text_input, is_lame, is_storing_inputs, global_scripts)
 
-                if hasattr(obj, "__editor_attr__file_name__") \
-                    and hasattr(global_scripts, "__editor_attr__current_path__") \
-                        and obj.__editor_attr__file_name__ \
-                            == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
-                    global_scripts.__editor_attr__selected_pos__ = obj.pos
-                    global_scripts.__editor_attr__selected_size__ = obj.size
-                    global_scripts.__editor_attr__selected_rot__ = obj.rot
+                self.set_global_attributes(obj, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
@@ -601,6 +588,26 @@ class Container:
         # Returns size the scroll bar should be and object_offset
         return (self.size[1] ** 2) / (max(max_y - self.object_offset, cont_max) \
                - min(min_y - self.object_offset, cont_min)), object_offset
+    
+    def set_global_attributes(self, obj, global_scripts):
+        if hasattr(obj, "__editor_attr__file_name__") \
+            and hasattr(global_scripts, "__editor_attr__current_path__") \
+                and obj.__editor_attr__file_name__ \
+                    == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
+            # Changed for object outline
+            global_scripts.__editor_attr__selected_pos__ = obj.pos
+            global_scripts.__editor_attr__selected_size__ = obj.size
+            global_scripts.__editor_attr__selected_rot__ = obj.rot
+
+            # Changed for customizer text boxes
+            if hasattr(self, "__editor_attr__file_name__"):
+                global_scripts.__editor_attr__container_name__ = self.__editor_attr__file_name__
+            else:
+                global_scripts.__editor_attr__container_name__ = "None"
+            global_scripts.__editor_attr__selected_pos_mod__ = obj.position_modifiers
+            global_scripts.__editor_attr__selected_size_mod__ = obj.size_modifiers
+            global_scripts.__editor_attr__selected_rot_mod__ = obj.rotation_modifiers
+            global_scripts.__editor_attr__selected_opa_mod__ = obj.opacity_modifiers
 
     def generate_object(self, global_scripts, name, *args):
         if len(args) == 0:

@@ -38,6 +38,8 @@ class globalScripts:
 
         self.current_path = ""
         self.current_index = None
+        self.changed_current_path = False
+        self.delayed_changed_current_path = False
 
         self.pause_storing_inputs = False
 
@@ -57,6 +59,13 @@ class globalScripts:
             self.delayed_refresh = True
 
             self.populate_obj_nums()
+
+        if self.delayed_changed_current_path:
+            self.delayed_changed_current_path = False
+
+        if self.changed_current_path:
+            self.changed_current_path = False
+            self.delayed_changed_current_path = True
 
         if self.pause_storing_inputs:
             self.pause_storing_inputs = False
@@ -269,3 +278,5 @@ class globalScripts:
         self._current_path = val
         if hasattr(self.project_global_scripts, "__editor_attr__current_path__"):
             self.project_global_scripts.__editor_attr__current_path__ = val
+
+        self.changed_current_path = True
