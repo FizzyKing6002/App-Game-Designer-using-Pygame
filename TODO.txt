@@ -1,5 +1,4 @@
 High prio:
-    >>> Textures path is incorrect for project files
     View button in list window
     Copy objects python file to code structs
 Med prio:
@@ -11,4 +10,4 @@ Low prio:
 
 bugs
 Multiple containers lead to object outline moved into wrong position
-Rotation of containers leads to object outline moved into wrong position
+>>> Rotation of containers leads to object outline moved into wrong position

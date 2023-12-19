@@ -518,8 +518,17 @@ class Container:
 
             if hasattr(self, "__editor_attr__file_name__") \
                 and hasattr(global_scripts, "__editor_attr__selected_pos__"):
-                global_scripts.__editor_attr__selected_pos__[0] += self.pos[0] - self.size[0] / 2
-                global_scripts.__editor_attr__selected_pos__[1] += self.pos[1] - self.size[1] / 2
+                if self.rot == 0:
+                    global_scripts.__editor_attr__selected_pos__[0] += self.pos[0] - self.size[0] / 2
+                    global_scripts.__editor_attr__selected_pos__[1] += self.pos[1] - self.size[1] / 2
+                else:
+                    temp_pos = global_scripts.__editor_attr__selected_pos__
+                    vector = pygame.math.Vector2(temp_pos[0] - self.size[0] / 2,
+                                                 temp_pos[1] - self.size[1] / 2).rotate(-self.rot)
+                    global_scripts.__editor_attr__selected_pos__[0] = vector[0] + self.pos[0]
+                    global_scripts.__editor_attr__selected_pos__[1] = vector[1] + self.pos[1]
+
+                    global_scripts.__editor_attr__selected_rot__ += self.rot
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
                      is_lame, is_storing_inputs,
