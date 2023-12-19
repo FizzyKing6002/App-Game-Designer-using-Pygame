@@ -9,5 +9,4 @@ Low prio:
     Error protection -> if hasattr()
 
 bugs
-Multiple containers lead to object outline moved into wrong position
->>> Rotation of containers leads to object outline moved into wrong position
+>>> Multiple containers lead to object outline moved into wrong position

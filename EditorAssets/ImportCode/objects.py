@@ -137,12 +137,14 @@ def Object(*args):
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa, mouse_pos, mouse_state, key_state,
                      text_input, is_lame, is_storing_inputs, global_scripts):
+            selected_object_found = False
+
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
                 if not is_lame and not is_storing_inputs:
                     self.frame_update(global_scripts)
-                return
+                return selected_object_found
 
             # Animations are not carried out on lame and input storing objects
             if not is_lame and not is_storing_inputs:
@@ -165,9 +167,11 @@ def Object(*args):
                         self.draw_text(window)
 
                 if hasattr(self, "container_update") and callable(self.container_update):
-                    self.container_update(window, time, mouse_pos, mouse_state,
-                                          key_state, text_input, True, False, global_scripts)
-                return
+                    selected_object_found = self.container_update(window, time, mouse_pos,
+                                                                  mouse_state, key_state,
+                                                                  text_input, True, False,
+                                                                  global_scripts)
+                return selected_object_found
             # If this object makes contained objects lame
             if hasattr(self, "objects_are_lame") and self.objects_are_lame:
                 is_lame = True
@@ -189,9 +193,11 @@ def Object(*args):
                         self.draw_text(window)
 
                 if hasattr(self, "container_update") and callable(self.container_update):
-                    self.container_update(window, time, mouse_pos, mouse_state,
-                                          key_state, text_input, is_lame, True, global_scripts)
-                return
+                    selected_object_found = self.container_update(window, time, mouse_pos,
+                                                                  mouse_state, key_state,
+                                                                  text_input, is_lame, True,
+                                                                  global_scripts)
+                return selected_object_found
             # If this object makes contained objects store inputs
             if hasattr(self, "objects_are_storing_inputs") and self.objects_are_storing_inputs:
                 is_storing_inputs = True
@@ -214,8 +220,11 @@ def Object(*args):
                     self.draw_text(window)
 
             if hasattr(self, "container_update") and callable(self.container_update):
-                self.container_update(window, time, mouse_pos, mouse_state, key_state, text_input,
-                                      is_lame, is_storing_inputs, global_scripts)
+                selected_object_found = self.container_update(window, time, mouse_pos, mouse_state,
+                                                              key_state, text_input, is_lame,
+                                                              is_storing_inputs, global_scripts)
+                
+            return selected_object_found
 
         def animate(self, time):
             for anim in self.animations:
@@ -447,8 +456,10 @@ class Container:
         # Containers that are rotated or have a scroll bar must make use of a surface
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
-            self.call_objects(window, time, mouse_pos, mouse_state, key_state, text_input,
-                              is_lame, is_storing_inputs, global_scripts, False, 0)
+            selected_object_found = self.call_objects(window, time, mouse_pos, mouse_state,
+                                                      key_state, text_input,
+                                                      is_lame, is_storing_inputs, global_scripts,
+                                                      False, 0)
 
         else:
             # Create surface matching container's size
@@ -503,9 +514,10 @@ class Container:
                 and not self.objects_are_lame and not self.objects_are_storing_inputs:
                 global_scripts.early_frame_update(time, mouse_pos, mouse_state, key_state)
 
-            self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
-                              is_lame, is_storing_inputs,
-                              global_scripts, container_has_scroll_bar, scroll_offset)
+            selected_object_found = self.call_objects(surface, time, mouse_pos, mouse_state,
+                                                      key_state, text_input,
+                                                      is_lame, is_storing_inputs, global_scripts,
+                                                      container_has_scroll_bar, scroll_offset)
 
             # Update project global scripts after objects
             if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
@@ -516,7 +528,7 @@ class Container:
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
 
-            if hasattr(self, "__editor_attr__file_name__") \
+            if selected_object_found and hasattr(self, "__editor_attr__file_name__") \
                 and hasattr(global_scripts, "__editor_attr__selected_pos__"):
                 if self.rot == 0:
                     global_scripts.__editor_attr__selected_pos__[0] += self.pos[0] - self.size[0] / 2
@@ -528,11 +540,16 @@ class Container:
                     global_scripts.__editor_attr__selected_pos__[0] = vector[0] + self.pos[0]
                     global_scripts.__editor_attr__selected_pos__[1] = vector[1] + self.pos[1]
 
-                    global_scripts.__editor_attr__selected_rot__ += self.rot
+                    if hasattr(global_scripts, "__editor_attr__selected_rot__"):
+                        global_scripts.__editor_attr__selected_rot__ += self.rot
+
+        return selected_object_found
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
                      is_lame, is_storing_inputs,
                      global_scripts, container_has_scroll_bar, scroll_offset):
+        selected_object_found = False
+
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
             # Object offset difference from last frame is added to total object offset
@@ -561,11 +578,12 @@ class Container:
                     pos[1] += self.object_offset - scroll_offset
 
                 # Calls the object
-                obj(surface, time,
-                    pos, size, self.rot, self.opa, mouse_pos, mouse_state, key_state, text_input,
-                    is_lame, is_storing_inputs, global_scripts)
+                selected_object_found = obj(surface, time, pos, size, self.rot, self.opa,
+                                            mouse_pos, mouse_state, key_state, text_input,
+                                            is_lame, is_storing_inputs, global_scripts)
 
-                self.set_global_attributes(obj, global_scripts)
+                selected_object_found = max(self.set_global_attributes(obj, global_scripts),
+                                            selected_object_found)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -576,11 +594,14 @@ class Container:
 
             for obj in self.objects:
                 # Calls the object
-                obj(surface, time,
-                    pos, self.size, self.rot, self.opa, mouse_pos, mouse_state,
-                    key_state, text_input, is_lame, is_storing_inputs, global_scripts)
+                selected_object_found = obj(surface, time, pos, self.size, self.rot, self.opa,
+                                            mouse_pos, mouse_state, key_state, text_input,
+                                            is_lame, is_storing_inputs, global_scripts)
 
-                self.set_global_attributes(obj, global_scripts)
+                selected_object_found = max(self.set_global_attributes(obj, global_scripts),
+                                            selected_object_found)
+
+        return selected_object_found
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
@@ -626,6 +647,9 @@ class Container:
             global_scripts.__editor_attr__selected_size_mod__ = obj.size_modifiers
             global_scripts.__editor_attr__selected_rot_mod__ = obj.rotation_modifiers
             global_scripts.__editor_attr__selected_opa_mod__ = obj.opacity_modifiers
+
+            return True
+        return False
 
     def generate_object(self, global_scripts, name, *args):
         if len(args) == 0:
