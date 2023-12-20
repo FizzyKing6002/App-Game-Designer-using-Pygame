@@ -1,6 +1,5 @@
 High prio:
-    >>> Clicking off text boxes doesnt save contents
-    Error protection in text boxes
+    >>> Error protection in text boxes
 Med prio:
     Rotate objects around their position origin
     Lost objects show in object list

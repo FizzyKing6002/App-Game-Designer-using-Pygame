@@ -100,6 +100,13 @@ class Main:
 
             try:
                 float(self.text)
+
+                while True:
+                    if self.text[0] == "0" and len(self.text) > 1:
+                        self.text = self.text[1:]
+                        continue
+                    break
+
                 global_scripts.customizer_input(
                     ",", self.text, "self.position_modifiers", "[[", "[")
                 global_scripts.add_dialogue("Object Moved")
