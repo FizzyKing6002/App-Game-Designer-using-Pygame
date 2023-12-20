@@ -34,6 +34,8 @@ class globalScripts:
 
         self.refresh = False
         self.delayed_refresh = False
+        self.fake_refresh = False
+        self.super_delayed_refresh = False
         self.create_new = False
 
         self.current_path = ""
@@ -59,8 +61,16 @@ class globalScripts:
         self.mouse_pos = mouse_pos
         self.mouse_state = mouse_state
 
+        if self.super_delayed_refresh:
+            self.super_delayed_refresh = False
+
         if self.delayed_refresh:
             self.delayed_refresh = False
+            self.super_delayed_refresh = True
+
+        if self.fake_refresh:
+            self.fake_refresh = False
+            self.delayed_refresh = True
 
         if self.refresh:
             self.refresh = False

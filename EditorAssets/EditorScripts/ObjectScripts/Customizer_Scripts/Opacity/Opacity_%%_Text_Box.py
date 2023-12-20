@@ -85,7 +85,7 @@ class Main:
             self.activated = True
         elif global_scripts.mouse_state[0] and self.activated and not self.hovered:
             self.activated = False
-            self.broadcast_value = True
+            global_scripts.fake_refresh = True
 
         if self.clicked:
             self.prev_clicked = True
@@ -106,7 +106,8 @@ class Main:
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
 
-        if global_scripts.super_delayed_changed_current_path:
+        if global_scripts.super_delayed_changed_current_path \
+            or global_scripts.super_delayed_refresh:
             if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_opa_mod__"):
                 self.text = str(
                     global_scripts.project_global_scripts.__editor_attr__selected_opa_mod__[1])[:5]
