@@ -136,8 +136,12 @@ def Object(*args):
 
         def __call__(self, window, time,
                      con_pos, con_size, con_rot, con_opa, mouse_pos, mouse_state, key_state,
-                     text_input, is_lame, is_storing_inputs, global_scripts):
+                     text_input, is_lame, is_storing_inputs, global_scripts, visually_inactive):
             selected_object_found = False
+            if not visually_inactive:
+                visually_inactive = hasattr(self, "__editor_attr__file_name__") \
+                                        and self.__editor_attr__file_name__ \
+                                            in global_scripts.__editor_attr__inactive__
 
             # If the object is not currently active
             if not self.active:
@@ -159,8 +163,9 @@ def Object(*args):
 
             # If the object is lame, only call the methods that are necessary
             if is_lame:
-                if self.rot == 0 or not (hasattr(self, "container_update") \
-                                         and callable(self.container_update)):
+                if (self.rot == 0 or not (hasattr(self, "container_update") \
+                                          and callable(self.container_update))) \
+                                            and not visually_inactive:
                     if hasattr(self, "draw_image") and callable(self.draw_image):
                         self.draw_image(window)
                     if hasattr(self, "draw_text") and callable(self.draw_text):
@@ -170,7 +175,7 @@ def Object(*args):
                     selected_object_found = self.container_update(window, time, mouse_pos,
                                                                   mouse_state, key_state,
                                                                   text_input, True, False,
-                                                                  global_scripts)
+                                                                  global_scripts, visually_inactive)
                 return selected_object_found
             # If this object makes contained objects lame
             if hasattr(self, "objects_are_lame") and self.objects_are_lame:
@@ -185,8 +190,9 @@ def Object(*args):
                 if hasattr(self, "call_activated") and callable(self.call_activated):
                     self.call_activated(key_state, text_input, True)
 
-                if self.rot == 0 or not (hasattr(self, "container_update") \
-                                         and callable(self.container_update)):
+                if (self.rot == 0 or not (hasattr(self, "container_update") \
+                                          and callable(self.container_update))) \
+                                            and not visually_inactive:
                     if hasattr(self, "draw_image") and callable(self.draw_image):
                         self.draw_image(window)
                     if hasattr(self, "draw_text") and callable(self.draw_text):
@@ -196,7 +202,7 @@ def Object(*args):
                     selected_object_found = self.container_update(window, time, mouse_pos,
                                                                   mouse_state, key_state,
                                                                   text_input, is_lame, True,
-                                                                  global_scripts)
+                                                                  global_scripts, visually_inactive)
                 return selected_object_found
             # If this object makes contained objects store inputs
             if hasattr(self, "objects_are_storing_inputs") and self.objects_are_storing_inputs:
@@ -212,8 +218,9 @@ def Object(*args):
 
             self.frame_update(global_scripts)
 
-            if self.rot == 0 or not (hasattr(self, "container_update") \
-                                     and callable(self.container_update)):
+            if (self.rot == 0 or not (hasattr(self, "container_update") \
+                                      and callable(self.container_update))) \
+                                        and not visually_inactive:
                 if hasattr(self, "draw_image") and callable(self.draw_image):
                     self.draw_image(window)
                 if hasattr(self, "draw_text") and callable(self.draw_text):
@@ -222,8 +229,9 @@ def Object(*args):
             if hasattr(self, "container_update") and callable(self.container_update):
                 selected_object_found = self.container_update(window, time, mouse_pos, mouse_state,
                                                               key_state, text_input, is_lame,
-                                                              is_storing_inputs, global_scripts)
-                
+                                                              is_storing_inputs, global_scripts,
+                                                              visually_inactive)
+
             return selected_object_found
 
         def animate(self, time):
@@ -424,8 +432,8 @@ class Container:
         self.object_offset = 0
         self.prev_scroll_offset = 0
 
-    def container_update(self, window, time, mouse_pos, mouse_state,
-                         key_state, text_input, is_lame, is_storing_inputs, global_scripts):
+    def container_update(self, window, time, mouse_pos, mouse_state, key_state, text_input,
+                         is_lame, is_storing_inputs, global_scripts, visually_inactive):
         # In the canvas user objects are stored therefore the project global scripts should be used
         if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__:
             global_scripts = global_scripts.project_global_scripts
@@ -459,7 +467,7 @@ class Container:
             selected_object_found = self.call_objects(window, time, mouse_pos, mouse_state,
                                                       key_state, text_input,
                                                       is_lame, is_storing_inputs, global_scripts,
-                                                      False, 0)
+                                                      False, 0, visually_inactive)
 
         else:
             # Create surface matching container's size
@@ -481,21 +489,22 @@ class Container:
                     vector[0] + self.size[0] / 2 - rotated_window.get_width() / 2,
                     vector[1] + self.size[1] / 2 - rotated_window.get_height() / 2))
 
-                # Save variables for reassignment
-                temp_pos = self.pos
-                temp_rot = self.rot
-                self.pos = [self.size[0] / 2, self.size[1] / 2]
-                self.rot = 0
+                if not visually_inactive:
+                    # Save variables for reassignment
+                    temp_pos = self.pos
+                    temp_rot = self.rot
+                    self.pos = [self.size[0] / 2, self.size[1] / 2]
+                    self.rot = 0
 
-                # Draw the image of the container onto the surface
-                if hasattr(self, "draw_image") and callable(self.draw_image):
-                    self.draw_image(surface)
-                if hasattr(self, "draw_text") and callable(self.draw_text):
-                    self.draw_text(surface)
+                    # Draw the image of the container onto the surface
+                    if hasattr(self, "draw_image") and callable(self.draw_image):
+                        self.draw_image(surface)
+                    if hasattr(self, "draw_text") and callable(self.draw_text):
+                        self.draw_text(surface)
 
-                # Reassign variables
-                self.pos = temp_pos
-                self.rot = temp_rot
+                    # Reassign variables
+                    self.pos = temp_pos
+                    self.rot = temp_rot
 
             # Recalculate mouse position for surface as
             # object positions are changed to be relative to the surface
@@ -517,7 +526,8 @@ class Container:
             selected_object_found = self.call_objects(surface, time, mouse_pos, mouse_state,
                                                       key_state, text_input,
                                                       is_lame, is_storing_inputs, global_scripts,
-                                                      container_has_scroll_bar, scroll_offset)
+                                                      container_has_scroll_bar, scroll_offset,
+                                                      visually_inactive)
 
             # Update project global scripts after objects
             if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
@@ -531,8 +541,10 @@ class Container:
             if selected_object_found and hasattr(self, "__editor_attr__file_name__") \
                 and hasattr(global_scripts, "__editor_attr__selected_pos__"):
                 if self.rot == 0:
-                    global_scripts.__editor_attr__selected_pos__[0] += self.pos[0] - self.size[0] / 2
-                    global_scripts.__editor_attr__selected_pos__[1] += self.pos[1] - self.size[1] / 2
+                    global_scripts.__editor_attr__selected_pos__[0] \
+                        += self.pos[0] - self.size[0] / 2
+                    global_scripts.__editor_attr__selected_pos__[1] \
+                        += self.pos[1] - self.size[1] / 2
                 else:
                     temp_pos = global_scripts.__editor_attr__selected_pos__
                     vector = pygame.math.Vector2(temp_pos[0] - self.size[0] / 2,
@@ -547,7 +559,7 @@ class Container:
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
                      is_lame, is_storing_inputs,
-                     global_scripts, container_has_scroll_bar, scroll_offset):
+                     global_scripts, container_has_scroll_bar, scroll_offset, visually_inactive):
         selected_object_found = False
 
         if container_has_scroll_bar:
@@ -580,7 +592,8 @@ class Container:
                 # Calls the object
                 selected_object_found = obj(surface, time, pos, size, self.rot, self.opa,
                                             mouse_pos, mouse_state, key_state, text_input,
-                                            is_lame, is_storing_inputs, global_scripts)
+                                            is_lame, is_storing_inputs, global_scripts,
+                                            visually_inactive)
 
                 selected_object_found = max(self.set_global_attributes(obj, global_scripts),
                                             selected_object_found)
@@ -596,7 +609,8 @@ class Container:
                 # Calls the object
                 selected_object_found = obj(surface, time, pos, self.size, self.rot, self.opa,
                                             mouse_pos, mouse_state, key_state, text_input,
-                                            is_lame, is_storing_inputs, global_scripts)
+                                            is_lame, is_storing_inputs, global_scripts,
+                                            visually_inactive)
 
                 selected_object_found = max(self.set_global_attributes(obj, global_scripts),
                                             selected_object_found)
@@ -633,6 +647,7 @@ class Container:
             and hasattr(global_scripts, "__editor_attr__current_path__") \
                 and obj.__editor_attr__file_name__ \
                     == global_scripts.__editor_attr__current_path__.split("/")[-1][:-3]:
+
             # Changed for object outline
             global_scripts.__editor_attr__selected_pos__ = obj.pos
             global_scripts.__editor_attr__selected_size__ = obj.size

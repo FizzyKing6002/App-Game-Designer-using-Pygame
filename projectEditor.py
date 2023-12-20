@@ -117,6 +117,7 @@ class Main:
             f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
         self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
         self.editor_global_scripts.project_global_scripts.__editor_attr__current_path__ = ""
+        self.editor_global_scripts.project_global_scripts.__editor_attr__inactive__ = []
 
         # Ensures project object modules are saved so they can be reloaded later
         self.project_obj_files = []
@@ -176,6 +177,7 @@ class Main:
         self.editor_global_scripts.project_global_scripts = global_scripts.globalScripts()
         self.editor_global_scripts.project_global_scripts.__editor_attr__current_path__ \
             = self.editor_global_scripts.current_path
+        self.editor_global_scripts.project_global_scripts.__editor_attr__inactive__ = []
 
         # Create a pointer list to show whether modules are still being used
         pointer_list = []
@@ -330,7 +332,9 @@ class Main:
                 mouse_pos, mouse_state, key_state, text_input,
                 # The objects should not be lame by default
                 False, False,
-                self.editor_global_scripts)
+                self.editor_global_scripts,
+                # Objects should be visible by default
+                False)
 
         # Calls global update function after objects
         self.editor_global_scripts.late_frame_update(

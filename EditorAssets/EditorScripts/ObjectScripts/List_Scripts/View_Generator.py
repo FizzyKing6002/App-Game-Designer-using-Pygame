@@ -81,15 +81,38 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.one_time = True
+        self.obj_name = None
+
         self.clicked = False
         self.prev_clicked = False
         self.hovered = False
 
+        self.invisible = False
+
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
+        if self.one_time:
+            self.one_time = False
+            self.obj_name = self.generated_value
+
         if not self.clicked and self.prev_clicked and self.hovered:
-            print("Invisible")
+            self.invisible = not self.invisible
+
+            if self.invisible:
+                if self.obj_name not in global_scripts.inactive:
+                    global_scripts.inactive.append(self.obj_name)
+            else:
+                if self.obj_name in global_scripts.inactive:
+                    global_scripts.inactive.remove(self.obj_name)
+
+        if self.obj_name not in global_scripts.inactive:
+            self.invisible = False
+            self.img_dir = "EditorAssets/Textures/List_Icons/view.png"
+        if self.obj_name in global_scripts.inactive:
+            self.invisible = True
+            self.img_dir = "EditorAssets/Textures/List_Icons/hide.png"
 
         if self.hovered:
             self.opa = 0.5

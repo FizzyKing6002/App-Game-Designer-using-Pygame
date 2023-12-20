@@ -44,6 +44,8 @@ class globalScripts:
 
         self.pause_storing_inputs = False
 
+        self.inactive = []
+
         self.one_time = True
 
 
@@ -79,6 +81,8 @@ class globalScripts:
 
         if self.pause_storing_inputs:
             self.pause_storing_inputs = False
+
+        self.project_global_scripts.__editor_attr__inactive__ = self.inactive
 
     # Late update is called every frame after all objects have been called
     def late_frame_update(self, elapsed_time, mouse_pos, mouse_state, key_state):
