@@ -1,7 +1,9 @@
 High prio:
-    >>> View button in list window
-    Copy objects python file to code structs
+    >>> Copy objects python file to code structs
+    Clicking off text boxes doesnt save contents
+    Error protection in text boxes
 Med prio:
+    Rotate objects around their position origin
     Lost objects show in object list
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type

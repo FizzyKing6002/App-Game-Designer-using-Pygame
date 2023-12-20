@@ -24,6 +24,7 @@ Classes:
 import ctypes
 import os
 import importlib
+import shutil
 
 import pygame
 
@@ -90,14 +91,19 @@ class Main:
         # Change the icon in the taskbar
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(window_icon_path)
 
-        self.fps = 120
+        self.fps = 60
         self.clock = pygame.time.Clock()
 
         self.window = pygame.display.set_mode(window_size, pygame.RESIZABLE)
+
         self.objects = []
 
         # Creates an instance of the class located within globalScripts.py
         self.global_scripts = globalScripts.globalScripts()
+
+        # Ensures the directories exist before importing objects
+        if not os.path.isdir("Assets/Scripts/ObjectScripts"):
+            os.mkdir("Assets/Scripts/ObjectScripts")
 
     def __call__(self):
         # Objects are loaded before the program loop begins
@@ -105,15 +111,19 @@ class Main:
         self.main_loop()
 
     def load_objects(self):
+        # Imports all the objects from the object scripts folders and composes a list of these files
+        # Passes path from this file to the folders
+        obj_files = self.import_objects(
+            "Assets/Scripts/ObjectScripts/", [])
+
+        # Allows the object files to be accessible from other files
+        self.global_scripts.object_files = obj_files
+
         # Creates a list of lists, where each list's first item is the container name and
         # the rest of the items are object's file names that belong to the specified container
         objects_list = []
-        # Imports all the objects from the object scripts folder and composes a list of these files
-        # Passes path from this file to the folder
-        object_files = self.import_objects("Assets/Scripts/ObjectScripts/", [])
-        self.global_scripts.object_files = object_files
 
-        for file in object_files:
+        for file in obj_files:
             # Gets the container name attribute from the current file
             container_names = file.container_name
 
@@ -122,21 +132,7 @@ class Main:
                 container_names = [container_names]
 
             for container_name in container_names:
-                # Base case - new list should be created if none already exist
-                if len(objects_list) == 0:
-                    objects_list.append([container_name, file])
-                    continue
-                # Searches through existing lists for matching container names
-                for container_type in objects_list:
-                    # When matching container name is found, adds current file name to the list
-                    if container_name == container_type[0]:
-                        container_type.append(file)
-                        break
-
-                    # If matching container name is not found, creates a new list
-                    if container_type == objects_list[-1]:
-                        objects_list.append([container_name, file])
-                        break
+                self.fill_container_list(objects_list, file, container_name)
 
         # Calls method to create objects using the ordered list just created
         self.recursive_create_objects(objects_list, None, "self.objects")
@@ -151,18 +147,36 @@ class Main:
                     self.import_objects(f"{path}{file}/", object_files)
                 continue
 
-            # Append the imported files into a list so they can be acessed
-            # importlib.import_module does not import the file into globals so this is neccessary
-            object_files.append(importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}"))
+            # importlib.import_module returns the imported module
+            module = importlib.import_module(f"{path.replace('/', '.')}{file[:-3]}")
+
+            object_files.append(module)
             del file
 
         return object_files
 
-    def recursive_create_objects(self, file_list, val, path):
+    def fill_container_list(self, objects_list, file, container_name):
+        # Base case - new list should be created if none already exist
+        if len(objects_list) == 0:
+            objects_list.append([container_name, file])
+            return
+        # Searches through existing lists for matching container names
+        for container_type in objects_list:
+            # When matching container name is found, adds current file name to the list
+            if container_name == container_type[0]:
+                container_type.append(file)
+                break
+
+            # If matching container name is not found, creates a new list
+            if container_type == objects_list[-1]:
+                objects_list.append([container_name, file])
+                break
+
+    def recursive_create_objects(self, file_list, target_container, path):
         # Iterates through lists of files belonging to different containers
         for container_type in file_list:
             # If the container for the objects matches the target container name
-            if container_type[0] == val:
+            if container_type[0] == target_container:
                 # Gets the objects that should belong to this container
                 for i, file in enumerate(container_type):
                     # Ignore the container name as it is not an object
@@ -206,7 +220,8 @@ class Main:
         mouse_state[1] = [mouse_state[1], mouse_wheel_movement]
 
         # Calls global update function before objects
-        self.global_scripts.early_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.global_scripts.early_frame_update(
+            elapsed_time, mouse_pos, mouse_state, key_state)
 
         for obj in self.objects:
             # Calls the object's __call__ method
@@ -214,10 +229,13 @@ class Main:
                 # Rotation of window is zero, opacity is one
                 0, 1,
                 mouse_pos, mouse_state, key_state, text_input,
+                # The objects should not be lame by default
+                False, False,
                 self.global_scripts)
 
         # Calls global update function after objects
-        self.global_scripts.late_frame_update(elapsed_time, mouse_pos, mouse_state, key_state)
+        self.global_scripts.late_frame_update(
+            elapsed_time, mouse_pos, mouse_state, key_state)
 
     def main_loop(self):
         # Objects are called once before the program begins so that everything is initialised

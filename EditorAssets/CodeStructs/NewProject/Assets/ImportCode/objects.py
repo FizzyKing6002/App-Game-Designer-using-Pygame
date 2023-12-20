@@ -120,16 +120,30 @@ def Object(*args):
                 # Initialises image class as the __init__ is overwritten
                 Image.__init__(self)
 
+            if button:
+                # Initialises image class as the __init__ is overwritten
+                Button.__init__(self)
+            if hover_activated:
+                # Initialises image class as the __init__ is overwritten
+                Hover_Activated.__init__(self)
+            if key_activated:
+                # Initialises image class as the __init__ is overwritten
+                Key_Activated.__init__(self)
+
         def __call__(self, window, time,
-                     con_pos, con_size, con_rot, con_opa,
-                     mouse_pos, mouse_state, key_state, text_input, global_scripts):
+                     con_pos, con_size, con_rot, con_opa, mouse_pos, mouse_state, key_state,
+                     text_input, is_lame, is_storing_inputs, global_scripts):
             # If the object is not currently active
             if not self.active:
                 # Call the frame update method so that it is able to become active again if needed
-                self.frame_update(global_scripts)
+                if not is_lame and not is_storing_inputs:
+                    self.frame_update(global_scripts)
                 return
 
-            self.animate(time)
+            # Animations are not carried out on lame and input storing objects
+            if not is_lame and not is_storing_inputs:
+                self.animate(time)
+
             self.calc_attr(con_pos, con_size, con_rot, con_opa)
             # Redefine position of mouse before checking hitbox collisions or calling child objects
             mouse_pos = self.calc_mouse_pos(mouse_pos)
@@ -137,29 +151,72 @@ def Object(*args):
             # hasattr() checks whether the attribute exists,
             # callable() checks whether the attribute is a method or not
 
+            # If the object is lame, only call the methods that are necessary
+            if is_lame:
+                if self.rot == 0 or not (hasattr(self, "container_update") \
+                                         and callable(self.container_update)):
+                    if hasattr(self, "draw_image") and callable(self.draw_image):
+                        self.draw_image(window)
+                    if hasattr(self, "draw_text") and callable(self.draw_text):
+                        self.draw_text(window)
+
+                if hasattr(self, "container_update") and callable(self.container_update):
+                    self.container_update(window, time, mouse_pos, mouse_state, key_state,
+                                          text_input, True, False, global_scripts)
+                return
+            # If this object makes contained objects lame
+            if hasattr(self, "objects_are_lame") and self.objects_are_lame:
+                is_lame = True
+
+            # If the object is storing inputs, only call the methods that are necessary
+            if is_storing_inputs:
+                if hasattr(self, "call_clicked") and callable(self.call_clicked):
+                    self.call_clicked(mouse_pos, mouse_state, True)
+                elif hasattr(self, "call_hovered") and callable(self.call_hovered):
+                    self.call_hovered(mouse_pos, True)
+                if hasattr(self, "call_activated") and callable(self.call_activated):
+                    self.call_activated(key_state, text_input, True)
+
+                if self.rot == 0 or not (hasattr(self, "container_update") \
+                                         and callable(self.container_update)):
+                    if hasattr(self, "draw_image") and callable(self.draw_image):
+                        self.draw_image(window)
+                    if hasattr(self, "draw_text") and callable(self.draw_text):
+                        self.draw_text(window)
+
+                if hasattr(self, "container_update") and callable(self.container_update):
+                    self.container_update(window, time, mouse_pos, mouse_state, key_state,
+                                          text_input, is_lame, True, global_scripts)
+                return
+            # If this object makes contained objects store inputs
+            if hasattr(self, "objects_are_storing_inputs") and self.objects_are_storing_inputs:
+                is_storing_inputs = True
+
             if hasattr(self, "call_clicked") and callable(self.call_clicked):
-                self.call_clicked(mouse_pos, mouse_state)
+                self.call_clicked(mouse_pos, mouse_state, False)
             elif hasattr(self, "call_hovered") and callable(self.call_hovered):
-                self.call_hovered(mouse_pos)
+                self.call_hovered(mouse_pos, False)
 
             if hasattr(self, "call_activated") and callable(self.call_activated):
-                self.call_activated(key_state, text_input)
+                self.call_activated(key_state, text_input, False)
 
             self.frame_update(global_scripts)
 
-            if hasattr(self, "draw_image") and callable(self.draw_image):
-                self.draw_image(window)
-            if hasattr(self, "draw_text") and callable(self.draw_text):
-                self.draw_text(window)
+            if self.rot == 0 or not (hasattr(self, "container_update") \
+                                     and callable(self.container_update)):
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(window)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(window)
 
             if hasattr(self, "container_update") and callable(self.container_update):
-                self.container_update(window, time, mouse_pos, mouse_state,
-                                      key_state, text_input, global_scripts)
+                self.container_update(window, time, mouse_pos, mouse_state, key_state, text_input,
+                                      is_lame, is_storing_inputs, global_scripts)
 
         def animate(self, time):
             for anim in self.animations:
                 # If the animation already completed
-                if (anim[0] == 2 and not anim[8]) or (anim[0] == 0 and anim[8]):
+                if (anim[0] == 2 and not anim[8]) or (anim[0] == 0 and anim[8]) or anim[0] == 3:
                     continue
 
                 # Update animation
@@ -198,6 +255,23 @@ def Object(*args):
                 if anim[7] == name:
                     # Delete the animation
                     self.animations.remove(anim)
+
+        def pause_resume_animation(self, name, *args):
+            for anim in self.animations:
+                # If the target animation is found
+                if anim[7] == name:
+                    if len(args) > 0:
+                        if args[0]:
+                            # Flag the animation as paused
+                            anim[0] = 3
+                        else:
+                            # Flag the animation as ongoing
+                            anim[0] = 1
+                    else:
+                        if anim[0] == 3:
+                            anim[0] = 1
+                        else:
+                            anim[0] = 3
 
         def progress_animation(self, name, time):
             for anim in self.animations:
@@ -337,8 +411,8 @@ class Container:
         self.object_offset = 0
         self.prev_scroll_offset = 0
 
-    def container_update(self, window, time, mouse_pos, mouse_state,
-                         key_state, text_input, global_scripts):
+    def container_update(self, window, time, mouse_pos, mouse_state, key_state, text_input,
+                         is_lame, is_storing_inputs, global_scripts):
         # Objects are sorted by their update_priority attribute
         self.objects.sort(key=lambda x: x.update_priority, reverse=False)
 
@@ -366,7 +440,7 @@ class Container:
         if self.objects_visible_outside_container \
             and not container_has_scroll_bar and self.rot == 0:
             self.call_objects(window, time, mouse_pos, mouse_state, key_state, text_input,
-                              global_scripts, False, 0)
+                              is_lame, is_storing_inputs, global_scripts, False, 0)
 
         else:
             # Create surface matching container's size
@@ -388,6 +462,22 @@ class Container:
                     vector[0] + self.size[0] / 2 - rotated_window.get_width() / 2,
                     vector[1] + self.size[1] / 2 - rotated_window.get_height() / 2))
 
+                # Save variables for reassignment
+                temp_pos = self.pos
+                temp_rot = self.rot
+                self.pos = [self.size[0] / 2, self.size[1] / 2]
+                self.rot = 0
+
+                # Draw the image of the container onto the surface
+                if hasattr(self, "draw_image") and callable(self.draw_image):
+                    self.draw_image(surface)
+                if hasattr(self, "draw_text") and callable(self.draw_text):
+                    self.draw_text(surface)
+
+                # Reassign variables
+                self.pos = temp_pos
+                self.rot = temp_rot
+
             # Recalculate mouse position for surface as
             # object positions are changed to be relative to the surface
             mouse_pos = [
@@ -395,14 +485,26 @@ class Container:
                 mouse_pos[1] - (self.pos[1] - self.size[1] / 2)
             ]
 
+            # Do not allow interactions with objects when mouse is outside container
+            if mouse_pos[0] < 0 or mouse_pos[1] < 0 \
+                or mouse_pos[0] > self.size[0] or mouse_pos[1] > self.size[1]:
+                mouse_pos.append(None)
+
+            # Update project global scripts before objects
+            if hasattr(self, "__is_editor_canvas__") and self.__is_editor_canvas__ \
+                and not self.objects_are_lame and not self.objects_are_storing_inputs:
+                global_scripts.early_frame_update(time, mouse_pos, mouse_state, key_state)
+
             self.call_objects(surface, time, mouse_pos, mouse_state, key_state, text_input,
-                              global_scripts, container_has_scroll_bar, scroll_offset)
+                              is_lame, is_storing_inputs, global_scripts, container_has_scroll_bar,
+                              scroll_offset)
 
             # Draws surface to screen
             surface = pygame.transform.rotate(surface, self.rot)
             draw_surface(self, window, surface)
 
     def call_objects(self, surface, time, mouse_pos, mouse_state, key_state, text_input,
+                     is_lame, is_storing_inputs,
                      global_scripts, container_has_scroll_bar, scroll_offset):
         if container_has_scroll_bar:
             scroll_bar_size, object_offset = self.calc_size_scroll_bar()
@@ -432,9 +534,8 @@ class Container:
                     pos[1] += self.object_offset - scroll_offset
 
                 # Calls the object
-                obj(surface, time,
-                    pos, size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
+                obj(surface, time, pos, size, self.rot, self.opa, mouse_pos, mouse_state,
+                    key_state, text_input, is_lame, is_storing_inputs, global_scripts)
 
         else:
             # Calculates the position of the object depending on whether a surface was used
@@ -445,9 +546,8 @@ class Container:
 
             for obj in self.objects:
                 # Calls the object
-                obj(surface, time,
-                    pos, self.size, 0, self.opa,
-                    mouse_pos, mouse_state, key_state, text_input, global_scripts)
+                obj(surface, time, pos, self.size, self.rot, self.opa, mouse_pos, mouse_state,
+                    key_state, text_input, is_lame, is_storing_inputs, global_scripts)
 
     def calc_size_scroll_bar(self):
         # Min and max y are set to the bounds of the container
@@ -593,23 +693,69 @@ class Button:
             Handles hovering over object logic if the object is both a button and hover_activated
     """
 
-    def call_clicked(self, mouse_pos, mouse_state):
+    def __init__(self):
+        self.stored_click = [False, False, False]
+        self.stored_hover = False
+
+    def call_clicked(self, mouse_pos, mouse_state, is_storing_inputs):
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
+
+        left_click_called = False
+        middle_click_called = False
+        right_click_called = False
+        hovered_called = False
+
         # Scroll bars need to know position of mouse if they are being dragged around
-        if collided or (self.is_scroll_bar and self.init_mouse_pos is not None):
+        if (collided and len(mouse_pos) != 3) \
+            or (self.is_scroll_bar and self.init_mouse_pos is not None):
             # Call the hoverered_over method from here rather than Hover Activated class
             # to save collision processing
             if hasattr(self, "call_hovered") and callable(self.call_hovered):
-                self.hovered_over(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_hover = True
+                else:
+                    self.hovered_over()
+                    hovered_called = True
 
             # 0 = left mouse button, 1 = middle mouse button, 2 = right mouse button
             if mouse_state[0]:
-                self.left_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[0] = True
+                else:
+                    self.left_clicked()
+                    left_click_called = True
             if mouse_state[1][0]:
-                self.middle_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[1] = True
+                else:
+                    self.middle_clicked()
+                    middle_click_called = True
             if mouse_state[2]:
-                self.right_clicked(mouse_pos)
+                # If the object is storing inputs, save the input
+                if is_storing_inputs:
+                    self.stored_click[2] = True
+                else:
+                    self.right_clicked()
+                    right_click_called = True
+
+        if (max(self.stored_click) or self.stored_hover) and not is_storing_inputs:
+            if hasattr(self, "call_hovered") and callable(self.call_hovered) \
+                and self.stored_hover and not hovered_called:
+                self.hovered_over()
+
+            if self.stored_click[0] and not left_click_called:
+                self.left_clicked()
+            if self.stored_click[1] and not middle_click_called:
+                self.middle_clicked()
+            if self.stored_click[2] and not right_click_called:
+                self.right_clicked()
+
+            self.stored_hover = False
+            self.stored_click = [False, False, False]
 
 class Hover_Activated:
     """
@@ -618,11 +764,31 @@ class Hover_Activated:
             Calls the object's hovered_over method if the object was hovered over this frame
     """
 
-    def call_hovered(self, mouse_pos):
+    def __init__(self):
+        self.stored_hover = False
+
+    def call_hovered(self, mouse_pos, is_storing_inputs):
+        # If the object shouldn't be able to be hovered over
+        if len(mouse_pos) == 3:
+            return
+
         # Get whether the object's hitbox has collided with the mouse
         collided = hitbox_collision(self, mouse_pos)
+
+        hovered_called = False
+
         if collided:
-            self.hovered_over(mouse_pos)
+            # If the object is storing inputs, save the input
+            if is_storing_inputs:
+                self.stored_hover = True
+            else:
+                self.hovered_over()
+                hovered_called = True
+
+        if self.stored_hover and not is_storing_inputs:
+            if not hovered_called:
+                self.hovered_over()
+            self.stored_hover = False
 
 def hitbox_collision(self, mouse_pos):
     # If the mouse position is within the bounds of the object's hitbox
@@ -641,10 +807,24 @@ class Key_Activated:
             and that should activate the object
     """
 
-    def call_activated(self, key_state, text_input):
-        # List of keys that activate the object that have been pressed since the last frame
+    def __init__(self):
+        self.stored_keys = []
+        self.stored_keys_has_text_input = False
+
+    def call_activated(self, key_state, text_input, is_storing_inputs):
+        # Defining list of keys that activate the object that have been pressed since the last frame
         if hasattr(self, "uses_text_input") and self.uses_text_input:
-            activated_keys = [text_input]
+            if is_storing_inputs:
+                # Store the text input into the stored keys list
+                if text_input != "" or len(self.stored_keys) == 0:
+                    if self.stored_keys_has_text_input:
+                        self.stored_keys[0] = text_input
+                    else:
+                        self.stored_keys.insert(0, text_input)
+                        self.stored_keys_has_text_input = True
+                activated_keys = []
+            else:
+                activated_keys = [text_input]
         else:
             activated_keys = []
 
@@ -666,7 +846,23 @@ class Key_Activated:
 
         # Call the key input function with each key that has been pressed
         # and should be reacted to, passing the name of the key
-        self.key_input(activated_keys)
+        if is_storing_inputs or len(self.stored_keys) > 0:
+            if self.stored_keys_has_text_input:
+                index = 0
+            else:
+                index = 1
+            for key in activated_keys:
+                if key not in self.stored_keys[index:] and key != "":
+                    self.stored_keys.append(key)
+
+        if not is_storing_inputs:
+            if len(self.stored_keys) > 0:
+                self.key_input(self.stored_keys)
+                self.stored_keys = []
+                self.stored_keys_has_text_input = False
+
+            elif len(activated_keys) > 0:
+                self.key_input(activated_keys)
 
 # None classes are throwaways for conditional inheritance
 class None1:
