@@ -1,8 +1,6 @@
 High prio:
 Med prio:
-    >>> Object outline is constant thickness
-    Help button
-    Add cursor to text boxes
-    Add new boxes to customizer window depending on object type
+    >>> Texture changes
 Low prio:
     Error protection -> if hasattr()
+    Help button
