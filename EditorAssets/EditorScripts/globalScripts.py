@@ -19,7 +19,12 @@ class globalScripts:
         self.menu_state = 0
         self.change_state = False
 
-        self.dialogue = ["Project Editor opened", "[Project Name] loaded"]
+        project_dir = os.listdir("_CurrentProject")
+        if len(project_dir) > 0:
+            project_name = os.listdir("_CurrentProject")[0]
+        else:
+            project_name = "NewProject"
+        self.dialogue = ["Project Editor Opened", f"{project_name} Loaded"]
 
         self.dragging = False
         self.key_dragging = False
