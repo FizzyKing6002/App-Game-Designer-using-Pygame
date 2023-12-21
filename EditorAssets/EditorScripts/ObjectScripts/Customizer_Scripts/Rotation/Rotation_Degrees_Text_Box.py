@@ -117,7 +117,7 @@ class Main:
             or global_scripts.super_delayed_refresh:
             if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_rot_mod__"):
                 self.text = str(
-                    global_scripts.project_global_scripts.__editor_attr__selected_rot_mod__[1])[:5]
+                    global_scripts.project_global_scripts.__editor_attr__selected_rot_mod__[0])[:5]
             else:
                 self.text = ""
 

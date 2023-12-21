@@ -367,8 +367,19 @@ def Object(*args):
 
             # Change the position of the object depending on
             # which part of the object the user wants the position to refer to
-            self.pos[0] -= (self.position_origin[0] - 0.5) * self.size[0]
-            self.pos[1] -= (self.position_origin[1] - 0.5) * self.size[1]
+            origin_point = [
+                (self.position_origin[0] - 0.5) * self.size[0],
+                (self.position_origin[1] - 0.5) * self.size[1]]
+            if self.rot == 0:
+                self.pos[0] -= origin_point[0]
+                self.pos[1] -= origin_point[1]
+            else:
+                # Rotates the object about the position origin
+                rotated_origin_to_center = pygame.math.Vector2(origin_point[0],
+                                                               origin_point[1])\
+                                                                .rotate(-self.rot)
+                self.pos[0] -= rotated_origin_to_center[0]
+                self.pos[1] -= rotated_origin_to_center[1]
 
             # Resizes the object based upon its limits of ratio of x and y
             if hasattr(self, "min_max_size"):
