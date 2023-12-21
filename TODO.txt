@@ -1,6 +1,5 @@
 High prio:
 Med prio:
-    >>> Texture changes
 Low prio:
     Error protection -> if hasattr()
     Help button
