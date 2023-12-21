@@ -72,7 +72,9 @@ class Main:
 
         self.one_time = True
         self.object_path = None
+        self.file_name = ""
         self.object_index = 0
+        self.homeless = False
 
         self.rename = False
 
@@ -82,9 +84,11 @@ class Main:
             self.one_time = False
 
             self.object_path = self.generated_value[0]
+            self.file_name = self.object_path.split("/")[-1][:-3]
             self.object_index = self.generated_value[1]
             self.text += "| " * self.generated_value[2]
-            self.text += self.object_path.split("/")[-1][:-3]
+            self.text += self.file_name
+            self.homeless = self.generated_value[3]
             self.generate_object(global_scripts, "List_Text_Edit")
 
         if global_scripts.menu_state != 0:
@@ -98,7 +102,19 @@ class Main:
         if not self.clicked and self.prev_clicked and self.hovered:
             global_scripts.current_path = self.object_path
             global_scripts.current_index = self.object_index
+
+            if self.homeless:
+                global_scripts.project_global_scripts.__editor_attr__selected_size__ = [0, 0]
+                global_scripts.project_global_scripts.__editor_attr__container_name__ = "Error"
+                global_scripts.project_global_scripts.__editor_attr__selected_pos_mod__ \
+                    = [[0, 0], [0, 0]]
+                global_scripts.project_global_scripts.__editor_attr__selected_size_mod__ \
+                    = [[0, 0], [0, 0]]
+                global_scripts.project_global_scripts.__editor_attr__selected_rot_mod__ = [0, 0]
+                global_scripts.project_global_scripts.__editor_attr__selected_opa_mod__ = [0, 0]
+
             self.selected = True
+
         # If the user clicks off of the text box
         elif global_scripts.mouse_state[0] and not self.hovered and self.activated:
             self.activated = False
@@ -106,7 +122,8 @@ class Main:
 
         if self.rename:
             self.rename = False
-            global_scripts.rename_file(self.object_path, self.text[1:])
+            global_scripts.rename_file(self.object_path,
+                                       self.text[1 + 2 * self.generated_value[2]:])
 
         if self.hovered:
             self.object_colour = (149, 152, 161)

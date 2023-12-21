@@ -1,12 +1,10 @@
 High prio:
-    >>> Error protection in text boxes
 Med prio:
+    >>> Lost objects show in object list
     Rotate objects around their position origin
-    Lost objects show in object list
+    Object outline is constant thickness
+    Help button
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type
 Low prio:
     Error protection -> if hasattr()
-
-bugs
-Text box backspace multiple times while playtesting

@@ -25,6 +25,7 @@ import ctypes
 import os
 import importlib
 import shutil
+import copy
 
 import pygame
 
@@ -214,8 +215,6 @@ class Main:
         self.editor_global_scripts.container_list = objects_list
 
         # Calls method to create objects using the ordered list just created
-        # self.objects[0] goes into the background object
-        # .objects[0] goes into the canvas object (AS OBJECTS HAVE NOT BEEN SORTED YET)
         self.recursive_create_objects(objects_list, None,
                                       "self.objects[0].objects[-2].objects[0].objects")
 

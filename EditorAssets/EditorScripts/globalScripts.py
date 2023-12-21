@@ -35,6 +35,7 @@ class globalScripts:
         self.refresh = False
         self.delayed_refresh = False
         self.fake_refresh = False
+        self.fake_delayed_refresh = False
         self.super_delayed_refresh = False
         self.create_new = False
 
@@ -64,13 +65,17 @@ class globalScripts:
         if self.super_delayed_refresh:
             self.super_delayed_refresh = False
 
-        if self.delayed_refresh:
-            self.delayed_refresh = False
+        if self.fake_delayed_refresh:
+            self.fake_delayed_refresh = False
             self.super_delayed_refresh = True
 
         if self.fake_refresh:
             self.fake_refresh = False
-            self.delayed_refresh = True
+            self.fake_delayed_refresh = True
+
+        if self.delayed_refresh:
+            self.delayed_refresh = False
+            self.super_delayed_refresh = True
 
         if self.refresh:
             self.refresh = False
@@ -286,11 +291,11 @@ class globalScripts:
             new_path += f"{directory}/"
         new_path = new_path[:-1]
 
+        self.refresh = True
         if os.path.exists(new_path):
             self.add_dialogue("File Already Exists")
         else:
             os.rename(path, new_path)
-            self.refresh = True
             self.add_dialogue("Object Renamed")
 
     @property

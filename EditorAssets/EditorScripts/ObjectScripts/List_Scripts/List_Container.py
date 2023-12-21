@@ -66,9 +66,8 @@ class Main:
         # Additional attributes:
         self.one_time = True
         self.object_counter = 0
+        self.reached_indexes = []
         self.next_time = False
-
-        self.blah = None
 
 
     # Called every frame, passes the object of globalScripts.py class
@@ -79,7 +78,12 @@ class Main:
             self.objects = [self.objects[-1]]
 
             self.object_counter = 0
-            self.create_objects_in_list(global_scripts, None, 0)
+            self.reached_indexes = []
+            self.create_objects_in_list(global_scripts, None, 0, False)
+
+            for i, container_type in enumerate(global_scripts.container_list):
+                if i not in self.reached_indexes:
+                    self.create_objects_in_list(global_scripts, container_type[0], 0, True)
 
         if self.one_time:
             self.one_time = False
@@ -109,19 +113,28 @@ class Main:
         pass
 
     # Additional methods:
-    def create_objects_in_list(self, global_scripts, target_container, depth):
-        for container_type in global_scripts.container_list:
+    def create_objects_in_list(self, global_scripts, target_container, depth, homeless):
+        for i, container_type in enumerate(global_scripts.container_list):
             if container_type[0] == target_container:
-                for i, file in enumerate(container_type):
-                    if i == 0:
+                if i in self.reached_indexes:
+                    break
+                self.reached_indexes.append(i)
+
+                for j, file in enumerate(container_type):
+                    if j == 0:
                         continue
 
                     self.generate_object(global_scripts, "List_Generator",
                                          [f"{file.__name__.replace('.', '/')}.py",
-                                          self.object_counter, depth])
+                                          self.object_counter, depth, homeless])
                     self.object_counter += 1
 
-                    self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1], depth + 1)
+                    if file.object_type["container"]:
+                        self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1],
+                                                    depth + 1, homeless)
+                    else:
+                        self.create_objects_in_list(global_scripts, file.__name__.split(".")[-1],
+                                                    depth + 1, True)
 
 
 """

@@ -112,6 +112,7 @@ class Main:
                 global_scripts.add_dialogue("Object Moved")
             except ValueError:
                 global_scripts.add_dialogue("Invalid Input")
+                global_scripts.fake_refresh = True
 
         if global_scripts.super_delayed_changed_current_path \
             or global_scripts.super_delayed_refresh:
