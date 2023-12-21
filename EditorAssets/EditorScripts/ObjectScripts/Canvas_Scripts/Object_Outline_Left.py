@@ -5,18 +5,18 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
-    "hover_activated" : True,
+    "hover_activated" : False,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "Canvas_Frame"
+container_name = "Object_Outline"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -33,18 +33,18 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, 0], [0, 0]]
+        self.position_modifiers = [[0, 0], [0, 0.5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 0], [0, 0]]
+        self.size_modifiers = [[5, 0], [0, 1]]
         # [degrees, percent of container's rotation] containers automatically rotate objects inside
         self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
-        self.opacity_modifiers = [0, 0.5]
+        self.opacity_modifiers = [0, 1]
 
         # Determines the point on the object that the object's position_modifiers are moving
         # [percent of object size, percent of object size] -> [x, y]
         # e.g. [0, 0] allows the object's top left corner to be aligned no matter the object's size
-        self.position_origin = [0.5, 0.5]
+        self.position_origin = [0, 0.5]
         # limits x and y size to a percentage of each other
         # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
         # e.g. [[None, 1], [None, 1]] ensures object is square
@@ -65,7 +65,7 @@ class Main:
 
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "EditorAssets/Textures/Canvas/Object_Outline_Vertical.png"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)
@@ -87,31 +87,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_pos__"):
-            self.position_modifiers[0][0] \
-                = global_scripts.project_global_scripts.__editor_attr__selected_pos__[0]
-            self.position_modifiers[1][0] \
-                = global_scripts.project_global_scripts.__editor_attr__selected_pos__[1]
-
-        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_size__"):
-            self.size_modifiers[0][0] \
-                = global_scripts.project_global_scripts.__editor_attr__selected_size__[0]
-            self.size_modifiers[1][0] \
-                = global_scripts.project_global_scripts.__editor_attr__selected_size__[1]
-
-        if hasattr(global_scripts.project_global_scripts, "__editor_attr__selected_rot__"):
-            self.rotation_modifiers[0] \
-                = global_scripts.project_global_scripts.__editor_attr__selected_rot__
-
-        if self.hovered:
-            self.opa = 0.1
-
-        self.hovered = False
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
@@ -127,7 +107,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self):
-        self.hovered = True
+        pass
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys

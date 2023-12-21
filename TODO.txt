@@ -1,7 +1,6 @@
 High prio:
 Med prio:
-    >>> Rotate objects around their position origin
-    Object outline is constant thickness
+    >>> Object outline is constant thickness
     Help button
     Add cursor to text boxes
     Add new boxes to customizer window depending on object type
