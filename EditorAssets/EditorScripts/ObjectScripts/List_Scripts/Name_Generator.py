@@ -158,7 +158,7 @@ class Main:
         if self.activated:
             if "BACKSPACE" in keys:
                 if not self.prev_backspace:
-                    if len(self.text) >= 2:
+                    if len(self.text) >= 2 + 2 * self.generated_value[2]:
                         # Removes one character
                         self.text = self.text[:-1]
                         self.prev_backspace = True

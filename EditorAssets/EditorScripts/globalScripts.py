@@ -290,6 +290,11 @@ class globalScripts:
                 self.project_global_scripts.__editor_attr__selected_rot__ = 0
 
     def rename_file(self, path, name):
+        if name == "":
+            self.add_dialogue("Invalid File Name")
+            self.refresh = True
+            return
+
         new_path = ""
         split_path = path.split("/")[:-1] + [f"{name}.py"]
         for directory in split_path:
@@ -299,6 +304,7 @@ class globalScripts:
         self.refresh = True
         if os.path.exists(new_path):
             self.add_dialogue("File Already Exists")
+            self.refresh = True
         else:
             os.rename(path, new_path)
             self.add_dialogue("Object Renamed")
