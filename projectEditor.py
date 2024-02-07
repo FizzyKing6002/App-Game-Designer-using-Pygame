@@ -99,9 +99,6 @@ class Main:
 
         self.objects = []
 
-        # Creates an instance of the class located within globalScripts.py
-        self.editor_global_scripts = globalScripts.globalScripts()
-
         # Ensures the directories exist before importing user objects
         if not os.path.isdir("_CurrentProject"):
             os.mkdir("_CurrentProject")
@@ -113,6 +110,10 @@ class Main:
             project_name = current_projects[0]
         if not os.path.isdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts"):
             os.mkdir(f"_CurrentProject/{project_name}/Assets/Scripts/ObjectScripts")
+
+        # Creates an instance of the class located within globalScripts.py
+        self.editor_global_scripts = globalScripts.globalScripts()
+
         # Creates an instance of the class located within the user's globalScripts.py
         global_scripts = importlib.import_module(
             f"_CurrentProject.{project_name}.Assets.Scripts.globalScripts")
