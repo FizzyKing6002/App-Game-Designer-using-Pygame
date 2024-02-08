@@ -290,7 +290,7 @@ class globalScripts:
                 self.project_global_scripts.__editor_attr__selected_rot__ = 0
 
     def rename_file(self, path, name):
-        if name == "":
+        if name == "" or "." in name:
             self.add_dialogue("Invalid File Name")
             self.refresh = True
             return
