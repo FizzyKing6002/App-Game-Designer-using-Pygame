@@ -118,7 +118,7 @@ class globalScripts:
 
             file_name = file[:-3]
             while True:
-                if file_name[-1].isdigit():
+                if len(file_name) != 0 and file_name[-1].isdigit():
                     file_name = file_name[:-1]
                     continue
                 break
