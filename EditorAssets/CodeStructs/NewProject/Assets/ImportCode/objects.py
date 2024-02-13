@@ -231,7 +231,7 @@ def Object(*args):
                 # If the target animation is found
                 if anim[7] == name:
                     # Return if the animation is complete or not
-                    if anim[0] == 1:
+                    if anim[0] == 1 or (anim[0] == 0 and not anim[8]) or (anim[0] == 2 and anim[8]):
                         return False
                     return True
 
@@ -289,13 +289,12 @@ def Object(*args):
                 if anim[7] == name:
                     # Reverse the animation
                     if len(args) == 0:
-                        anim[0] = 1
                         anim[8] = not anim[8]
+                        anim[0] = 1
                     else:
                         if anim[8] != args[0]:
+                            anim[8] = args[0]
                             anim[0] = 1
-
-                        anim[8] = args[0]
 
         def calc_attr(self, con_pos, con_size, con_rot, con_opa):
             pos_mod = copy.deepcopy(self.position_modifiers)
