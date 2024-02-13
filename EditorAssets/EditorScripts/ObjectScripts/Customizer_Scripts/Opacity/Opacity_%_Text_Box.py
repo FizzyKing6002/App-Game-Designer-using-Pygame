@@ -107,6 +107,9 @@ class Main:
                         continue
                     break
 
+                if self.text == ".":
+                    self.text = "0"
+
                 global_scripts.customizer_input(",", self.text, "self.opacity_modifiers", "[")
                 global_scripts.add_dialogue("Object Opactity Changed")
             except ValueError:

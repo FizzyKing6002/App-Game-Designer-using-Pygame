@@ -107,6 +107,9 @@ class Main:
                         continue
                     break
 
+                if self.text == ".":
+                    self.text = "0"
+
                 global_scripts.customizer_input(
                     "]", f" {self.text}", "self.size_modifiers", "[[", "[", ",")
                 global_scripts.add_dialogue("Object Resized")
