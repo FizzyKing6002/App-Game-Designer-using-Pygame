@@ -9,7 +9,7 @@ object_type = {
     "text" : False,
     "image" : True,
     "button" : True,
-    "hover_activated" : False,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
@@ -26,7 +26,7 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
         # If this object has been generated using the generate_object method,
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
@@ -68,7 +68,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (100, 100, 100)
+        self.object_colour = (200, 200, 200)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -88,6 +88,9 @@ class Main:
 
         # Additional attributes:
         self.onetime = True
+        self.clicked = False
+        self.hovered = False
+        self.prev_clicked = False
 
 
     # Called every frame, passes the object of globalScripts.py class
@@ -97,9 +100,44 @@ class Main:
             self.position_modifiers[0][1] = self.generated_value[0]
             self.position_modifiers[1][1] = self.generated_value[1]
 
+        if global_scripts.tile_change:
+            self.opacity_modifiers[1] = 0
+            for tile in global_scripts.tiles:
+                if tile[0] == self.generated_value[2] and tile[1] == self.generated_value[3]:
+                    if global_scripts.turn == 0:
+                        if tile not in global_scripts.white_occ:
+                            if tile not in global_scripts.black_occ:
+                                self.opacity_modifiers[1] = 0.5
+                            elif abs(tile[0] - global_scripts.selected_tile[0]) == 1 and abs(tile[1] - global_scripts.selected_tile[1]) == 1:
+                                global_scripts.tiles.remove(tile)
+                                global_scripts.tiles.append([2 * tile[0] - global_scripts.selected_tile[0], 2 * tile[1] - global_scripts.selected_tile[1]])
+                                global_scripts.super_tile_change = True
+                                global_scripts.jump_tile = tile
+                    else:
+                        if tile not in global_scripts.black_occ:
+                            if tile not in global_scripts.white_occ:
+                                self.opacity_modifiers[1] = 0.5
+                            elif abs(tile[0] - global_scripts.selected_tile[0]) == 1 and abs(tile[1] - global_scripts.selected_tile[1]) == 1:
+                                global_scripts.tiles.remove(tile)
+                                global_scripts.tiles.append([2 * tile[0] - global_scripts.selected_tile[0], 2 * tile[1] - global_scripts.selected_tile[1]])
+                                global_scripts.super_tile_change = True
+                                global_scripts.jump_tile = tile
+        
+        if self.opacity_modifiers[1] != 0 and not self.clicked and self.hovered and self.prev_clicked:
+            global_scripts.move = [self.generated_value[2], self.generated_value[3]]
+            global_scripts.tile_change = True
+            global_scripts.tiles = []
+            self.opacity_modifiers[1] = 0
+            if [(global_scripts.move[0] + global_scripts.selected_tile[0])/2, (global_scripts.move[1] + global_scripts.selected_tile[1])/2] == global_scripts.jump_tile:
+                global_scripts.delete_jump = True
+
+        self.prev_clicked = self.clicked
+        self.clicked = False
+        self.hovered = False
+
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self):
@@ -111,7 +149,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self):
-        pass
+        self.hovered = True
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys

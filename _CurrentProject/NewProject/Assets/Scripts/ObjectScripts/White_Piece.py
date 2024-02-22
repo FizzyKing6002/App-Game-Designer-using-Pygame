@@ -26,7 +26,7 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 2
         # If this object has been generated using the generate_object method,
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
@@ -92,7 +92,8 @@ class Main:
         self.prev_clicked = False
         self.hovered = False
         self.selected = False
-        self.counter = 0
+        self.moving = False
+        self.deleting = False
 
 
     # Called every frame, passes the object of globalScripts.py class
@@ -101,17 +102,52 @@ class Main:
             self.onetime = False
             self.position_modifiers[0][1] = self.generated_value[0]
             self.position_modifiers[1][1] = self.generated_value[1]
+            global_scripts.white_occ.append([self.generated_value[2], self.generated_value[3]])
+
+        if self.deleting:
+            if self.get_complete_animation("delete"):
+                self.active = False
+            return
+
+        if global_scripts.delete_jump and global_scripts.jump_tile[0] == self.generated_value[2] and global_scripts.jump_tile[1] == self.generated_value[3]:
+            self.create_animation([-.1, -.1], 1000, "size%", "x", "delete")
+            global_scripts.delete_jump = False
+            global_scripts.jump_tile = []
+            global_scripts.white_occ.remove([self.generated_value[2], self.generated_value[3]])
 
         if global_scripts.mouse_state[0] and not self.hovered:
             self.selected = False
 
-        if not self.clicked and self.hovered and self.prev_clicked and global_scripts.turn == 0:
+        if self.selected:
+            global_scripts.tile_change = False
+
+        if self.moving:
+            if self.get_complete_animation("move_piece"):
+                self.moving = False
+                self.update_priority = 2
+                global_scripts.paused = False
+                global_scripts.turn = 1
+
+        if len(global_scripts.selected_tile) == 2 and global_scripts.selected_tile[0] == self.generated_value[2] and global_scripts.selected_tile[1] == self.generated_value[3] and global_scripts.move != []:
+            move_dist = [(global_scripts.move[0] - self.generated_value[2])*0.125, (global_scripts.move[1] - self.generated_value[3])*0.125]
+            global_scripts.white_occ.remove([self.generated_value[2], self.generated_value[3]])
+            global_scripts.white_occ.append(global_scripts.move)
+            self.generated_value[2] = global_scripts.move[0]
+            self.generated_value[3] = global_scripts.move[1]
+            global_scripts.selected_tile = []
+            global_scripts.move = []
+            self.create_animation(move_dist, 1000, "pos%", "(x**2)*(3-2*x)", "move_piece")
+            self.update_priority = 3
+            global_scripts.paused = True
+            self.moving = True
+
+        if not global_scripts.paused and not self.clicked and self.hovered and self.prev_clicked and global_scripts.turn == 0:
             self.selected = True
             global_scripts.tiles = []
-
-        if self.selected:
             global_scripts.tiles.append([self.generated_value[2]-1, self.generated_value[3]-1])
             global_scripts.tiles.append([self.generated_value[2]+1, self.generated_value[3]-1])
+            global_scripts.tile_change = True
+            global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
 
         self.prev_clicked = self.clicked
         self.clicked = False
