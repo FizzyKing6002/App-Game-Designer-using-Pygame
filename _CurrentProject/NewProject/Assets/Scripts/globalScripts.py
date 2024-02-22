@@ -11,6 +11,8 @@ class globalScripts:
         self.mouse_state = [False, [False, 0], False]
 
         # Globals go here
+        self.turn = 0
+        self.tiles = []
 
 
     # Elapsed time is the time in milliseconds since the last frame
