@@ -201,6 +201,8 @@ class Main:
             if not boolean:
                 self.project_obj_files.pop(i - len_pointer_list)
 
+        self.editor_global_scripts.project_global_scripts.object_files = self.project_obj_files
+
         for file in self.project_obj_files:
             # Gets the container name attribute from the current file
             container_names = file.container_name
