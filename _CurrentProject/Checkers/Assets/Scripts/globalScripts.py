@@ -22,6 +22,7 @@ class globalScripts:
         self.super_tile_change = True
         self.jump_tile = []
         self.delete_jump = -1
+        self.game_state = 0
 
 
     # Elapsed time is the time in milliseconds since the last frame

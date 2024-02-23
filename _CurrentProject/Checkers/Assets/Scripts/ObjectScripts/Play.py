@@ -5,25 +5,25 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
     "image" : True,
-    "button" : False,
-    "hover_activated" : False,
+    "button" : True,
+    "hover_activated" : True,
     "key_activated" : False
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = None
+container_name = "Menu"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
         self.update_priority = 0
@@ -33,9 +33,9 @@ class Main:
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, .5], [0, .5]]
+        self.position_modifiers = [[0, .5], [0, .6]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, .25], [0, .2]]
         # [degrees, percent of container's rotation] containers automatically rotate objects inside
         self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
@@ -68,7 +68,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (100, 100, 200)
+        self.object_colour = (200, 50, 50)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -87,16 +87,23 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.clicked = False
+        self.prev_clicked = False
+        self.hovered = False
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.game_state == 1:
-            self.active = True
+        if not self.clicked and self.prev_clicked and self.hovered:
+            global_scripts.game_state = 1
+
+        self.prev_clicked = self.clicked
+        self.clicked = False
+        self.hovered = False
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
-        pass
+        self.clicked = True
 
     # Called if the object was middle-clicked this frame, passes mouse position -> [x, y]
     def middle_clicked(self):
@@ -108,7 +115,7 @@ class Main:
 
     # Called if the mouse was over the object this frame, passes mouse position -> [x, y]
     def hovered_over(self):
-        pass
+        self.hovered = True
 
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys
@@ -168,13 +175,13 @@ Call self.pause_animation(b[, c])
         specifies either paused or resumed -> boolean -> True = pause, False = resume
 
 To progress an animation (moves the animation forwards by an amount of time):
-Call self.progress_animation(b, c)
+Call self.progress_animation(b, d)
     b -> string -> name of animation used to locate the correct animation
-    c -> integer -> milliseconds to move the animation forward by
+    d -> integer -> milliseconds to move the animation forward by
 
 To reverse an animation (makes the animation progress backwards):
-Call self.reverse_animation(b[, d])
+Call self.reverse_animation(b[, e])
     b -> string -> name of animation used to locate the correct animation
-    d -> this parameter can be ignored if the state of reversal wants to be switched ->
+    e -> this parameter can be ignored if the state of reversal wants to be switched ->
         specifies either reversed or not -> boolean -> True = reversed, False = not reversed
 """

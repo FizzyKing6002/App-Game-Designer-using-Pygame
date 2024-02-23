@@ -5,9 +5,9 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
-    "text" : False,
-    "image" : True,
+    "container" : False,
+    "text" : True,
+    "image" : False,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -16,26 +16,26 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = None
+container_name = "Menu"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
     def __init__(self):
         # Determines if object is evaluated
         # Only functionality of inactive objects is the frame_update function which is still called
-        self.active = False
+        self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
         # If this object has been generated using the generate_object method,
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
 
         # List components are added together after calculations
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.position_modifiers = [[0, .5], [0, .5]]
+        self.position_modifiers = [[0, .5], [0, .6]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, 0.15], [0, 0.15]]
         # [degrees, percent of container's rotation] containers automatically rotate objects inside
         self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
@@ -68,7 +68,7 @@ class Main:
         self.img_dir = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (100, 100, 200)
+        self.object_colour = (97, 52, 67)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -78,7 +78,7 @@ class Main:
         self.is_scroll_bar = False
 
         # Content of the text - TEXT ONLY
-        self.text = ""
+        self.text = "Play"
         # If font does not exist, defaults to freesansbold
         self.text_font = ""
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255)
@@ -91,8 +91,7 @@ class Main:
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if global_scripts.game_state == 1:
-            self.active = True
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
