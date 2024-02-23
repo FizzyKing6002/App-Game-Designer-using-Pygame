@@ -112,8 +112,8 @@ class Main:
                                 global_scripts.tiles.remove(tile)
                                 global_scripts.tiles.append([2 * tile[0] - global_scripts.selected_tile[0], 2 * tile[1] - global_scripts.selected_tile[1]])
                                 global_scripts.super_tile_change = True
-                                global_scripts.jump_tile = tile
-                    else:
+                                global_scripts.jump_tile.append(tile)
+                    elif global_scripts.turn == 1:
                         if tile not in global_scripts.black_occ:
                             if tile not in global_scripts.white_occ:
                                 self.opacity_modifiers[1] = 0.5
@@ -121,15 +121,18 @@ class Main:
                                 global_scripts.tiles.remove(tile)
                                 global_scripts.tiles.append([2 * tile[0] - global_scripts.selected_tile[0], 2 * tile[1] - global_scripts.selected_tile[1]])
                                 global_scripts.super_tile_change = True
-                                global_scripts.jump_tile = tile
-        
+                                global_scripts.jump_tile.append(tile)
+                    else:
+                        self.opacity_modifiers[1] = 0.5
+
         if self.opacity_modifiers[1] != 0 and not self.clicked and self.hovered and self.prev_clicked:
             global_scripts.move = [self.generated_value[2], self.generated_value[3]]
             global_scripts.tile_change = True
             global_scripts.tiles = []
             self.opacity_modifiers[1] = 0
-            if [(global_scripts.move[0] + global_scripts.selected_tile[0])/2, (global_scripts.move[1] + global_scripts.selected_tile[1])/2] == global_scripts.jump_tile:
-                global_scripts.delete_jump = True
+            for i, tile in enumerate(global_scripts.jump_tile):
+                if [(global_scripts.move[0] + global_scripts.selected_tile[0])/2, (global_scripts.move[1] + global_scripts.selected_tile[1])/2] == tile:
+                    global_scripts.delete_jump = i
 
         self.prev_clicked = self.clicked
         self.clicked = False

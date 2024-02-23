@@ -21,7 +21,7 @@ class globalScripts:
         self.paused = False
         self.super_tile_change = True
         self.jump_tile = []
-        self.delete_jump = False
+        self.delete_jump = -1
 
 
     # Elapsed time is the time in milliseconds since the last frame
