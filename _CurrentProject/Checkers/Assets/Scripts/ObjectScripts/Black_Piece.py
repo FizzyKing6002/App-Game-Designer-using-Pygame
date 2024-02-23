@@ -95,6 +95,7 @@ class Main:
         self.moving = False
         self.deleting = False
         self.counter = 0
+        self.prev_pos = [-5, -5]
 
 
     # Called every frame, passes the object of globalScripts.py class
@@ -132,35 +133,38 @@ class Main:
                 global_scripts.turn = 0
                 self.counter += 1
 
-                if [self.generated_value[2]-1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]-2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]-2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]-2 >= 0 and self.generated_value[3]+2 <= 7:
-                    if [self.generated_value[2]+1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]+2 <= 7 and self.generated_value[3]+2 <= 7:
+                if abs(self.prev_pos[0] - self.generated_value[2]) == 2 and abs(self.prev_pos[1] - self.generated_value[3]) == 2:
+                    if [self.generated_value[2]-1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]-2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]-2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]-2 >= 0 and self.generated_value[3]+2 <= 7:
+                        if [self.generated_value[2]+1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]+2 <= 7 and self.generated_value[3]+2 <= 7:
+                            global_scripts.turn = 2
+                            global_scripts.tiles = []
+                            global_scripts.tiles.append([self.generated_value[2]-2, self.generated_value[3]+2])
+                            global_scripts.tiles.append([self.generated_value[2]+2, self.generated_value[3]+2])
+                            global_scripts.tile_change = True
+                            global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
+                            global_scripts.jump_tile.append([self.generated_value[2]-1, self.generated_value[3]+1])
+                            global_scripts.jump_tile.append([self.generated_value[2]+1, self.generated_value[3]+1])
+                        else:
+                            global_scripts.turn = 2
+                            global_scripts.tiles = []
+                            global_scripts.tiles.append([self.generated_value[2]-2, self.generated_value[3]+2])
+                            global_scripts.tile_change = True
+                            global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
+                            global_scripts.jump_tile.append([self.generated_value[2]-1, self.generated_value[3]+1])
+                    elif [self.generated_value[2]+1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]+2 <= 7 and self.generated_value[3]+2 <= 7:
                         global_scripts.turn = 2
                         global_scripts.tiles = []
-                        global_scripts.tiles.append([self.generated_value[2]-2, self.generated_value[3]+2])
                         global_scripts.tiles.append([self.generated_value[2]+2, self.generated_value[3]+2])
                         global_scripts.tile_change = True
                         global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
-                        global_scripts.jump_tile.append([self.generated_value[2]-1, self.generated_value[3]+1])
                         global_scripts.jump_tile.append([self.generated_value[2]+1, self.generated_value[3]+1])
-                    else:
-                        global_scripts.turn = 2
-                        global_scripts.tiles = []
-                        global_scripts.tiles.append([self.generated_value[2]-2, self.generated_value[3]+2])
-                        global_scripts.tile_change = True
-                        global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
-                        global_scripts.jump_tile.append([self.generated_value[2]-1, self.generated_value[3]+1])
-                if [self.generated_value[2]+1, self.generated_value[3]+1] in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.white_occ and [self.generated_value[2]+2, self.generated_value[3]+2] not in global_scripts.black_occ and self.generated_value[2]+2 <= 7 and self.generated_value[3]+2 <= 7:
-                    global_scripts.turn = 2
-                    global_scripts.tiles = []
-                    global_scripts.tiles.append([self.generated_value[2]+2, self.generated_value[3]+2])
-                    global_scripts.tile_change = True
-                    global_scripts.selected_tile = [self.generated_value[2], self.generated_value[3]]
-                    global_scripts.jump_tile.append([self.generated_value[2]+1, self.generated_value[3]+1])
 
         if len(global_scripts.selected_tile) == 2 and global_scripts.selected_tile[0] == self.generated_value[2] and global_scripts.selected_tile[1] == self.generated_value[3] and global_scripts.move != []:
             move_dist = [(global_scripts.move[0] - self.generated_value[2])*0.125, (global_scripts.move[1] - self.generated_value[3])*0.125]
             global_scripts.black_occ.remove([self.generated_value[2], self.generated_value[3]])
             global_scripts.black_occ.append(global_scripts.move)
+            self.prev_pos[0] = self.generated_value[2]
+            self.prev_pos[1] = self.generated_value[3]
             self.generated_value[2] = global_scripts.move[0]
             self.generated_value[3] = global_scripts.move[1]
             global_scripts.selected_tile = []
