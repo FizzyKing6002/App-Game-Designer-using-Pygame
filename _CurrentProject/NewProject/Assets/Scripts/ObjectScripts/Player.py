@@ -5,18 +5,18 @@ Represents an object
 
 # Determines the type of object
 object_type = {
-    "container" : True,
+    "container" : False,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
-    "key_activated" : False
+    "key_activated" : True
 }
 # The name of the container object that this object belongs to -> string
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "Game_Bg"
+container_name = "Game"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -26,7 +26,7 @@ class Main:
         self.active = True
         # Determines the order that objects within a container are evaluated from low to high
         # Objects evaluated later will be drawn over others that are evaluated sooner
-        self.update_priority = 0
+        self.update_priority = 1
         # If this object has been generated using the generate_object method,
         # this value can be changed to identify or pass values to this object
         self.generated_value = None
@@ -35,7 +35,7 @@ class Main:
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
         self.position_modifiers = [[0, .5], [0, .5]]
         # [[pixels, percent of container's size], [pixels, percent of container's size]] -> [x, y]
-        self.size_modifiers = [[0, 1], [0, 1]]
+        self.size_modifiers = [[0, .5], [0, .5]]
         # [degrees, percent of container's rotation] containers automatically rotate objects inside
         self.rotation_modifiers = [0, 0]
         # [percentage opacity, percent of container's opacity]
@@ -48,7 +48,7 @@ class Main:
         # limits x and y size to a percentage of each other
         # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
         # e.g. [[None, 1], [None, 1]] ensures object is square
-        self.min_max_size = [[None, 1], [None, 1]]
+        self.min_max_size = [[None, None], [None, None]]
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
@@ -65,10 +65,10 @@ class Main:
 
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "Assets/Textures/Rick-Astley-Never-Gonna-Give-You-Up.webp"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
-        self.object_colour = (0, 0, 0)
+        self.object_colour = (138, 138, 47)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
         self.activation_keys = {}
         # Passes the unicode text input as first item in keys list in key_input method
@@ -87,23 +87,18 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.world_update = True
+        self.vision_change = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.world_update:
-            self.world_update = False
+        if self.vision_change:
+            self.vision_change = False
 
-            for i, row in enumerate(global_scripts.map):
-                for j, col in enumerate(row):
-                    object_name = ""
-
-                    if col == 0:
-                        object_name = "#0"
-
-                    if object_name != "":
-                        self.generate_object(global_scripts, object_name, [j, i])
+            global_scripts.calc_my_attributes([(global_scripts.vision[0] - 1) / 2,
+                                                (global_scripts.vision[1] - 1) / 2],
+                                                self.size_modifiers,
+                                                self.position_modifiers)
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):

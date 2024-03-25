@@ -7,7 +7,7 @@ Represents an object
 object_type = {
     "container" : True,
     "text" : False,
-    "image" : False,
+    "image" : True,
     "button" : False,
     "hover_activated" : False,
     "key_activated" : False
@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = "Game_Bg"
+container_name = None
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -48,7 +48,7 @@ class Main:
         # limits x and y size to a percentage of each other
         # [[min percent of y, max percent of y], [min percent of x, max percent of x]]
         # e.g. [[None, 1], [None, 1]] ensures object is square
-        self.min_max_size = [[None, 1], [None, 1]]
+        self.min_max_size = [[None, None], [None, None]]
 
         # Determines whether objects that protrude from this container are shown - CONTAINER ONLY
         # For rotated containers and containers that have a scroll bar, this becomes False
@@ -65,7 +65,7 @@ class Main:
 
         # Image directory for this object (path from main.py) - IMAGE ONLY
         # If image does not exist, defaults to black rectangle
-        self.img_dir = ""
+        self.img_dir = "Assets/Textures/Rick-Astley-Never-Gonna-Give-You-Up.webp"
         # RGB -> (0 -> 255, 0 -> 255, 0 -> 255),
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (0, 0, 0)
@@ -87,23 +87,11 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
-        self.world_update = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        if self.world_update:
-            self.world_update = False
-
-            for i, row in enumerate(global_scripts.map):
-                for j, col in enumerate(row):
-                    object_name = ""
-
-                    if col == 0:
-                        object_name = "#0"
-
-                    if object_name != "":
-                        self.generate_object(global_scripts, object_name, [j, i])
+        pass
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):

@@ -16,7 +16,7 @@ object_type = {
 # Must be the same as the container's file name (without .py and without any folder path)
 # If the object is not contained within any others, choose None
 # If the object belongs to multiple containers, a list can be used
-container_name = None
+container_name = "None"
 
 # Class in which methods and attributes are used - DO NOT RENAME
 class Main:
@@ -87,14 +87,17 @@ class Main:
         self.text_italic = False
 
         # Additional attributes:
+        self.world_update = True
 
 
     # Called every frame, passes the object of globalScripts.py class
     def frame_update(self, global_scripts):
-        self.size_modifiers[0][1] = 1 / global_scripts.vision[0]
-        self.size_modifiers[1][1] = 1 / global_scripts.vision[1]
-        self.position_modifiers[0][1] = (self.generated_value[0] - 1/2) * self.size_modifiers[0][1]
-        self.position_modifiers[1][1] = (self.generated_value[0] - 1/2) * self.size_modifiers[0][1]
+        if self.world_update:
+            self.world_update = False
+
+            global_scripts.calc_my_attributes(self.generated_value,
+                                            self.size_modifiers,
+                                            self.position_modifiers)
 
     # Called if the object was left-clicked this frame, passes mouse position -> [x, y]
     def left_clicked(self):
