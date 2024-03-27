@@ -95,8 +95,22 @@ class Main:
         if self.world_update:
             self.world_update = False
 
-            for i, row in enumerate(global_scripts.map):
-                for j, col in enumerate(row):
+            for i in range(global_scripts.vision[1]):
+                yindex = i + global_scripts.position[1] - (global_scripts.vision[1] - 1) // 2
+
+                try:
+                    row = global_scripts.map[yindex]
+                except IndexError:
+                    continue
+
+                for j in range(global_scripts.vision[0]):
+                    xindex = j + global_scripts.position[0] - (global_scripts.vision[0] - 1) // 2
+
+                    try:
+                        col = row[xindex]
+                    except IndexError:
+                        continue
+
                     object_name = ""
 
                     if col == 0:

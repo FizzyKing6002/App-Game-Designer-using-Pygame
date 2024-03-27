@@ -70,7 +70,12 @@ class Main:
         # colour is used if the object's image does not exist - IMAGE ONLY
         self.object_colour = (138, 138, 47)
         # Dictionary of keys that activate object ("key_name" : True/False) - KEY_ACTIVATED ONLY
-        self.activation_keys = {}
+        self.activation_keys = {
+            "w":True,
+            "s":True,
+            "a":True,
+            "d":True
+        }
         # Passes the unicode text input as first item in keys list in key_input method
         # KEY_ACTIVATED ONLY
         self.uses_text_input = False
@@ -88,6 +93,10 @@ class Main:
 
         # Additional attributes:
         self.vision_change = True
+        self.prev_w = False
+        self.prev_s = False
+        self.prev_a = False
+        self.prev_d = False
 
 
     # Called every frame, passes the object of globalScripts.py class
@@ -119,7 +128,8 @@ class Main:
     # Called if a key in activation_keys was pressed this frame,
     # passes list of all pressed keys in activation_keys
     def key_input(self, keys):
-        pass
+        if "w" in keys and not self.prev_w:
+            self.prev_w = True
 
     # Additional methods:
 
