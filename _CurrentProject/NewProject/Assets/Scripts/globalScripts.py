@@ -11,11 +11,7 @@ class globalScripts:
         self.mouse_state = [False, [False, 0], False]
 
         # Globals go here
-        self.game_state = 0
-        self.turn = 0
-        self.map = map
-        self.position = [4, 4]
-        self.vision = [9, 9]
+
 
     # Elapsed time is the time in milliseconds since the last frame
     # Early update is called every frame before any objects are called
@@ -30,24 +26,3 @@ class globalScripts:
         pass
 
     # Global methods go here
-    def calc_my_attributes(self, placement, size_mod, pos_mod):
-        size_mod[0][1] = 1 / self.vision[0]
-        size_mod[1][1] = 1 / self.vision[1]
-        pos_mod[0][1] = (placement[0] + 1/2) * size_mod[0][1]
-        pos_mod[1][1] = (placement[1] + 1/2) * size_mod[1][1]
-
-
-map = [
-
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-[0, 0, 0, 0, 1, 1, 0, 0, 1, 0],
-[0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-]
