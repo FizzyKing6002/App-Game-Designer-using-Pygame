@@ -262,9 +262,11 @@ def Object(*args):
                 if anim[7] == name:
                     # Complete the animation
                     if anim[8]:
+                        anim[1] = 0
                         anim[3] = 0
                         anim[0] = 0
                     else:
+                        anim[1] = anim[2]
                         anim[3] = anim[4]
                         anim[0] = 2
 
